@@ -23,16 +23,21 @@ export default function RootLayout({
   const pathname = usePathname()
 
   useEffect(() => {
-    const authStatus = localStorage.getItem('isAuthenticated')
-    setIsAuthenticated(authStatus === 'true')
+    // const authStatus = localStorage.getItem('isAuthenticated')
+    // setIsAuthenticated(authStatus === 'true')
+    console.log('document.cookie=', document.cookie)
+    const authStatus = document.cookie === 'isAuthenticated=true'
+    setIsAuthenticated(authStatus)
 
-    if (authStatus !== 'true' && pathname !== '/') {
+    if (authStatus !== true && pathname !== '/') {
+      console.log('authStatus=', authStatus)
       router.push('/')
     }
   }, [pathname, router])
 
   const handleLogout = () => {
-    localStorage.removeItem('isAuthenticated')
+    // localStorage.removeItem('isAuthenticated')
+    document.cookie = 'isAuthenticated=false; path=/'
     setIsAuthenticated(false)
     router.push('/')
   }

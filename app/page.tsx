@@ -18,6 +18,7 @@ export default function LoginPage() {
     // For this example, we'll just set a flag in localStorage
     // localStorage.setItem('isAuthenticated', 'true')
     document.cookie = 'isAuthenticated=true; path=/'
+    // console.log('localStorage=', localStorage)
     router.push('/home')
   }
 
@@ -45,7 +46,7 @@ export default function LoginPage() {
               <Label htmlFor="corppassId">Corppass ID</Label>
               <Input
                 id="corppassId"
-                type="password"
+                type="text"
                 placeholder="Enter your Corppass ID"
                 value={corppassId}
                 onChange={(e) => setCorppassId(e.target.value)}
