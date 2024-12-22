@@ -126,17 +126,20 @@ export default function MDWExamPage() {
   }
 
   const handleContinue = async (nextStep: string) => {
+    console.log('nextStep=', nextStep)
     let isValid = false
 
-    switch (expandedAccordion) {
-      case 'clinic-doctor':
+    switch (nextStep) {
+      case 'helper-details':
         isValid = await trigger('clinicDoctor')
+        console.log('isValid=', isValid)
         if (isValid) {
           setIsHelperDetailsEnabled(true)
           setExpandedAccordion('helper-details')
-        }
+        } 
         break
-      case 'helper-details':
+      case 'examination-details':
+        console.log('examination-details2')
         isValid = await trigger('helperDetails')
         if (isValid) {
           // if (isSummaryActive) {
@@ -149,10 +152,25 @@ export default function MDWExamPage() {
           setExpandedAccordion('examination-details')
         }
         break
-      case 'examination-details':
-        setWeightTouched(true);
-        // isValid = await trigger(['examinationDetails.weight', 'examinationDetails'])
-        isValid = await trigger('examinationDetails')
+      // case 'examination-details':
+      //   setWeightTouched(true);
+      //   // isValid = await trigger(['examinationDetails.weight', 'examinationDetails'])
+      //   isValid = await trigger('examinationDetails')
+
+      //   if (isValid) {
+      //     setIsSummaryActive(true)
+      //     setStep('summary')
+      //   }
+      //   break
+      case 'summary':
+        console.log('summary2')
+        // console.log('summary')
+        // setIsSummaryActive(true)
+        // setStep('summary')
+        // isValid = await trigger(['clinicDoctor', 'helperDetails', 'examinationDetails'])
+        // isValid = await trigger('examinationDetails')
+        isValid = await trigger(['examinationDetails.weight', 'examinationDetails'])
+
 
         if (isValid) {
           setIsSummaryActive(true)
