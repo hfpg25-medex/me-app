@@ -20,7 +20,7 @@ interface SummaryProps {
   helperDetails: {
     fin: string
     name: string
-    visitDate: Date
+    visitDate: Date | null
   }
   examinationDetails: {
     weight: string
@@ -125,7 +125,7 @@ export function Summary({
             </div>
             <div>
               <p className="text-gray-600">Date helper visited clinic</p>
-              <p>{format(helperDetails.visitDate, 'dd MMM yyyy')}</p>
+              <p>{helperDetails.visitDate ? format(helperDetails.visitDate, 'dd MMM yyyy') : '-'}</p>
             </div>
           </div>
         </section>
