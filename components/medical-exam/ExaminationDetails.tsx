@@ -80,12 +80,12 @@ export function ExaminationDetails({
                 <div className="flex items-start space-x-2 p-3 bg-orange-100 border border-orange-300 rounded-md mt-2">
                   <WarningIcon className="w-5 h-5 text-orange-500 flex-shrink-0 mt-0.5" />
                   <p className="text-sm text-orange-700">
-                    This helper has lost >=10% weight since the last examination. If her weight loss was unintentional or if its reason cannot be determined, please select 'Yes' for weight loss under the Physical examination details.
+                    This helper has lost {'>'}=10% weight since the last examination. If her weight loss was unintentional or if its reason cannot be determined, please select 'Yes' for weight loss under the Physical examination details.
                   </p>
                 </div>
               )}
               {lastRecordedWeight && (
-                <p className="text-sm text-muted-foreground mt-1">Last recorded weight: {lastRecordedWeight} kg (Date: {format(new Date(), 'dd/MM/yyyy')})</p>
+                <p className="text-sm text-muted-foreground mt-1">Last recorded weight: {lastRecordedWeight} kg (Date: {format(new Date(new Date().setMonth(new Date().getMonth() - 6)), 'dd/MM/yyyy')})</p>
               )}
             </div>
             <div>
@@ -278,21 +278,6 @@ export function ExaminationDetails({
         <div>
           <h3 className="text-lg font-semibold mb-2">Remarks</h3>
           <div className="space-y-4">
-            {(watchedValues.examinationDetails.suspiciousInjuries ||
-              watchedValues.examinationDetails.unintentionalWeightLoss ||
-              watchedValues.examinationDetails.remarks !== '') && (
-              <>
-                <Textarea
-                  placeholder="Enter any additional remarks here"
-                  className="w-full"
-                  {...register('examinationDetails.remarks')}
-                  maxLength={500}
-                />
-                <p className="text-sm text-muted-foreground">
-                  {500 - (watchedValues.examinationDetails.remarks?.length || 0)} characters left
-                </p>
-              </>
-            )}
             {!watchedValues.examinationDetails.suspiciousInjuries && !watchedValues.examinationDetails.unintentionalWeightLoss && (
               <div className="flex items-center space-x-2">
                 <Checkbox
@@ -312,6 +297,21 @@ export function ExaminationDetails({
                   I have something else to report to MOM about the helper
                 </Label>
               </div>
+            )}
+                        {(watchedValues.examinationDetails.suspiciousInjuries ||
+              watchedValues.examinationDetails.unintentionalWeightLoss ||
+              watchedValues.examinationDetails.remarks !== '') && (
+              <>
+                <Textarea
+                  placeholder="Enter any additional remarks here"
+                  className="w-full"
+                  {...register('examinationDetails.remarks')}
+                  maxLength={500}
+                />
+                <p className="text-sm text-muted-foreground">
+                  {500 - (watchedValues.examinationDetails.remarks?.length || 0)} characters left
+                </p>
+              </>
             )}
           </div>
           {errors.examinationDetails?.remarks && <p className="text-red-500 text-sm mt-1">{errors.examinationDetails.remarks.message}</p>}
