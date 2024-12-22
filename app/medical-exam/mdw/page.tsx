@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Calendar } from "@/components/ui/calendar"
 import { format } from "date-fns"
-import { CalendarIcon } from 'lucide-react'
+import { CalendarIcon, FileWarningIcon as WarningIcon } from 'lucide-react'
 import { cn } from "@/lib/utils"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -67,6 +67,9 @@ export default function MDWExamPage() {
   const [suspiciousInjuries, setSuspiciousInjuries] = useState(false)
   const [unintentionalWeightLoss, setUnintentionalWeightLoss] = useState(false)
   const [policeReport, setPoliceReport] = useState<string | null>(null)
+  const [remarks, setRemarks] = useState('')
+  const [somethingToReport, setSomethingToReport] = useState(false)
+  const [showWeightWarning, setShowWeightWarning] = useState(false)
 
   const validateFin = (value: string) => {
     const regex = /^[FMG]\d{7}[A-Z]$/
@@ -119,14 +122,19 @@ export default function MDWExamPage() {
         setExpandedAccordion("examination-details")
       }
     } else if (nextStep === 'summary') {
-      // Add validation for examination details here
       if (!weight) newErrors.weight = "Please enter a weight"
       else if (parseFloat(weight) < 15 || parseFloat(weight) > 200) newErrors.weight = "Weight must be between 15kg and 200kg"
       
       if (!height) newErrors.height = "Please enter a height"
       else if (parseFloat(height) < 90 || parseFloat(height) > 250) newErrors.height = "Height must be between 90cm and 250cm"
 
-      if (policeReport === null) newErrors.policeReport = "Please select whether a police report has been made"
+      if ((suspiciousInjuries || unintentionalWeightLoss) && policeReport === null) {
+        newErrors.policeReport = "Please select whether a police report has been made"
+      }
+
+      if ((suspiciousInjuries || unintentionalWeightLoss || somethingToReport) && !remarks.trim()) {
+        newErrors.remarks = "Please provide remarks"
+      }
 
       if (Object.keys(newErrors).length === 0) {
         setStep('summary')
@@ -146,6 +154,53 @@ export default function MDWExamPage() {
       setBmi(null)
     }
   }, [weight, height])
+
+  const validateField = (field: string, value: any) => {
+    const newErrors = { ...errors };
+    switch (field) {
+      case 'clinic':
+        if (!value) newErrors.clinic = "Please select a clinic";
+        else delete newErrors.clinic;
+        break;
+      case 'doctor':
+        if (!value) newErrors.doctor = "Please select a doctor";
+        else delete newErrors.doctor;
+        break;
+      case 'fin':
+        if (!validateFin(value)) newErrors.fin = "Please enter a valid FIN";
+        else delete newErrors.fin;
+        break;
+      case 'visitDate':
+        if (!value) newErrors.visitDate = "Please select a visit date";
+        else delete newErrors.visitDate;
+        break;
+      case 'weight':
+        if (!value) newErrors.weight = "Please enter a weight";
+        else if (parseFloat(value) < 15 || parseFloat(value) > 200) newErrors.weight = "Weight must be between 15kg and 200kg";
+        else delete newErrors.weight;
+        break;
+      case 'height':
+        if (!value) newErrors.height = "Please enter a height";
+        else if (parseFloat(value) < 90 || parseFloat(value) > 250) newErrors.height = "Height must be between 90cm and 250cm";
+        else delete newErrors.height;
+        break;
+      case 'policeReport':
+        if ((suspiciousInjuries || unintentionalWeightLoss) && value === null) {
+          newErrors.policeReport = "Please select whether a police report has been made";
+        } else {
+          delete newErrors.policeReport;
+        }
+        break;
+      case 'remarks':
+        if ((suspiciousInjuries || unintentionalWeightLoss || somethingToReport) && !value.trim()) {
+          newErrors.remarks = "Please provide remarks";
+        } else {
+          delete newErrors.remarks;
+        }
+        break;
+    }
+    setErrors(newErrors);
+  };
 
   return (
     <div className="container mx-auto p-6">
@@ -180,7 +235,7 @@ export default function MDWExamPage() {
                 <div className="space-y-4">
                   <div>
                     <Label htmlFor="clinic">Select Clinic</Label>
-                    <Select onValueChange={setSelectedClinic} value={selectedClinic}>
+                    <Select onValueChange={(value) => { setSelectedClinic(value); validateField('clinic', value); }} value={selectedClinic}>
                       <SelectTrigger id="clinic">
                         <SelectValue placeholder="Select a clinic" />
                       </SelectTrigger>
@@ -194,7 +249,7 @@ export default function MDWExamPage() {
                   </div>
                   <div>
                     <Label htmlFor="doctor">Select Doctor</Label>
-                    <Select onValueChange={setSelectedDoctor} value={selectedDoctor}>
+                    <Select onValueChange={(value) => { setSelectedDoctor(value); validateField('doctor', value); }} value={selectedDoctor}>
                       <SelectTrigger id="doctor">
                         <SelectValue placeholder="Select a doctor" />
                       </SelectTrigger>
@@ -219,7 +274,7 @@ export default function MDWExamPage() {
                     <Input
                       id="fin"
                       value={fin}
-                      onChange={(e) => handleFinChange(e.target.value)}
+                      onChange={(e) => { handleFinChange(e.target.value); validateField('fin', e.target.value); }}
                       placeholder="Enter FIN (e.g., G1234567A)"
                     />
                     {errors.fin && <p className="text-red-500 text-sm mt-1">{errors.fin}</p>}
@@ -247,7 +302,7 @@ export default function MDWExamPage() {
                           <Calendar
                             mode="single"
                             selected={visitDate}
-                            onSelect={setVisitDate}
+                            onSelect={(date) => { setVisitDate(date); validateField('visitDate', date); }}
                             disabled={(date) => 
                               date > new Date() || date < new Date(new Date().setDate(new Date().getDate() - 90))
                             }
@@ -274,15 +329,30 @@ export default function MDWExamPage() {
                           <Input
                             id="weight"
                             value={weight}
-                            onChange={(e) => setWeight(e.target.value)}
+                            onChange={(e) => {
+                              const newWeight = e.target.value;
+                              setWeight(newWeight);
+                              validateField('weight', newWeight);
+                              if (lastRecordedWeight) {
+                                setShowWeightWarning(parseFloat(newWeight) <= 0.9 * lastRecordedWeight);
+                              }
+                            }}
                             placeholder="Enter weight"
-                            className="mr-2"
+                            className="mr-2 w-40"
                           />
                           <span>kg</span>
                         </div>
                         {errors.weight && <p className="text-red-500 text-sm mt-1">{errors.weight}</p>}
+                        {showWeightWarning && (
+                          <div className="flex items-start space-x-2 p-3 bg-orange-100 border border-orange-300 rounded-md mt-2">
+                            <WarningIcon className="w-5 h-5 text-orange-500 flex-shrink-0 mt-0.5" />
+                            <p className="text-sm text-orange-700">
+                              This helper has lost &gt;=10% weight since the last examination. If her weight loss was unintentional or if its reason cannot be determined, please select 'Yes' for weight loss under the Physical examination details.
+                            </p>
+                          </div>
+                        )}
                         {lastRecordedWeight && (
-                          <p className="text-sm text-muted-foreground mt-1">Last recorded weight: {lastRecordedWeight} kg</p>
+                          <p className="text-sm text-muted-foreground mt-1">Last recorded weight: {lastRecordedWeight} kg (Date: {format(new Date(), 'dd/MM/yyyy')})</p>
                         )}
                       </div>
                       <div>
@@ -291,15 +361,15 @@ export default function MDWExamPage() {
                           <Input
                             id="height"
                             value={height}
-                            onChange={(e) => setHeight(e.target.value)}
+                            onChange={(e) => { setHeight(e.target.value); validateField('height', e.target.value); }}
                             placeholder="Enter height"
-                            className="mr-2"
+                            className="mr-2 w-40"
                           />
                           <span>cm</span>
                         </div>
                         {errors.height && <p className="text-red-500 text-sm mt-1">{errors.height}</p>}
                         {lastRecordedHeight && (
-                          <p className="text-sm text-muted-foreground mt-1">Last recorded height: {lastRecordedHeight} cm</p>
+                          <p className="text-sm text-muted-foreground mt-1">Last recorded height: {lastRecordedHeight} cm (Date: {format(new Date(), 'dd/MM/yyyy')})</p>
                         )}
                       </div>
                       {bmi !== null && (
@@ -314,14 +384,14 @@ export default function MDWExamPage() {
                     <h3 className="text-lg font-semibold mb-2">Test results</h3>
                     <p className="text-sm text-muted-foreground mb-2">Indicate positive test results:</p>
                     {testTypes.map((test) => (
-                      <div key={test} className="flex items-center justify-between space-x-2 mb-2">
+                      <div key={test} className="flex items-center mb-2">
                         <Label
                           htmlFor={test}
-                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                          className="flex-grow text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 w-3/4"
                         >
                           {test}
                         </Label>
-                        <div className="flex items-center space-x-2">
+                        <div className="flex items-center space-x-2 ml-auto pl-24">
                           <Checkbox
                             id={test}
                             checked={positiveTests.includes(test)}
@@ -332,12 +402,17 @@ export default function MDWExamPage() {
                                   : positiveTests.filter((t) => t !== test)
                               )
                             }}
-                            className={positiveTests.includes(test) ? "text-orange-500 border-orange-500" : ""}
+                            className={cn(
+                              "border-2",
+                              positiveTests.includes(test) 
+                                ? "border-orange-500 bg-orange-500 text-primary-foreground hover:bg-orange-500 hover:text-primary-foreground" 
+                                : "border-primary"
+                            )}
                           />
                           <Label
                             htmlFor={test}
                             className={cn(
-                              "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
+                              "text-sm font-medium",
                               positiveTests.includes(test) ? "text-orange-500" : ""
                             )}
                           >
@@ -356,24 +431,39 @@ export default function MDWExamPage() {
                     <h3 className="text-lg font-semibold mb-2">Physical examination details</h3>
                     <div className="space-y-4">
                       <div>
-                        <div className="flex items-center justify-between space-x-2 mb-2">
+                        <div className="flex items-center mb-2">
                           <Label
                             htmlFor="suspicious-injuries"
-                            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                            className="flex-grow text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 w-3/4"
                           >
                             Signs of suspicious or unexplained injuries
                           </Label>
-                          <div className="flex items-center space-x-2">
+                          <div className="flex items-center space-x-2 ml-auto pl-24">
                             <Checkbox
                               id="suspicious-injuries"
                               checked={suspiciousInjuries}
-                              onCheckedChange={(checked) => setSuspiciousInjuries(checked as boolean)}
-                              className={suspiciousInjuries ? "text-orange-500 border-orange-500" : ""}
+                              onCheckedChange={(checked) => {
+                                setSuspiciousInjuries(checked as boolean);
+                                if (!checked && !unintentionalWeightLoss) {
+                                  setPoliceReport(null);
+                                  const newErrors = { ...errors };
+                                  delete newErrors.policeReport;
+                                  delete newErrors.remarks;
+                                  setErrors(newErrors);
+                                }
+                                validateField('remarks', remarks);
+                              }}
+                              className={cn(
+                                "border-2",
+                                suspiciousInjuries 
+                                  ? "border-orange-500 bg-orange-500 text-primary-foreground hover:bg-orange-500 hover:text-primary-foreground" 
+                                  : "border-primary"
+                              )}
                             />
                             <Label
                               htmlFor="suspicious-injuries"
                               className={cn(
-                                "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
+                                "text-sm font-medium",
                                 suspiciousInjuries ? "text-orange-500" : ""
                               )}
                             >
@@ -382,28 +472,46 @@ export default function MDWExamPage() {
                           </div>
                         </div>
                         {suspiciousInjuries && (
-                          <p className="text-orange-500 text-sm mt-1">Provide your assessment in the remarks section.</p>
+                          <p className="text-orange-500 text-sm mt-1 flex items-center">
+                            <WarningIcon className="w-4 h-4 mr-1" />
+                            Provide your assessment in the remarks section.
+                          </p>
                         )}
                       </div>
                       <div>
-                        <div className="flex items-center justify-between space-x-2 mb-2">
+                        <div className="flex items-center mb-2">
                           <Label
                             htmlFor="unintentional-weight-loss"
-                            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                            className="flex-grow text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 w-3/4"
                           >
                             Unintentional weight loss (if unsure, select yes)
                           </Label>
-                          <div className="flex items-center space-x-2">
+                          <div className="flex items-center space-x-2 ml-auto pl-24">
                             <Checkbox
                               id="unintentional-weight-loss"
                               checked={unintentionalWeightLoss}
-                              onCheckedChange={(checked) => setUnintentionalWeightLoss(checked as boolean)}
-                              className={unintentionalWeightLoss ? "text-orange-500 border-orange-500" : ""}
+                              onCheckedChange={(checked) => {
+                                setUnintentionalWeightLoss(checked as boolean);
+                                if (!checked && !suspiciousInjuries) {
+                                  setPoliceReport(null);
+                                  const newErrors = { ...errors };
+                                  delete newErrors.policeReport;
+                                  delete newErrors.remarks;
+                                  setErrors(newErrors);
+                                }
+                                validateField('remarks', remarks);
+                              }}
+                              className={cn(
+                                "border-2",
+                                unintentionalWeightLoss 
+                                  ? "border-orange-500 bg-orange-500 text-primary-foreground hover:bg-orange-500 hover:text-primary-foreground" 
+                                  : "border-primary"
+                              )}
                             />
                             <Label
                               htmlFor="unintentional-weight-loss"
                               className={cn(
-                                "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
+                                "text-sm font-medium",
                                 unintentionalWeightLoss ? "text-orange-500" : ""
                               )}
                             >
@@ -412,31 +520,95 @@ export default function MDWExamPage() {
                           </div>
                         </div>
                         {unintentionalWeightLoss && (
-                          <p className="text-orange-500 text-sm mt-1">Provide your assessment in the remarks section.</p>
+                          <p className="text-orange-500 text-sm mt-1 flex items-center">
+                            <WarningIcon className="w-4 h-4 mr-1" />
+                            Provide your assessment in the remarks section.
+                          </p>
                         )}
                       </div>
-                      <div>
-                        <Label className="text-sm font-medium mb-2 block">Have you made a police report?</Label>
-                        <RadioGroup value={policeReport || ''} onValueChange={setPoliceReport}>
-                          <div className="flex items-center space-x-2">
-                            <RadioGroupItem value="yes" id="police-report-yes" />
-                            <Label htmlFor="police-report-yes">Yes</Label>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <RadioGroupItem value="no" id="police-report-no" />
-                            <Label htmlFor="police-report-no">No</Label>
-                          </div>
-                        </RadioGroup>
-                        {errors.policeReport && <p className="text-red-500 text-sm mt-1">{errors.policeReport}</p>}
-                      </div>
+                      {(suspiciousInjuries || unintentionalWeightLoss) && (
+                        <div>
+                          <Label
+                            htmlFor="police-report"
+                            className="text-sm font-medium mb-2 block"
+                          >
+                            Have you made a police report?
+                          </Label>
+                          <RadioGroup 
+                            value={policeReport || ''} 
+                            onValueChange={(value) => { setPoliceReport(value); validateField('policeReport', value); }}
+                            className="flex space-x-4"
+                          >
+                            <div className="flex items-center space-x-2">
+                              <RadioGroupItem value="yes" id="police-report-yes" />
+                              <Label htmlFor="police-report-yes">Yes</Label>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                              <RadioGroupItem value="no" id="police-report-no" />
+                              <Label htmlFor="police-report-no">No</Label>
+                            </div>
+                          </RadioGroup>
+                          {errors.policeReport && <p className="text-red-500 text-sm mt-1">{errors.policeReport}</p>}
+                        </div>
+                      )}
                     </div>
                   </div>
                   <div>
                     <h3 className="text-lg font-semibold mb-2">Remarks</h3>
-                    <Textarea
-                      placeholder="Enter any additional remarks here"
-                      className="w-full"
-                    />
+                    {(suspiciousInjuries || unintentionalWeightLoss) ? (
+                      <>
+                        <Textarea
+                          placeholder="Enter any additional remarks here"
+                          className="w-full"
+                          value={remarks}
+                          onChange={(e) => { setRemarks(e.target.value); validateField('remarks', e.target.value); }}
+                          maxLength={500}
+                        />
+                        <p className="text-sm text-muted-foreground mt-1">
+                          {500 - remarks.length} characters left
+                        </p>
+                      </>
+                    ) : (
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          id="something-to-report"
+                          checked={somethingToReport}
+                          onCheckedChange={(checked) => {
+                            setSomethingToReport(checked as boolean);
+                            if (!checked) {
+                              setRemarks('');
+                              const newErrors = { ...errors };
+                              delete newErrors.remarks;
+                              setErrors(newErrors);
+                            }
+                          }}
+                          className={cn(
+                            "border-2",
+                            somethingToReport
+                              ? "border-orange-500 bg-orange-500 text-primary-foreground hover:bg-orange-500 hover:text-primary-foreground"
+                              : "border-primary"
+                          )}
+                        />
+                        <Label htmlFor="something-to-report">
+                          I have something else to report to MOM about the helper
+                        </Label>
+                      </div>
+                    )}
+                    {somethingToReport && !suspiciousInjuries && !unintentionalWeightLoss && (
+                      <>
+                        <Textarea
+                          placeholder="Enter your report here"
+                          className="w-full mt-2"
+                          value={remarks}
+                          onChange={(e) => { setRemarks(e.target.value); validateField('remarks', e.target.value); }}
+                          maxLength={500}
+                        />
+                        <p className="text-sm text-muted-foreground mt-1">
+                          {500 - remarks.length} characters left
+                        </p>
+                      </>
+                    )}
+                    {errors.remarks && <p className="text-red-500 text-sm mt-1">{errors.remarks}</p>}
                   </div>
                 </div>
                 <Button className="mt-4" onClick={() => handleContinue('summary')} disabled={!isExaminationEnabled}>Continue</Button>
