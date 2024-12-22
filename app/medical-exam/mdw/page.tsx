@@ -15,18 +15,19 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Checkbox } from "@/components/ui/checkbox"
 import { Textarea } from "@/components/ui/textarea"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { Summary } from "@/components/Summary"
 
 // Mock data for clinics and doctors
 const clinics = [
-  { id: '1', name: 'Clinic A' },
-  { id: '2', name: 'Clinic B' },
-  { id: '3', name: 'Clinic C' },
+  { id: '1', name: 'Clinic A', hciCode: '21M0180', contactNumber: '+65 6999 1234' },
+  { id: '2', name: 'Clinic B', hciCode: '21M0181', contactNumber: '+65 6999 5678' },
+  { id: '3', name: 'Clinic C', hciCode: '21M0182', contactNumber: '+65 6999 9012' },
 ]
 
 const doctors = [
-  { id: '1', name: 'Dr. Smith' },
-  { id: '2', name: 'Dr. Johnson' },
-  { id: '3', name: 'Dr. Lee' },
+  { id: '1', name: 'Dr. Smith', mcrNumber: 'M11111A' },
+  { id: '2', name: 'Dr. Johnson', mcrNumber: 'M22222B' },
+  { id: '3', name: 'Dr. Lee', mcrNumber: 'M33333C' },
 ]
 
 // Mock API call
@@ -47,7 +48,7 @@ const mockApiCall = async (fin: string) => {
 }
 
 export default function MDWExamPage() {
-  const [step, setStep] = useState('submission')
+  const [step, setStep] = useState<'submission' | 'summary'>('submission')
   const [selectedClinic, setSelectedClinic] = useState('')
   const [selectedDoctor, setSelectedDoctor] = useState('')
   const [fin, setFin] = useState('')
@@ -70,6 +71,7 @@ export default function MDWExamPage() {
   const [remarks, setRemarks] = useState('')
   const [somethingToReport, setSomethingToReport] = useState(false)
   const [showWeightWarning, setShowWeightWarning] = useState(false)
+  const [isSummaryActive, setIsSummaryActive] = useState(false)
 
   const validateFin = (value: string) => {
     const regex = /^[FMG]\d{7}[A-Z]$/
@@ -78,6 +80,7 @@ export default function MDWExamPage() {
 
   const handleFinChange = async (value: string) => {
     setFin(value)
+    setVisitDate(undefined) // Clear the visit date when FIN changes
     if (validateFin(value)) {
       const result = await mockApiCall(value)
       if (result) {
@@ -115,7 +118,7 @@ export default function MDWExamPage() {
       }
     } else if (nextStep === 'examination-details') {
       if (!validateFin(fin)) newErrors.fin = "Please enter a valid FIN"
-      if (!visitDate) newErrors.visitDate = "Please select a visit date"
+      if (helperName && !visitDate) newErrors.visitDate = "Please select a visit date"
 
       if (Object.keys(newErrors).length === 0) {
         setIsExaminationEnabled(true)
@@ -142,6 +145,30 @@ export default function MDWExamPage() {
     }
 
     setErrors(newErrors)
+
+    if (Object.keys(newErrors).length === 0) {
+      if (isSummaryActive) {
+        setStep('summary')
+      } else {
+        const accordions = ['clinic-doctor', 'helper-details', 'examination-details']
+        const currentIndex = accordions.indexOf(expandedAccordion)
+        if (currentIndex < accordions.length - 1) {
+          setExpandedAccordion(accordions[currentIndex + 1])
+        } else {
+          setIsSummaryActive(true)
+        }
+      }
+    }
+  }
+
+  const handleEdit = (section: 'clinic-doctor' | 'helper-details' | 'examination-details') => {
+    setStep('submission')
+    setExpandedAccordion(section)
+  }
+
+  const handleSubmit = () => {
+    // Implement the submission logic here
+    console.log("Form submitted!")
   }
 
   useEffect(() => {
@@ -202,6 +229,46 @@ export default function MDWExamPage() {
     setErrors(newErrors);
   };
 
+  const selectedClinicDetails = clinics.find(clinic => clinic.id === selectedClinic)
+  const selectedDoctorDetails = doctors.find(doctor => doctor.id === selectedDoctor)
+
+  if (step === 'summary') {
+    return (
+      <div className="container mx-auto p-6">
+        <Summary
+          clinicDetails={{
+            clinic: selectedClinicDetails?.name || '',
+            doctor: selectedDoctorDetails?.name || '',
+            hciCode: selectedClinicDetails?.hciCode || '',
+            contactNumber: selectedClinicDetails?.contactNumber || '',
+            mcrNumber: selectedDoctorDetails?.mcrNumber || '',
+          }}
+          helperDetails={{
+            fin,
+            name: helperName,
+            visitDate: visitDate!
+          }}
+          examinationDetails={{
+            weight,
+            height,
+            bmi,
+            positiveTests,
+            testResults: testTypes.map(test => ({
+              name: test,
+              result: positiveTests.includes(test) ? 'Positive/Reactive' : 'Negative/Non-reactive'
+            })),
+            suspiciousInjuries,
+            unintentionalWeightLoss,
+            policeReport,
+            remarks
+          }}
+          onEdit={handleEdit}
+          onSubmit={handleSubmit}
+        />
+      </div>
+    )
+  }
+
   return (
     <div className="container mx-auto p-6">
       <Card>
@@ -220,7 +287,7 @@ export default function MDWExamPage() {
               Submission
             </div>
             <div className="mx-2 w-10 h-0.5 bg-gray-300"></div>
-            <div className={cn("flex items-center", step === 'summary' ? "text-primary" : "text-muted-foreground opacity-50")}>
+            <div className={cn("flex items-center", isSummaryActive ? "text-primary" : "text-muted-foreground opacity-50")}>
               <div className="w-8 h-8 rounded-full border-2 border-current flex items-center justify-center mr-2">
                 2
               </div>
@@ -262,7 +329,7 @@ export default function MDWExamPage() {
                     {errors.doctor && <p className="text-red-500 text-sm mt-1">{errors.doctor}</p>}
                   </div>
                 </div>
-                <Button className="mt-4" onClick={() => handleContinue('helper-details')}>Continue</Button>
+                <Button className="mt-4 bg-orange-500 hover:bg-orange-600 text-white" onClick={() => handleContinue('helper-details')}>{isSummaryActive ? 'Continue to Summary' : 'Continue'}</Button>
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="helper-details" className={!isHelperDetailsEnabled ? "opacity-50" : ""}>
@@ -275,45 +342,48 @@ export default function MDWExamPage() {
                       id="fin"
                       value={fin}
                       onChange={(e) => { handleFinChange(e.target.value); validateField('fin', e.target.value); }}
+                      onBlur={() => { if (validateFin(fin)) handleFinChange(fin); }}
                       placeholder="Enter FIN (e.g., G1234567A)"
                     />
                     {errors.fin && <p className="text-red-500 text-sm mt-1">{errors.fin}</p>}
-                    {helperName && (
-                      <p className="mt-2 text-sm text-muted-foreground">Helper Name: {helperName}</p>
-                    )}
                   </div>
                   {helperName && (
-                    <div>
-                      <Label htmlFor="visit-date">Date helper visits the clinic</Label>
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <Button
-                            variant={"outline"}
-                            className={cn(
-                              "w-full justify-start text-left font-normal",
-                              !visitDate && "text-muted-foreground"
-                            )}
-                          >
-                            <CalendarIcon className="mr-2 h-4 w-4" />
-                            {visitDate ? format(visitDate, "PPP") : <span>Pick a date</span>}
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0">
-                          <Calendar
-                            mode="single"
-                            selected={visitDate}
-                            onSelect={(date) => { setVisitDate(date); validateField('visitDate', date); }}
-                            disabled={(date) => 
-                              date > new Date() || date < new Date(new Date().setDate(new Date().getDate() - 90))
-                            }
-                          />
-                        </PopoverContent>
-                      </Popover>
-                      {errors.visitDate && <p className="text-red-500 text-sm mt-1">{errors.visitDate}</p>}
-                    </div>
+                    <>
+                      <div>
+                        <p className="mt-2 text-sm text-muted-foreground">Helper Name: {helperName}</p>
+                      </div>
+                      <div>
+                        <Label htmlFor="visit-date">Date helper visits the clinic</Label>
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <Button
+                              variant={"outline"}
+                              className={cn(
+                                "w-full justify-start text-left font-normal",
+                                !visitDate && "text-muted-foreground"
+                              )}
+                            >
+                              <CalendarIcon className="mr-2 h-4 w-4" />
+                              {visitDate ? format(visitDate, "PPP") : <span>Pick a date</span>}
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-auto p-0">
+                            <Calendar
+                              mode="single"
+                              selected={visitDate}
+                              onSelect={(date) => { setVisitDate(date); validateField('visitDate', date); }}
+                              disabled={(date) => 
+                                date > new Date() || date < new Date(new Date().setDate(new Date().getDate() - 90))
+                              }
+                            />
+                          </PopoverContent>
+                        </Popover>
+                        {errors.visitDate && visitDate === undefined && <p className="text-red-500 text-sm mt-1">{errors.visitDate}</p>}
+                      </div>
+                    </>
                   )}
                 </div>
-                <Button className="mt-4" onClick={() => handleContinue('examination-details')} disabled={!isHelperDetailsEnabled}>Continue</Button>
+                <Button className="mt-4 bg-orange-500 hover:bg-orange-600 text-white" onClick={() => handleContinue('examination-details')} disabled={!isHelperDetailsEnabled}>{isSummaryActive ? 'Continue to Summary' : 'Continue'}</Button>
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="examination-details" className={!isExaminationEnabled ? "opacity-50" : ""}>
@@ -611,7 +681,7 @@ export default function MDWExamPage() {
                     {errors.remarks && <p className="text-red-500 text-sm mt-1">{errors.remarks}</p>}
                   </div>
                 </div>
-                <Button className="mt-4" onClick={() => handleContinue('summary')} disabled={!isExaminationEnabled}>Continue</Button>
+                <Button className="mt-4 bg-orange-500 hover:bg-orange-600 text-white" onClick={() => handleContinue('summary')} disabled={!isExaminationEnabled}>{isSummaryActive ? 'Continue to Summary' : 'Continue'}</Button>
               </AccordionContent>
             </AccordionItem>
           </Accordion>
