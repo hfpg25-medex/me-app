@@ -12,9 +12,9 @@ import { format } from "date-fns"
 import { CalendarIcon } from 'lucide-react'
 import { cn } from "@/lib/utils"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { toast } from "@/components/ui/use-toast"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Textarea } from "@/components/ui/textarea"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 
 // Mock data for clinics and doctors
 const clinics = [
@@ -64,6 +64,9 @@ export default function MDWExamPage() {
   const [bmi, setBmi] = useState<number | null>(null)
   const [lastRecordedWeight, setLastRecordedWeight] = useState<number | null>(null)
   const [lastRecordedHeight, setLastRecordedHeight] = useState<number | null>(null)
+  const [suspiciousInjuries, setSuspiciousInjuries] = useState(false)
+  const [unintentionalWeightLoss, setUnintentionalWeightLoss] = useState(false)
+  const [policeReport, setPoliceReport] = useState<string | null>(null)
 
   const validateFin = (value: string) => {
     const regex = /^[FMG]\d{7}[A-Z]$/
@@ -122,6 +125,8 @@ export default function MDWExamPage() {
       
       if (!height) newErrors.height = "Please enter a height"
       else if (parseFloat(height) < 90 || parseFloat(height) > 250) newErrors.height = "Height must be between 90cm and 250cm"
+
+      if (policeReport === null) newErrors.policeReport = "Please select whether a police report has been made"
 
       if (Object.keys(newErrors).length === 0) {
         setStep('summary')
@@ -309,37 +314,122 @@ export default function MDWExamPage() {
                     <h3 className="text-lg font-semibold mb-2">Test results</h3>
                     <p className="text-sm text-muted-foreground mb-2">Indicate positive test results:</p>
                     {testTypes.map((test) => (
-                      <div key={test} className="flex items-center space-x-2">
-                        <Checkbox
-                          id={test}
-                          checked={positiveTests.includes(test)}
-                          onCheckedChange={(checked) => {
-                            setPositiveTests(
-                              checked
-                                ? [...positiveTests, test]
-                                : positiveTests.filter((t) => t !== test)
-                            )
-                          }}
-                        />
+                      <div key={test} className="flex items-center justify-between space-x-2 mb-2">
                         <Label
                           htmlFor={test}
                           className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                         >
                           {test}
                         </Label>
+                        <div className="flex items-center space-x-2">
+                          <Checkbox
+                            id={test}
+                            checked={positiveTests.includes(test)}
+                            onCheckedChange={(checked) => {
+                              setPositiveTests(
+                                checked
+                                  ? [...positiveTests, test]
+                                  : positiveTests.filter((t) => t !== test)
+                              )
+                            }}
+                            className={positiveTests.includes(test) ? "text-orange-500 border-orange-500" : ""}
+                          />
+                          <Label
+                            htmlFor={test}
+                            className={cn(
+                              "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
+                              positiveTests.includes(test) ? "text-orange-500" : ""
+                            )}
+                          >
+                            Positive/Reactive
+                          </Label>
+                        </div>
                       </div>
                     ))}
-                    {/* {test === 'HIV' && (
+                    {testTypes.includes('HIV') && (
                       <p className="text-sm text-muted-foreground mt-2">
                         Note: HIV test must be done by an MOH-approved laboratory.
                       </p>
-                    )} */}
+                    )}
                   </div>
                   <div>
                     <h3 className="text-lg font-semibold mb-2">Physical examination details</h3>
-                    <p className="text-sm text-muted-foreground">
-                      Physical examination details coming soon...
-                    </p>
+                    <div className="space-y-4">
+                      <div>
+                        <div className="flex items-center justify-between space-x-2 mb-2">
+                          <Label
+                            htmlFor="suspicious-injuries"
+                            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                          >
+                            Signs of suspicious or unexplained injuries
+                          </Label>
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              id="suspicious-injuries"
+                              checked={suspiciousInjuries}
+                              onCheckedChange={(checked) => setSuspiciousInjuries(checked as boolean)}
+                              className={suspiciousInjuries ? "text-orange-500 border-orange-500" : ""}
+                            />
+                            <Label
+                              htmlFor="suspicious-injuries"
+                              className={cn(
+                                "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
+                                suspiciousInjuries ? "text-orange-500" : ""
+                              )}
+                            >
+                              Yes
+                            </Label>
+                          </div>
+                        </div>
+                        {suspiciousInjuries && (
+                          <p className="text-orange-500 text-sm mt-1">Provide your assessment in the remarks section.</p>
+                        )}
+                      </div>
+                      <div>
+                        <div className="flex items-center justify-between space-x-2 mb-2">
+                          <Label
+                            htmlFor="unintentional-weight-loss"
+                            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                          >
+                            Unintentional weight loss (if unsure, select yes)
+                          </Label>
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              id="unintentional-weight-loss"
+                              checked={unintentionalWeightLoss}
+                              onCheckedChange={(checked) => setUnintentionalWeightLoss(checked as boolean)}
+                              className={unintentionalWeightLoss ? "text-orange-500 border-orange-500" : ""}
+                            />
+                            <Label
+                              htmlFor="unintentional-weight-loss"
+                              className={cn(
+                                "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
+                                unintentionalWeightLoss ? "text-orange-500" : ""
+                              )}
+                            >
+                              Yes
+                            </Label>
+                          </div>
+                        </div>
+                        {unintentionalWeightLoss && (
+                          <p className="text-orange-500 text-sm mt-1">Provide your assessment in the remarks section.</p>
+                        )}
+                      </div>
+                      <div>
+                        <Label className="text-sm font-medium mb-2 block">Have you made a police report?</Label>
+                        <RadioGroup value={policeReport || ''} onValueChange={setPoliceReport}>
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="yes" id="police-report-yes" />
+                            <Label htmlFor="police-report-yes">Yes</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="no" id="police-report-no" />
+                            <Label htmlFor="police-report-no">No</Label>
+                          </div>
+                        </RadioGroup>
+                        {errors.policeReport && <p className="text-red-500 text-sm mt-1">{errors.policeReport}</p>}
+                      </div>
+                    </div>
                   </div>
                   <div>
                     <h3 className="text-lg font-semibold mb-2">Remarks</h3>
