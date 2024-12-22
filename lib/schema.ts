@@ -25,10 +25,6 @@ export const doctorSchema = z.object({
   mcr: z
     .string()
     .regex(/^M\d{5}[A-Z]$/, { message: 'MCR number must be in format M12345A' }),
-  specialization: z
-    .string()
-    .min(2, { message: 'Specialization must be at least 2 characters' })
-    .max(100, { message: 'Specialization must be at most 100 characters' }),
 })
 
 export const contactFormSchema = z.object({

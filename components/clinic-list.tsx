@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent } from '@/components/ui/card'
-import { Plus, Trash2, Building2 } from 'lucide-react'
+import { Plus, Trash2, Building2, Pencil } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { clinicAction } from '@/lib/actions'
 
@@ -19,6 +19,7 @@ interface Clinic {
 
 export function ClinicList() {
   const [clinics, setClinics] = React.useState<Clinic[]>([])
+  const [editingId, setEditingId] = React.useState<string | null>(null)
 
   const addClinic = () => {
     const newClinic: Clinic = {
@@ -29,10 +30,14 @@ export function ClinicList() {
       address: '',
     }
     setClinics([...clinics, newClinic])
+    setEditingId(newClinic.id)
   }
 
   const removeClinic = (id: string) => {
     setClinics(clinics.filter(clinic => clinic.id !== id))
+    if (editingId === id) {
+      setEditingId(null)
+    }
   }
 
   const updateClinic = (id: string, field: keyof Clinic, value: string) => {
@@ -54,7 +59,7 @@ export function ClinicList() {
       })
       await clinicAction(null, formData)
     }
-    // Handle the response, maybe show a success message or clear the form
+    setEditingId(null)
   }
 
   return (
@@ -77,67 +82,85 @@ export function ClinicList() {
           {clinics.map((clinic) => (
             <Card key={clinic.id}>
               <CardContent className="pt-6">
-                <div className="relative grid gap-4">
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    className="absolute right-0 top-0"
-                    onClick={() => removeClinic(clinic.id)}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                  
-                  <div className="grid gap-2">
-                    <Label htmlFor={`clinic-name-${clinic.id}`}>Clinic Name</Label>
-                    <Input
-                      id={`clinic-name-${clinic.id}`}
-                      value={clinic.name}
-                      onChange={(e) => updateClinic(clinic.id, 'name', e.target.value)}
-                      placeholder="Enter clinic name"
-                    />
-                  </div>
-
-                  <div className="grid gap-2">
-                    <Label htmlFor={`hc-code-${clinic.id}`}>
-                      Healthcare Institution (HC) code
-                    </Label>
-                    <Input
-                      id={`hc-code-${clinic.id}`}
-                      value={clinic.hcCode}
-                      onChange={(e) => updateClinic(clinic.id, 'hcCode', e.target.value)}
-                      placeholder="1234567"
-                      maxLength={7}
-                    />
-                  </div>
-
-                  <div className="grid gap-2">
-                    <Label htmlFor={`contact-${clinic.id}`}>Contact Number</Label>
-                    <div className="flex">
-                      <span className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md">
-                        +65
-                      </span>
+                {editingId === clinic.id ? (
+                  <div className="relative grid gap-4">
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      className="absolute right-0 top-0"
+                      onClick={() => removeClinic(clinic.id)}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                    
+                    <div className="grid gap-2">
+                      <Label htmlFor={`clinic-name-${clinic.id}`}>Clinic Name</Label>
                       <Input
-                        id={`contact-${clinic.id}`}
-                        value={clinic.contactNumber}
-                        onChange={(e) => updateClinic(clinic.id, 'contactNumber', e.target.value)}
-                        placeholder="91234567"
-                        maxLength={8}
-                        className="rounded-l-none"
+                        id={`clinic-name-${clinic.id}`}
+                        value={clinic.name}
+                        onChange={(e) => updateClinic(clinic.id, 'name', e.target.value)}
+                        placeholder="Enter clinic name"
+                      />
+                    </div>
+
+                    <div className="grid gap-2">
+                      <Label htmlFor={`hc-code-${clinic.id}`}>
+                        Healthcare Institution (HC) code
+                      </Label>
+                      <Input
+                        id={`hc-code-${clinic.id}`}
+                        value={clinic.hcCode}
+                        onChange={(e) => updateClinic(clinic.id, 'hcCode', e.target.value)}
+                        placeholder="1234567"
+                        maxLength={7}
+                      />
+                    </div>
+
+                    <div className="grid gap-2">
+                      <Label htmlFor={`contact-${clinic.id}`}>Contact Number</Label>
+                      <div className="flex">
+                        <span className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md">
+                          +65
+                        </span>
+                        <Input
+                          id={`contact-${clinic.id}`}
+                          value={clinic.contactNumber}
+                          onChange={(e) => updateClinic(clinic.id, 'contactNumber', e.target.value)}
+                          placeholder="91234567"
+                          maxLength={8}
+                          className="rounded-l-none"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid gap-2">
+                      <Label htmlFor={`address-${clinic.id}`}>Address</Label>
+                      <Input
+                        id={`address-${clinic.id}`}
+                        value={clinic.address}
+                        onChange={(e) => updateClinic(clinic.id, 'address', e.target.value)}
+                        placeholder="Enter clinic address"
                       />
                     </div>
                   </div>
-
-                  <div className="grid gap-2">
-                    <Label htmlFor={`address-${clinic.id}`}>Address</Label>
-                    <Input
-                      id={`address-${clinic.id}`}
-                      value={clinic.address}
-                      onChange={(e) => updateClinic(clinic.id, 'address', e.target.value)}
-                      placeholder="Enter clinic address"
-                    />
+                ) : (
+                  <div className="relative">
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      className="absolute right-0 top-0"
+                      onClick={() => setEditingId(clinic.id)}
+                    >
+                      <Pencil className="h-4 w-4" />
+                    </Button>
+                    <h4 className="font-semibold">{clinic.name}</h4>
+                    <p className="text-sm text-muted-foreground">HC Code: {clinic.hcCode}</p>
+                    <p className="text-sm text-muted-foreground">Contact: +65 {clinic.contactNumber}</p>
+                    <p className="text-sm text-muted-foreground">{clinic.address}</p>
                   </div>
-                </div>
+                )}
               </CardContent>
             </Card>
           ))}

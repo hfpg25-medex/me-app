@@ -5,12 +5,12 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
-import { clinicAction, doctorAction } from '@/lib/actions'
+import { clinicDetailsAction } from '@/lib/actions'
 import { Check } from 'lucide-react'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card'
 
 export function ClinicDetailsForm({ className }: React.ComponentProps<'div'>) {
-  const [state, formAction, pending] = React.useActionState(clinicAction, {
+  const [state, formAction, pending] = React.useActionState(clinicDetailsAction, {
     defaultValues: {
       hcCode: '',
       contactNumber: '',

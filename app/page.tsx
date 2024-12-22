@@ -26,7 +26,7 @@ export default function HomePage() {
                 Submit a new medical examination record
               </CardDescription>
               <Button asChild className="mt-2 w-full">
-                <Link href="/medical-exam">Start New Exam</Link>
+                <Link href="/medical-exam/select">Start New Exam</Link>
               </Button>
             </CardHeader>
           </Card>

@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent } from '@/components/ui/card'
-import { Plus, Trash2, Stethoscope } from 'lucide-react'
+import { Plus, Trash2, Stethoscope, Pencil } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { doctorAction } from '@/lib/actions'
 
@@ -17,6 +17,7 @@ interface Doctor {
 
 export function DoctorList() {
   const [doctors, setDoctors] = React.useState<Doctor[]>([])
+  const [editingId, setEditingId] = React.useState<string | null>(null)
 
   const addDoctor = () => {
     const newDoctor: Doctor = {
@@ -25,10 +26,14 @@ export function DoctorList() {
       mcr: '',
     }
     setDoctors([...doctors, newDoctor])
+    setEditingId(newDoctor.id)
   }
 
   const removeDoctor = (id: string) => {
     setDoctors(doctors.filter(doctor => doctor.id !== id))
+    if (editingId === id) {
+      setEditingId(null)
+    }
   }
 
   const updateDoctor = (id: string, field: keyof Doctor, value: string) => {
@@ -50,7 +55,7 @@ export function DoctorList() {
       })
       await doctorAction(null, formData)
     }
-    // Handle the response, maybe show a success message or clear the form
+    setEditingId(null)
   }
 
   return (
@@ -73,38 +78,54 @@ export function DoctorList() {
           {doctors.map((doctor) => (
             <Card key={doctor.id}>
               <CardContent className="pt-6">
-                <div className="relative grid gap-4">
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    className="absolute right-0 top-0"
-                    onClick={() => removeDoctor(doctor.id)}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                  
-                  <div className="grid gap-2">
-                    <Label htmlFor={`doctor-name-${doctor.id}`}>Doctor Name</Label>
-                    <Input
-                      id={`doctor-name-${doctor.id}`}
-                      value={doctor.name}
-                      onChange={(e) => updateDoctor(doctor.id, 'name', e.target.value)}
-                      placeholder="Enter doctor name"
-                    />
-                  </div>
+                {editingId === doctor.id ? (
+                  <div className="relative grid gap-4">
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      className="absolute right-0 top-0"
+                      onClick={() => removeDoctor(doctor.id)}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                    
+                    <div className="grid gap-2">
+                      <Label htmlFor={`doctor-name-${doctor.id}`}>Doctor Name</Label>
+                      <Input
+                        id={`doctor-name-${doctor.id}`}
+                        value={doctor.name}
+                        onChange={(e) => updateDoctor(doctor.id, 'name', e.target.value)}
+                        placeholder="Enter doctor name"
+                      />
+                    </div>
 
-                  <div className="grid gap-2">
-                    <Label htmlFor={`mcr-${doctor.id}`}>Medical Registration (MCR) Number</Label>
-                    <Input
-                      id={`mcr-${doctor.id}`}
-                      value={doctor.mcr}
-                      onChange={(e) => updateDoctor(doctor.id, 'mcr', e.target.value)}
-                      placeholder="M12345A"
-                      maxLength={7}
-                    />
+                    <div className="grid gap-2">
+                      <Label htmlFor={`mcr-${doctor.id}`}>MCR Number</Label>
+                      <Input
+                        id={`mcr-${doctor.id}`}
+                        value={doctor.mcr}
+                        onChange={(e) => updateDoctor(doctor.id, 'mcr', e.target.value)}
+                        placeholder="M12345A"
+                        maxLength={7}
+                      />
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  <div className="relative">
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      className="absolute right-0 top-0"
+                      onClick={() => setEditingId(doctor.id)}
+                    >
+                      <Pencil className="h-4 w-4" />
+                    </Button>
+                    <h4 className="font-semibold">{doctor.name}</h4>
+                    <p className="text-sm text-muted-foreground">MCR: {doctor.mcr}</p>
+                  </div>
+                )}
               </CardContent>
             </Card>
           ))}
@@ -114,3 +135,4 @@ export function DoctorList() {
     </form>
   )
 }
+
