@@ -1,0 +1,8 @@
+{
+  "name": "me-app",
+  "framework": "nextjs",
+  "scripts": {
+    "build": "npm run build",
+    "start": "next start"
+  }
+}
