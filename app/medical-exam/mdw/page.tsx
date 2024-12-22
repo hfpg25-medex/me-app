@@ -12,6 +12,7 @@ import { useForm, FormProvider } from "react-hook-form"
 import { ClinicDoctorDetails } from "@/components/medical-exam/ClinicDoctorDetails"
 import { HelperDetails } from "@/components/medical-exam/HelperDetails"
 import { ExaminationDetails } from "@/components/medical-exam/ExaminationDetails"
+import { AcknowledgementPage } from '@/components/AcknowledgementPage'
 
 const clinics = [
   { id: '1', name: 'Clinic A', hciCode: '21M0180', contactNumber: '+65 6999 1234' },
@@ -57,6 +58,7 @@ export default function MDWExamPage() {
   const [finTouched, setFinTouched] = useState(false);
   const [visitDateTouched, setVisitDateTouched] = useState(false);
   const [weightTouched, setWeightTouched] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false); // New state to track submission
 
   const methods = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -187,7 +189,18 @@ export default function MDWExamPage() {
 
   const onSubmit = (data: FormData) => {
     console.log("Form submitted!", data)
-    // Implement the submission logic here
+    setIsSubmitted(true);
+  }
+
+  if (isSubmitted) {
+    return (
+      <AcknowledgementPage 
+        finNumber={watchedValues.helperDetails.fin}
+        helperName={watchedValues.helperDetails.helperName}
+        referenceNumber="6ME2108120001" // Replace with actual reference number if available
+        submissionDateTime={new Date().toLocaleString()} // Current date and time for submission
+      />
+    );
   }
 
   const selectedClinicDetails = clinics.find(clinic => clinic.id === watchedValues.clinicDoctor.clinic)
