@@ -17,7 +17,8 @@ export const helperDetailsSchema = z.object({
 export const examinationDetailsSchema = z.object({
   weight: z.union([
     z.string().refine((val) => val === '', { message: "Weight is required" }),
-    z.number().min(15, "Weight must be at least 15kg").max(200, "Weight must be at most 200kg")
+    z.number().min(15, "Weight must be at least 15kg").max(200, "Weight must be at most 200kg"),
+    z.null()
   ]),
   height: z.number().min(90, "Height must be at least 90cm").max(250, "Height must be at most 250cm"),
   bmi: z.number().nullable(),

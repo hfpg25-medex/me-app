@@ -188,7 +188,7 @@ export default function MDWExamPage() {
             visitDate: watchedValues.helperDetails.visitDate || null
           }}
           examinationDetails={{
-            weight: watchedValues.examinationDetails.weight.toString(),
+            weight: watchedValues.examinationDetails.weight !== null ? watchedValues.examinationDetails.weight.toString() : '',
             height: watchedValues.examinationDetails.height.toString(),
             bmi: watchedValues.examinationDetails.bmi,
             positiveTests: watchedValues.examinationDetails.positiveTests,
