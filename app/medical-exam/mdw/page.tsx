@@ -139,17 +139,21 @@ export default function MDWExamPage() {
       case 'helper-details':
         isValid = await trigger('helperDetails')
         if (isValid) {
-          if (isSummaryActive) {
-            setStep('summary')
-          } else {
-            setIsExaminationEnabled(true)
-            setExpandedAccordion('examination-details')
-          }
+          // if (isSummaryActive) {
+          //   setStep('summary')
+          // } else {
+          //   setIsExaminationEnabled(true)
+          //   setExpandedAccordion('examination-details')
+          // }
+          setIsExaminationEnabled(true)
+          setExpandedAccordion('examination-details')
         }
         break
       case 'examination-details':
         setWeightTouched(true);
-        isValid = await trigger(['examinationDetails.weight', 'examinationDetails'])
+        // isValid = await trigger(['examinationDetails.weight', 'examinationDetails'])
+        isValid = await trigger('examinationDetails')
+
         if (isValid) {
           setIsSummaryActive(true)
           setStep('summary')

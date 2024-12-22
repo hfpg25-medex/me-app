@@ -317,7 +317,7 @@ export function ExaminationDetails({
           {errors.examinationDetails?.remarks && <p className="text-red-500 text-sm mt-1">{errors.examinationDetails.remarks.message}</p>}
         </div>
       </div>
-      <Button className="mt-4 bg-orange-500 hover:bg-orange-600 text-white" onClick={() => handleContinue('summary')} disabled={!isSummaryActive}>{isSummaryActive ? 'Continue to Summary' : 'Continue'}</Button>
+      <Button className="mt-4 bg-orange-500 hover:bg-orange-600 text-white" onClick={() => handleContinue('summary')}>{isSummaryActive ? 'Continue to Summary' : 'Continue'}</Button>
     </AccordionContent>
   )
 }
