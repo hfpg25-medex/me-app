@@ -1,85 +1,61 @@
-import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+'use client'
+
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
-import Link from "next/link"
-import { ClipboardList, Stethoscope, FileEdit, History } from 'lucide-react'
 
-export default function HomePage() {
+export default function LoginPage() {
+  const [uen, setUen] = useState('')
+  const [corppassId, setCorppassId] = useState('')
+  const router = useRouter()
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault()
+     // Here you would typically validate the credentials with a backend service
+    // For this example, we'll just set a flag in localStorage
+    // localStorage.setItem('isAuthenticated', 'true')
+    document.cookie = 'isAuthenticated=true; path=/'
+    router.push('/home')
+  }
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      <main className="container mx-auto p-6">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold tracking-tight mb-2">Welcome to the Medical Portal</h1>
-          <p className="text-xl text-muted-foreground">
-            Hello, Doctor. We hope you're having a great day. What would you like to do?
-          </p>
-        </div>
-
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-          {/* New Medical Exam Card */}
-          <Card className="hover:shadow-lg transition-shadow">
-            <CardHeader>
-              <div className="mb-2 w-fit rounded-full bg-primary/10 p-2">
-                <ClipboardList className="h-6 w-6 text-primary" />
-              </div>
-              <CardTitle className="text-xl">New Medical Exam</CardTitle>
-              <CardDescription>
-                Submit a new medical examination record
-              </CardDescription>
-              <Button asChild className="mt-2 w-full">
-                <Link href="/medical-exam/select">Start New Exam</Link>
-              </Button>
-            </CardHeader>
-          </Card>
-
-          {/* Clinic & Doctor Details Card */}
-          <Card className="hover:shadow-lg transition-shadow">
-            <CardHeader>
-              <div className="mb-2 w-fit rounded-full bg-primary/10 p-2">
-                <Stethoscope className="h-6 w-6 text-primary" />
-              </div>
-              <CardTitle className="text-xl">Clinic & Doctor Details</CardTitle>
-              <CardDescription>
-                Manage your clinic and doctor information
-              </CardDescription>
-              <Button asChild className="mt-2 w-full">
-                <Link href="/forms">Update Details</Link>
-              </Button>
-            </CardHeader>
-          </Card>
-
-          {/* Update Medical Records Card */}
-          <Card className="hover:shadow-lg transition-shadow">
-            <CardHeader>
-              <div className="mb-2 w-fit rounded-full bg-primary/10 p-2">
-                <FileEdit className="h-6 w-6 text-primary" />
-              </div>
-              <CardTitle className="text-xl">Update Records</CardTitle>
-              <CardDescription>
-                Modify existing medical examination records
-              </CardDescription>
-              <Button asChild className="mt-2 w-full">
-                <Link href="/records/edit">Update Records</Link>
-              </Button>
-            </CardHeader>
-          </Card>
-
-          {/* View History Card */}
-          <Card className="hover:shadow-lg transition-shadow">
-            <CardHeader>
-              <div className="mb-2 w-fit rounded-full bg-primary/10 p-2">
-                <History className="h-6 w-6 text-primary" />
-              </div>
-              <CardTitle className="text-xl">View History</CardTitle>
-              <CardDescription>
-                Access past medical examination records
-              </CardDescription>
-              <Button asChild className="mt-2 w-full">
-                <Link href="/records/history">View History</Link>
-              </Button>
-            </CardHeader>
-          </Card>
-        </div>
-      </main>
+    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <Card className="w-full max-w-md">
+        <CardHeader>
+          <CardTitle className="text-2xl font-bold">Login to Medical Portal</CardTitle>
+          <CardDescription>Enter your UEN and Corppass ID to access the portal</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleLogin} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="uen">UEN</Label>
+              <Input
+                id="uen"
+                type="text"
+                placeholder="Enter your UEN"
+                value={uen}
+                onChange={(e) => setUen(e.target.value)}
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="corppassId">Corppass ID</Label>
+              <Input
+                id="corppassId"
+                type="password"
+                placeholder="Enter your Corppass ID"
+                value={corppassId}
+                onChange={(e) => setCorppassId(e.target.value)}
+                required
+              />
+            </div>
+            <Button type="submit" className="w-full">Login</Button>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   )
 }
