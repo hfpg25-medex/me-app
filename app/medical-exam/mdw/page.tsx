@@ -81,7 +81,7 @@ export default function MDWExamPage() {
 
   useEffect(() => {
     if (watchedValues.examinationDetails.weight && watchedValues.examinationDetails.height) {
-      const weightInKg = parseFloat(watchedValues.examinationDetails.weight)
+      const weightInKg = watchedValues.examinationDetails.weight
       const heightInM = watchedValues.examinationDetails.height / 100
       const calculatedBmi = weightInKg / (heightInM * heightInM)
       setValue('examinationDetails.bmi', parseFloat(calculatedBmi.toFixed(1)))
