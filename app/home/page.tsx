@@ -10,7 +10,7 @@ export default function HomePage() {
         <div className="mb-8">
           <h1 className="text-4xl font-bold tracking-tight mb-2">Welcome to the Medical Portal</h1>
           <p className="text-xl text-muted-foreground">
-            Hello, Doctor. We hope you're having a great day. What would you like to do?
+            Hello, Doctor. We hope you&apos;re having a great day. What would you like to do?
           </p>
         </div>
 
