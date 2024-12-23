@@ -51,7 +51,7 @@ export function Summary({
 
   return (
     <div className="max-w-4xl mx-auto">
-      <h1 className="text-2xl font-semibold mb-6">Submit medical examination results</h1>
+      <h1 className="text-2xl font-semibold mb-6">Six-monthly Medical Exam for Migrant Domestic Workers (MOM)</h1>
       
       <div className="flex items-center mb-8">
         <div className="flex items-center text-primary">
@@ -82,22 +82,22 @@ export function Summary({
               Edit
             </Button>
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2">
             <div>
-              <p className="text-gray-600">Healthcare Institution (HCI) code</p>
-              <p>{clinicDetails.hciCode}</p>
+              <div className="text-sm text-gray-600">Healthcare Institution (HCI) code</div>
+              <p className="text-sm font-semibold">{clinicDetails.hciCode}</p>
             </div>
             <div>
-              <p className="text-gray-600">Clinic contact number</p>
-              <p>{clinicDetails.contactNumber}</p>
+              <div className="text-sm text-gray-600">Clinic contact number</div>
+              <p className="text-sm font-semibold">{clinicDetails.contactNumber}</p>
             </div>
             <div>
-              <p className="text-gray-600">Medical Registration (MCR) number</p>
-              <p>{clinicDetails.mcrNumber}</p>
+              <div className="text-sm text-gray-600">Medical Registration (MCR) number</div>
+              <p className="text-sm font-semibold">{clinicDetails.mcrNumber}</p>
             </div>
             <div>
-              <p className="text-gray-600">Doctor's name</p>
-              <p>{clinicDetails.doctor}</p>
+              <div className="text-sm text-gray-600">Doctor's name</div>
+              <p className="text-sm font-semibold">{clinicDetails.doctor}</p>
             </div>
           </div>
         </section>
@@ -114,18 +114,18 @@ export function Summary({
               Edit
             </Button>
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2">
             <div>
-              <p className="text-gray-600">FIN</p>
-              <p>{helperDetails.fin}</p>
+              <div className="text-sm text-gray-600">FIN</div>
+              <p className="text-sm font-semibold">{helperDetails.fin}</p>
             </div>
             <div>
-              <p className="text-gray-600">Name</p>
-              <p>{helperDetails.name}</p>
+              <div className="text-sm text-gray-600">Name</div>
+              <p className="text-sm font-semibold">{helperDetails.name}</p>
             </div>
             <div>
-              <p className="text-gray-600">Date helper visited clinic</p>
-              <p>{helperDetails.visitDate ? format(helperDetails.visitDate, 'dd MMM yyyy') : '-'}</p>
+              <div className="text-sm text-gray-600">Date helper visited clinic</div>
+              <p className="text-sm font-semibold">{helperDetails.visitDate ? format(helperDetails.visitDate, 'dd MMM yyyy') : '-'}</p>
             </div>
           </div>
         </section>
@@ -143,7 +143,7 @@ export function Summary({
             </Button>
           </div>
           <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
+            {/* <div className="grid grid-cols-2 gap-4">
               <div>
                 <p className="text-gray-600">Weight</p>
                 <p>{examinationDetails.weight} kg</p>
@@ -156,16 +156,28 @@ export function Summary({
                 <p className="text-gray-600">BMI</p>
                 <p>{examinationDetails.bmi}</p>
               </div>
+            </div> */}
+            <div className="grid grid-cols-2">
+            <div>
+              <div className="text-sm text-gray-600">Weight</div>
+              <p className="text-sm font-semibold">{examinationDetails.weight} kg</p>
             </div>
+            <div>
+              <div className="text-sm text-gray-600">Height</div>
+              <p className="text-sm font-semibold">{examinationDetails.height} cm</p>
+            </div>
+            <div>
+              <div className="text-sm text-gray-600">BMI</div>
+              <p className="text-sm font-semibold">{examinationDetails.bmi}</p>
+            </div>
+          </div>
 
             {examinationDetails.testResults && examinationDetails.testResults.length > 0 ? (
               <div className="space-y-2">
                 {examinationDetails.testResults.map((test) => (
                   <div key={test.name}>
-                    <p className="text-gray-600">{test.name}</p>
-                    <p className={cn(
-                      test.result === 'Positive/Reactive' && "text-orange-500"
-                    )}>
+                    <div className="text-sm text-gray-600">{test.name}</div>
+                    <p className={cn("text-sm font-semibold", test.result === 'Positive/Reactive' && "text-orange-500")}>
                       {test.result}
                     </p>
                   </div>
@@ -177,8 +189,8 @@ export function Summary({
 
             <div className="space-y-2">
               <div>
-                <p className="text-gray-600">Signs of suspicious or unexplained injuries</p>
-                <p className={cn(
+                <div className="text-sm text-gray-600">Signs of suspicious or unexplained injuries</div>
+                <p className={cn("text-sm font-semibold",
                   examinationDetails.suspiciousInjuries && "text-orange-500"
                 )}>
                   {examinationDetails.suspiciousInjuries ? 'Yes' : 'No'}
@@ -186,8 +198,8 @@ export function Summary({
               </div>
 
               <div>
-                <p className="text-gray-600">Unintentional weight loss (if unsure, select yes)</p>
-                <p className={cn(
+                <div className="text-sm text-gray-600">Unintentional weight loss (if unsure, select yes)</div>
+                <p className={cn("text-sm font-semibold",
                   examinationDetails.unintentionalWeightLoss && "text-orange-500"
                 )}>
                   {examinationDetails.unintentionalWeightLoss ? 'Yes' : 'No'}
@@ -196,14 +208,14 @@ export function Summary({
 
               {(examinationDetails.suspiciousInjuries || examinationDetails.unintentionalWeightLoss) && (
                 <div>
-                  <p className="text-gray-600">Has a police report been made?</p>
-                  <p>{examinationDetails.policeReport === 'yes' ? 'Yes' : 'No'}</p>
+                  <div className="text-sm text-gray-600">Has a police report been made?</div>
+                  <p className="text-sm font-semibold">{examinationDetails.policeReport === 'yes' ? 'Yes' : 'No'}</p>
                 </div>
               )}
 
               <div>
-                <p className="text-gray-600">Remarks</p>
-                <p className="whitespace-pre-wrap">{examinationDetails.remarks || '-'}</p>
+                <div className="text-sm text-gray-600">Remarks</div>
+                <p className="whitespace-pre-wrap text-sm font-semibold">{examinationDetails.remarks || '-'}</p>
               </div>
             </div>
           </div>
@@ -229,7 +241,7 @@ export function Summary({
         <Button 
           onClick={onSubmit} 
           disabled={!declarationChecked}
-          className="w-full bg-orange-500 hover:bg-orange-600 text-white"
+          // className="w-full bg-orange-500 hover:bg-orange-600 text-white"
         >
           Submit
         </Button>

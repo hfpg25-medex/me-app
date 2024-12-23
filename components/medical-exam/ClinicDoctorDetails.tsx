@@ -19,9 +19,10 @@ export function ClinicDoctorDetails({ isSummaryActive, handleContinue, clinics, 
 
   return (
     <AccordionContent>
-      <div className="space-y-4">
-        <div>
+      <div className="space-y-4 w-1/2">
+      
           <Label htmlFor="clinic">Select Clinic</Label>
+          <div>
           <Select onValueChange={(value) => setValue('clinicDoctor.clinic', value)} value={watchedValues.clinicDoctor.clinic}>
             <SelectTrigger id="clinic">
               <SelectValue placeholder="Select a clinic" />
@@ -50,7 +51,7 @@ export function ClinicDoctorDetails({ isSummaryActive, handleContinue, clinics, 
         </div>
       </div>
       <Button 
-        className="mt-4 bg-orange-500 hover:bg-orange-600 text-white" 
+        className="mt-4" 
         onClick={() => {
           if (isSummaryActive) {
             handleContinue('summary');

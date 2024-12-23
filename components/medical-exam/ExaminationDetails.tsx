@@ -53,27 +53,33 @@ export function ExaminationDetails({
                     valueAsNumber: true,
                     validate: (value) => !value || (value >= 15 && value <= 200) || "Weight must be between 15kg and 200kg"
                   })}
-                  onChange={(e) => {
+                  onBlur={(e) => {
                     const newWeight = e.target.value ? parseFloat(e.target.value) : null;
                     setValue('examinationDetails.weight', newWeight);
-                    if (lastRecordedWeight && newWeight) {
+                    setWeightTouched(true);
+                    trigger('examinationDetails.weight');
+                    if (lastRecordedWeight && newWeight && errors.examinationDetails?.weight) {
                       setShowWeightWarning(newWeight <= 0.9 * lastRecordedWeight);
                     } else {
                       setShowWeightWarning(false);
                     }
-                    setWeightTouched(true);
-                    trigger('examinationDetails.weight');
+                    
                   }}
-                  onBlur={() => {
-                    setWeightTouched(true);
-                    trigger('examinationDetails.weight');
-                  }}
+                  onChange={()=>{
+
+                  }
+
+                  }
+                  // onBlur={() => {
+                  //   setWeightTouched(true);
+                  //   trigger('examinationDetails.weight');
+                  // }}
                   placeholder="Enter weight"
                   className="mr-2 w-40"
                 />
                 <span>kg</span>
               </div>
-              {weightTouched && errors.examinationDetails?.weight && (
+              {weightTouched && watchedValues.examinationDetails.weight && errors.examinationDetails?.weight && (
                 <p className="text-red-500 text-sm mt-1">{errors.examinationDetails.weight.message}</p>
               )}
               {showWeightWarningState && (
@@ -115,7 +121,7 @@ export function ExaminationDetails({
         </div>
         <div>
           <h3 className="text-lg font-semibold mb-2">Test results</h3>
-          <p className="text-sm text-muted-foreground mb-2">Indicate positive test results:</p>
+          <p className="text-sm text-muted-foreground mb-2">Indicate <b>positive</b> test results:</p>
           {testTypes.map((test) => (
             <div key={test} className="flex items-center mb-2">
               <Label
@@ -124,7 +130,7 @@ export function ExaminationDetails({
               >
                 {test}
               </Label>
-              <div className="flex items-center space-x-2 ml-auto pl-24">
+              <div className="flex items-center space-x-2 ml-4 pl-24">
                 <Checkbox
                   id={test}
                   checked={watchedValues.examinationDetails.positiveTests.includes(test)}
@@ -317,7 +323,7 @@ export function ExaminationDetails({
           {errors.examinationDetails?.remarks && <p className="text-red-500 text-sm mt-1">{errors.examinationDetails.remarks.message}</p>}
         </div>
       </div>
-      <Button className="mt-4 bg-orange-500 hover:bg-orange-600 text-white" onClick={() => handleContinue('summary')}>{isSummaryActive ? 'Continue to Summary' : 'Continue'}</Button>
+      <Button className="mt-4" onClick={() => handleContinue('summary')}>{isSummaryActive ? 'Continue to Summary' : 'Continue'}</Button>
     </AccordionContent>
   )
 }

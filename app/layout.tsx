@@ -2,11 +2,17 @@
 
 import { useEffect, useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
+// In the entry point
 import '@/app/globals.css'
+// import '@govtechsg/sgds/css/sgds.css'
+import '@govtechsg/sgds-masthead/dist/sgds-masthead/sgds-masthead.css';
+import {SgdsMasthead} from "@govtechsg/sgds-masthead-react"
+
 import { Geist } from 'next/font/google'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { Home, LogOut } from 'lucide-react'
+import { DefaultFooter } from '@/components/sgds/Footer'
 
 const geist = Geist({
   subsets: ['latin'],
@@ -18,7 +24,12 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  // const [isAuthenticated, setIsAuthenticated] = useState(false)
+
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    // Check cookie on initial render
+    return document.cookie === 'isAuthenticated=true';
+  });
   const router = useRouter()
   const pathname = usePathname()
 
@@ -29,7 +40,7 @@ export default function RootLayout({
     const authStatus = document.cookie === 'isAuthenticated=true'
     setIsAuthenticated(authStatus)
 
-    if (authStatus !== true && pathname !== '/') {
+    if (!authStatus && pathname !== '/') {
       console.log('authStatus=', authStatus)
       router.push('/')
     }
@@ -44,9 +55,22 @@ export default function RootLayout({
 
   return (
     <html lang="en">
+      <head>
+      <link
+          href="https://cdn.jsdelivr.net/npm/@govtechsg/sgds@2.3.6/css/sgds.css"
+          rel="stylesheet"
+          type="text/css"
+        />
+      </head>
+
       <body className={`${geist.variable} font-sans antialiased`}>
+      <SgdsMasthead
+        placeholder={undefined}
+        onPointerEnterCapture={undefined}
+        onPointerLeaveCapture={undefined}
+      /> 
         <div className="flex min-h-screen flex-col">
-          {isAuthenticated && (
+        {isAuthenticated && 
             <header className="border-b">
               <div className="container flex h-14 items-center px-4 justify-between">
                 <Button variant="ghost" size="sm" asChild className="mr-6">
@@ -60,10 +84,10 @@ export default function RootLayout({
                   Logout
                 </Button>
               </div>
-            </header>
-          )}
+            </header>}
           {children}
         </div>
+        <DefaultFooter />
       </body>
     </html>
   )

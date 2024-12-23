@@ -35,18 +35,18 @@ export function HelperDetails({
 
   return (
     <AccordionContent>
-      <div className="space-y-4">
-        <div>
+      <div className="space-y-4 w-1/5">
+        <div className="w-2/3">
           <Label htmlFor="fin">FIN</Label>
           <Input
             id="fin"
             {...register('helperDetails.fin')}
             onChange={(e) => {
               handleFinChange(e.target.value);
-              setFinTouched(true);
+              // setFinTouched(true);
             }}
             onBlur={() => setFinTouched(true)}
-            placeholder="Enter FIN (e.g., G1234567A)"
+            placeholder="Enter FIN (e.g., F1234567N)"
           />
           {finTouched && errors.helperDetails?.fin && (
             <p className="text-red-500 text-sm mt-1">Please enter a valid FIN</p>
@@ -54,7 +54,8 @@ export function HelperDetails({
         </div>
         {watchedValues.helperDetails.helperName && (
           <>
-            <div>
+            <div className="border-l-2 border-gray-300 pl-4">
+              <div>
               <Label>Helper Name</Label>
               <p className="mt-2 text-sm">{watchedValues.helperDetails.helperName}</p>
             </div>
@@ -78,7 +79,7 @@ export function HelperDetails({
                     mode="single"
                     selected={watchedValues.helperDetails.visitDate}
                     onSelect={(date) => {
-                      setValue('helperDetails.visitDate', date);
+                      setValue('helperDetails.visitDate', date as Date);
                       setVisitDateTouched(true);
                       trigger('helperDetails.visitDate');  // Trigger validation
                     }}
@@ -88,15 +89,16 @@ export function HelperDetails({
                   />
                 </PopoverContent>
               </Popover>
-              {visitDateTouched && errors.helperDetails?.visitDate && (
+              {visitDateTouched && watchedValues.helperDetails.visitDate && errors.helperDetails?.visitDate && (
                 <p className="text-red-500 text-sm mt-1">{errors.helperDetails.visitDate.message}</p>
               )}
+            </div>
             </div>
           </>
         )}
         
       <Button 
-        className="mt-4 bg-orange-500 hover:bg-orange-600 text-white" 
+        className="mt-4" 
         onClick={() => {
           setFinTouched(true);
           setVisitDateTouched(true);

@@ -1,7 +1,7 @@
 import Link from "next/link"
 import Image from "next/image"
 import { CheckCircle2 } from 'lucide-react'
-
+import { Card, CardContent } from "@/components/ui/card"
 interface SubmissionDetailsProps {
   finNumber: string
   helperName: string
@@ -13,12 +13,23 @@ export function AcknowledgementPage({finNumber, helperName, referenceNumber, sub
   const submissionDetails: SubmissionDetailsProps = {
     finNumber: "G1234567A",
     helperName: "JUNAID** SULAIM**",
-    referenceNumber: "6ME2108120001",
-    submissionDateTime: "25 May 2021, 09:23am"
+    referenceNumber: "6ME2412230001",
+    submissionDateTime: new Date().toLocaleString('en-GB', { 
+        day: 'numeric', 
+        month: 'long', 
+        year: 'numeric', 
+        hour: 'numeric', 
+        minute: 'numeric', 
+        hour12: true 
+    }).replace(',', '').replace(' ', ' '),
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#f4f4f4]">
+    // <div className="min-h-screen flex flex-col">
+      <div>
+    {/* <div className="min-h-screen flex flex-col bg-[#f4f4f4]"> */}
+
+    {/* <div className="container mx-auto p-6"> */}
       {/* Header */}
       {/* <header className="bg-white border-b">
         <div className="container mx-auto px-4 py-4">
@@ -57,13 +68,20 @@ export function AcknowledgementPage({finNumber, helperName, referenceNumber, sub
       </header> */}
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-8 flex-1">
-        <h1 className="text-2xl font-semibold mb-8">
-          Submit medical examination results
-        </h1>
+      <main className="container mx-auto p-6">
+     
+      {/* <main className="container mx-auto px-4 py-8 flex-1"> */}
 
-        <div className="bg-white rounded-lg p-6 shadow-sm mb-8">
-          <div className="flex items-center gap-3 mb-6">
+        {/* <h1 className="text-2xl font-semibold mb-8">
+          Submit medical examination results
+        </h1> */}
+        <Card>
+        <CardContent>
+          {/* <div className="bg-white rounded-lg p-6 shadow-sm mb-8"> */}
+
+
+        {/* <div className="bg-white rounded-lg p-6 shadow-sm mb-8"> */}
+          <div className="flex items-center gap-3 mb-6 mt-6">
             <CheckCircle2 className="h-6 w-6 text-[#45bf00]" />
             <h2 className="text-xl font-semibold">
               Medical examination results submitted successfully
@@ -81,7 +99,7 @@ export function AcknowledgementPage({finNumber, helperName, referenceNumber, sub
               <dt className="text-gray-600">Reference number</dt>
               <dd>{submissionDetails.referenceNumber}</dd>
               
-              <dt className="text-gray-600">Date and time submitted</dt>
+              <dt className="text-gray-600">Date time submitted</dt>
               <dd>{submissionDetails.submissionDateTime}</dd>
             </dl>
           </div>
@@ -99,10 +117,21 @@ export function AcknowledgementPage({finNumber, helperName, referenceNumber, sub
             If you need a record of this submission, download the PDF now. You will
             no longer have access to this submission after you leave this page.
           </p>
-        </div>
+        {/* </div> */}
+        {/* </div> */}
+        </CardContent>
+      </Card>
+      <div className="mb-4">
 
-        <div className="bg-white rounded-lg p-6 shadow-sm">
-          <h2 className="text-xl font-semibold mb-4">
+      </div>
+
+      <Card>
+      <CardContent>
+        {/* <div className="bg-white rounded-lg p-6 shadow-sm mt-6"> */}
+        {/* <div className="bg-white rounded-lg p-6 mt-4"> */}
+
+
+          <h2 className="text-xl font-semibold mb-4 mt-4">
             What do you want to do next?
           </h2>
           <ul className="space-y-2">
@@ -131,7 +160,11 @@ export function AcknowledgementPage({finNumber, helperName, referenceNumber, sub
               </Link>
             </li>
           </ul>
-        </div>
+
+        {/* </div> */}
+    
+        </CardContent>
+        </Card>
       </main>
 
       {/* Footer */}

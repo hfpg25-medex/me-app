@@ -15,15 +15,19 @@ import { ExaminationDetails } from "@/components/medical-exam/ExaminationDetails
 import { AcknowledgementPage } from '@/components/AcknowledgementPage'
 
 const clinics = [
-  { id: '1', name: 'Clinic A', hciCode: '21M0180', contactNumber: '+65 6999 1234' },
-  { id: '2', name: 'Clinic B', hciCode: '21M0181', contactNumber: '+65 6999 5678' },
-  { id: '3', name: 'Clinic C', hciCode: '21M0182', contactNumber: '+65 6999 9012' },
+  { id: '1', name: 'Healthline Medical Clinic (Bukit Batok)', hciCode: '2M12345', contactNumber: '+65 69991234' },
+  { id: '2', name: 'Healthline 24Hr Clinic (Jurong East)', hciCode: '2M54321', contactNumber: '+65 69995678' },
+  // { id: '3', name: 'Clinic C', hciCode: '21M0182', contactNumber: '+65 6999 9012' },
 ]
 
+/*
+66 Bukit Batok Central #01-24, Singapore 675689
+438 Jurong East #04-55, Singapore 289988
+*/
 const doctors = [
-  { id: '1', name: 'Dr. Smith', mcrNumber: 'M11111A' },
-  { id: '2', name: 'Dr. Johnson', mcrNumber: 'M22222B' },
-  { id: '3', name: 'Dr. Lee', mcrNumber: 'M33333C' },
+  { id: '1', name: 'Mary Ang', mcrNumber: 'M11111A' },
+  { id: '2', name: 'Danny Lim', mcrNumber: 'M22222B' },
+  // { id: '3', name: 'Dr. Lee', mcrNumber: 'M33333C' },
 ]
 
 // Mock API call
@@ -32,9 +36,9 @@ const mockApiCall = async (fin: string) => {
   await new Promise(resolve => setTimeout(resolve, 1000))
   
   // Mock response
-  if (fin === 'G1234567A') {
+  if (fin === 'G1234567X') {
     return { 
-      name: 'Jane Doe', 
+      name: 'JUNAID** SULAIM**', 
       testTypes: ['Pregnancy', 'Syphilis test', 'HIV', 'Chest X-ray to screen for TB'],
       lastRecordedWeight: 55,
       lastRecordedHeight: 160
@@ -247,10 +251,10 @@ export default function MDWExamPage() {
     <div className="container mx-auto p-6">
       <Card>
         <CardHeader>
-          <CardTitle>Six-monthly Medical Exam for Migrant Domestic Workers (MOM)</CardTitle>
-          <CardDescription>
+          <CardTitle className="text-xl font-bold">Six-monthly Medical Exam for Migrant Domestic Workers (MOM)</CardTitle>
+          {/* <CardDescription>
             Required medical examination for migrant domestic workers
-          </CardDescription>
+          </CardDescription> */}
         </CardHeader>
         <CardContent>
           <div className="flex items-center mb-6">
@@ -273,7 +277,7 @@ export default function MDWExamPage() {
             <form onSubmit={handleSubmit(onSubmit)}>
               <Accordion type="single" value={expandedAccordion} onValueChange={setExpandedAccordion} collapsible>
                 <AccordionItem value="clinic-doctor">
-                  <AccordionTrigger>Clinic and doctor details</AccordionTrigger>
+                  <AccordionTrigger className="text-lg font-bold">Clinic and doctor details</AccordionTrigger>
                   <ClinicDoctorDetails 
                     isSummaryActive={isSummaryActive} 
                     handleContinue={handleContinue}
@@ -282,7 +286,7 @@ export default function MDWExamPage() {
                   />
                 </AccordionItem>
                 <AccordionItem value="helper-details" className={!isHelperDetailsEnabled ? "opacity-50" : ""}>
-                  <AccordionTrigger disabled={!isHelperDetailsEnabled}>Helper details</AccordionTrigger>
+                  <AccordionTrigger className="text-lg font-bold" disabled={!isHelperDetailsEnabled}>Helper details</AccordionTrigger>
                   <HelperDetails 
                     isSummaryActive={isSummaryActive}
                     handleContinue={handleContinue}
@@ -294,7 +298,7 @@ export default function MDWExamPage() {
                   />
                 </AccordionItem>
                 <AccordionItem value="examination-details" className={!isExaminationEnabled ? "opacity-50 pointer-events-none" : ""}>
-                  <AccordionTrigger disabled={!isExaminationEnabled}>Examination details</AccordionTrigger>
+                  <AccordionTrigger className="text-lg font-bold" disabled={!isExaminationEnabled}>Examination details</AccordionTrigger>
                   <ExaminationDetails 
                     isSummaryActive={isSummaryActive}
                     handleContinue={handleContinue}
