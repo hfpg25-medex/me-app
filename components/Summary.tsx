@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -48,6 +48,10 @@ export function Summary({
   onSubmit
 }: SummaryProps) {
   const [declarationChecked, setDeclarationChecked] = useState(false)
+
+  useEffect(() => {
+    window.scrollTo(0, 0); // Scroll to the top of the page
+  }, []); // Empty dependency array means this runs once on mount
 
   return (
     <div className="max-w-4xl mx-auto">
