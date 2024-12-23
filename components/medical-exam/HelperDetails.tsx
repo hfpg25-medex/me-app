@@ -36,7 +36,7 @@ export function HelperDetails({
   return (
     <AccordionContent>
       <div className="space-y-4 w-1/5">
-        <div className="w-2/3">
+        <div>
           <Label htmlFor="fin">FIN</Label>
           <Input
             id="fin"
