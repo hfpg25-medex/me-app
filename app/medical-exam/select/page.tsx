@@ -6,25 +6,40 @@ import { ClipboardList } from 'lucide-react'
 export default function SelectExamPage() {
   const examTypes = [
     {
-      title: "Six-monthly Medical Exam for Migrant Domestic Workers (MOM)",
-      description: "Required medical examination for migrant domestic workers",
+      title: "Six-monthly Medical Exam for Migrant Domestic Workers (6ME for MDW)",
+      description: "MOM",
       href: "/medical-exam/mdw"
     },
     {
-      title: "Six-monthly Medical Exam for Female Migrant Workers (MOM)",
-      description: "Required medical examination for female migrant workers",
+      title: "Medical Exam for Work Permit Application",
+      description: "MOM",
+      href: "/medical-exam/wp"
+    },
+    {
+      title: "Six-monthly Medical Exam for Female Migrant Workers (6ME for FMW)",
+      description: "MOM",
       href: "/medical-exam/fmw"
     },
     {
-      title: "Medical Exam for Aged Drivers (SPF)",
-      description: "Medical examination for elderly drivers",
+      title: "Medical Exam for Aged Drivers 65 Years Old and Above",
+      description: "SPF",
       href: "/medical-exam/aged-drivers"
+    },
+    {
+      title: "Medical Exam for Vocational Driving Licenses",
+      description: "LTA",
+      href: "/medical-exam/vocational-drivers"
+    },
+    {
+      title: "Medical Exam for Permanant Residency Application",
+      description: "ICA",
+      href: "/medical-exam/vocational-drivers"
     }
   ]
 
   return (
     <div className="container mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-6">Select Medical Examination Type</h1>
+      <h1 className="text-3xl font-bold mb-6">Select Medical Examination</h1>
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {examTypes.map((exam, index) => (
           <Card key={index} className="hover:shadow-lg transition-shadow">
