@@ -9,7 +9,7 @@ import { CalendarIcon } from 'lucide-react'
 import { cn } from "@/lib/utils"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { useFormContext } from "react-hook-form"
-import { FormData } from "@/lib/schemas"
+import { FormDataMW, FormDataMDW } from "@/lib/schemas"
 
 interface HelperDetailsProps {
   isSummaryActive: boolean
@@ -30,7 +30,8 @@ export function HelperDetails({
   finTouched,
   visitDateTouched
 }: HelperDetailsProps) {
-  const { register, setValue, formState: { errors }, watch, trigger } = useFormContext<FormData>()
+  // const { register, setValue, formState: { errors }, watch, trigger } = useFormContext<FormData>()
+  const { register, setValue, formState: { errors }, watch, trigger }  = useFormContext<FormDataMW>()
   const watchedValues = watch()
 
   return (
@@ -56,11 +57,11 @@ export function HelperDetails({
           <>
             <div className="border-l-2 border-gray-300 pl-4">
               <div>
-              <Label>Helper Name</Label>
+              <Label>Person Name</Label>
               <p className="mt-2 text-sm">{watchedValues.helperDetails.helperName}</p>
             </div>
             <div>
-              <Label htmlFor="visit-date">Date helper visits the clinic</Label>
+              <Label htmlFor="visit-date">Date person visits the clinic</Label>
               <Popover>
                 <PopoverTrigger asChild>
                   <Button
@@ -99,11 +100,12 @@ export function HelperDetails({
         
       <Button 
         className="mt-4" 
-        onClick={() => {
+        onClick={async (e) => {
+          e.preventDefault(); // Prevent default form submission
           setFinTouched(true);
           setVisitDateTouched(true);
-          const isFinValid = trigger('helperDetails.fin');
-          const isDateValid = trigger('helperDetails.visitDate');
+          const isFinValid = await trigger('helperDetails.fin');
+          const isDateValid = await trigger('helperDetails.visitDate');
           
           if (isFinValid && isDateValid) {
             handleContinue(isSummaryActive ? 'summary' : 'examination-details');

@@ -4,14 +4,14 @@ import { useState, useEffect } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Accordion, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { cn } from "@/lib/utils"
-import { Summary } from "@/components/Summary"
+import { Summary } from "@/components/SummaryMDW"
 import { FinChangeModal } from "@/components/FinChangeModal"
-import { formSchema, FormData } from "@/lib/schemas"
+import { formSchemaMDW, FormDataMDW } from "@/lib/schemas"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm, FormProvider } from "react-hook-form"
 import { ClinicDoctorDetails } from "@/components/medical-exam/ClinicDoctorDetails"
 import { HelperDetails } from "@/components/medical-exam/HelperDetails"
-import { ExaminationDetails } from "@/components/medical-exam/ExaminationDetails"
+import { ExaminationDetails } from "@/components/medical-exam/ExaminationDetailsMDW"
 import { AcknowledgementPage } from '@/components/AcknowledgementPage'
 
 const clinics = [
@@ -64,8 +64,8 @@ export default function MDWExamPage() {
   const [weightTouched, setWeightTouched] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false); // New state to track submission
 
-  const methods = useForm<FormData>({
-    resolver: zodResolver(formSchema),
+  const methods = useForm<FormDataMDW>({
+    resolver: zodResolver(formSchemaMDW),
     defaultValues: {
       clinicDoctor: { clinic: '', doctor: '' },
       helperDetails: { fin: '', helperName: '', visitDate: undefined },
@@ -191,7 +191,7 @@ export default function MDWExamPage() {
     setExpandedAccordion(section)
   }
 
-  const onSubmit = (data: FormData) => {
+  const onSubmit = (data: FormDataMDW) => {
     console.log("Form submitted!", data)
     setIsSubmitted(true);
   }

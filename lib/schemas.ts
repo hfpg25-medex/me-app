@@ -53,7 +53,7 @@ function validateNRIC(str:String) {
   return (icArray[8] === theAlpha);
 }
 
-export const examinationDetailsSchema = z.object({
+export const examinationDetailsMDWSchema = z.object({
   weight: z.union([
     z.string().refine((val) => val === '', { message: "Weight is required" }),
     z.number().min(15, "Please input a valid weight").max(200, "Please input a valid weight"),
@@ -68,11 +68,25 @@ export const examinationDetailsSchema = z.object({
   remarks: z.string().max(500, "Remarks must be at most 500 characters"),
 });
 
-export const formSchema = z.object({
-  clinicDoctor: clinicDoctorSchema,
-  helperDetails: helperDetailsSchema,
-  examinationDetails: examinationDetailsSchema,
+export const examinationDetailsMWSchema = z.object({
+  positiveTests: z.array(z.string()),
+  remarks: z.string().max(500, "Remarks must be at most 500 characters"),
 });
 
-export type FormData = z.infer<typeof formSchema>;
+export const formSchemaMDW = z.object({
+  clinicDoctor: clinicDoctorSchema,
+  helperDetails: helperDetailsSchema,
+  examinationDetails: examinationDetailsMDWSchema,
+});
+
+export type FormDataMDW = z.infer<typeof formSchemaMDW>;
+
+
+export const formSchemaMW = z.object({
+  clinicDoctor: clinicDoctorSchema,
+  helperDetails: helperDetailsSchema,
+  examinationDetails: examinationDetailsMWSchema,
+});
+
+export type FormDataMW = z.infer<typeof formSchemaMW>;
 
