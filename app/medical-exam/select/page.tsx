@@ -8,6 +8,7 @@ import { useState } from 'react'
 
 export default function SelectExamPage() {
   const [filter, setFilter] = useState('')
+  const [searchTerm, setSearchTerm] = useState('')
 
   const examTypes = [
     {
@@ -40,16 +41,25 @@ export default function SelectExamPage() {
       description: "ICA",
       href: "/medical-exam/pr"
     }
-  ].filter(exam => filter === '' || exam.description === filter)
+  ].filter(exam => 
+    (filter === '' || exam.description === filter) && 
+    (searchTerm === '' || exam.title.toLowerCase().includes(searchTerm.toLowerCase()))
+  )
 
   return (
     <div className="container mx-auto p-6">
       <h1 className="text-3xl font-bold mb-6">Select Medical Examination</h1>
       <div className="flex justify-between mb-4">
         <div className="ml-auto flex items-center">
+          <input
+            type="text"
+            placeholder="Search by title"
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="border rounded p-2 mr-2 w-64 h-10"
+          />
           <select 
             onChange={(e) => setFilter(e.target.value)}
-            className="border rounded p-2 mr-2 w-24"
+            className="border rounded p-2 mr-2 w-24 h-10"
             defaultValue=""
           >
             <option value="">All</option>
