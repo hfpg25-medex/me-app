@@ -58,7 +58,7 @@ export default function MDWExamPage() {
   const [testTypes, setTestTypes] = useState<string[]>([])
   const [lastRecordedWeight, setLastRecordedWeight] = useState<number | null>(null)
   const [lastRecordedHeight, setLastRecordedHeight] = useState<number | null>(null)
-  const [showWeightWarning, setShowWeightWarning] = useState(false)
+  // const [showWeightWarning, setShowWeightWarning] = useState(false)
   const [finTouched, setFinTouched] = useState(false);
   const [visitDateTouched, setVisitDateTouched] = useState(false);
   const [weightTouched, setWeightTouched] = useState(false);
@@ -309,7 +309,7 @@ export default function MDWExamPage() {
                     handleContinue={handleContinue}
                     setWeightTouched={setWeightTouched}
                     weightTouched={weightTouched}
-                    showWeightWarning={showWeightWarning}
+                    // showWeightWarning={showWeightWarning}
                     lastRecordedWeight={lastRecordedWeight}
                     lastRecordedHeight={lastRecordedHeight}
                     testTypes={testTypes}

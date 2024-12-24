@@ -80,7 +80,7 @@ export function ClinicList() {
       ) : (
         <div className="space-y-4">
           {clinics.map((clinic) => (
-            <Card key={clinic.id}>
+            <Card key={clinic.id} className="w-2/3">
               <CardContent className="pt-6">
                 {editingId === clinic.id ? (
                   <div className="relative grid gap-4">
@@ -91,7 +91,7 @@ export function ClinicList() {
                       className="absolute right-0 top-0"
                       onClick={() => removeClinic(clinic.id)}
                     >
-                      <Trash2 className="h-4 w-4" />
+                      <Trash2 className="h-4 w-4 mb-6" />
                     </Button>
                     
                     <div className="grid gap-2">
@@ -156,9 +156,9 @@ export function ClinicList() {
                       <Pencil className="h-4 w-4" />
                     </Button>
                     <h4 className="font-semibold">{clinic.name}</h4>
-                    <p className="text-sm text-muted-foreground">HC Code: {clinic.hcCode}</p>
-                    <p className="text-sm text-muted-foreground">Contact: +65 {clinic.contactNumber}</p>
-                    <p className="text-sm text-muted-foreground">{clinic.address}</p>
+                    <div className="text-sm text-muted-foreground mb-2">HC Code: {clinic.hcCode}</div>
+                    <div className="text-sm text-muted-foreground mb-2">Contact: +65 {clinic.contactNumber}</div>
+                    <div className="text-sm text-muted-foreground mb-2">{clinic.address}</div>
                   </div>
                 )}
               </CardContent>

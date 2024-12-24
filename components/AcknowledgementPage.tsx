@@ -170,6 +170,14 @@ const referenceNumber = generateReferenceNumber();
             </li>
             <li>
               <Link
+                href="/medical-exam/select"
+                className="text-[#0072a3] hover:underline"
+              >
+                Start a new submission (different medical exam type)
+              </Link>
+            </li>
+            <li>
+              <Link
                 href="/submission-history"
                 className="text-[#0072a3] hover:underline"
               >
@@ -183,31 +191,6 @@ const referenceNumber = generateReferenceNumber();
         </CardContent>
         </Card>
       </main>
-
-      {/* Footer */}
-      {/* <footer className="bg-[#1a1919] text-white py-4">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4 text-sm">
-              <Link href="/report" className="hover:underline">
-                Report vulnerability
-              </Link>
-              <Link href="/terms" className="hover:underline">
-                Terms of use
-              </Link>
-              <Link href="/privacy" className="hover:underline">
-                Privacy policy
-              </Link>
-              <Link href="/contact" className="hover:underline">
-                Contact us
-              </Link>
-            </div>
-            <div className="text-sm">
-              Copyright © 2019 Government of Singapore.
-            </div>
-          </div>
-        </div>
-      </footer> */}
     </div>
   )
 }

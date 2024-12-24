@@ -1,5 +1,5 @@
-import { ClinicList } from '@/components/clinic-list'
-import { DoctorList } from '@/components/doctor-list'
+import { ClinicList } from '@/components/clinic-doctor-info/clinic-list'
+import { DoctorList } from '@/components/clinic-doctor-info/doctor-list'
 
 export default function Page() {
   return (

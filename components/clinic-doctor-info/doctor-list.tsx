@@ -76,7 +76,7 @@ export function DoctorList() {
       ) : (
         <div className="space-y-4">
           {doctors.map((doctor) => (
-            <Card key={doctor.id}>
+            <Card key={doctor.id} className="w-2/3">
               <CardContent className="pt-6">
                 {editingId === doctor.id ? (
                   <div className="relative grid gap-4">
@@ -87,7 +87,7 @@ export function DoctorList() {
                       className="absolute right-0 top-0"
                       onClick={() => removeDoctor(doctor.id)}
                     >
-                      <Trash2 className="h-4 w-4" />
+                      <Trash2 className="h-4 w-4 mb-6" />
                     </Button>
                     
                     <div className="grid gap-2">
@@ -123,7 +123,7 @@ export function DoctorList() {
                       <Pencil className="h-4 w-4" />
                     </Button>
                     <h4 className="font-semibold">{doctor.name}</h4>
-                    <p className="text-sm text-muted-foreground">MCR: {doctor.mcr}</p>
+                    <div className="text-sm text-muted-foreground mb-2">MCR: {doctor.mcr}</div>
                   </div>
                 )}
               </CardContent>

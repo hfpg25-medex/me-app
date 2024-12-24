@@ -17,7 +17,7 @@ interface ExaminationDetailsProps {
   handleContinue: (nextStep: string) => void
   setWeightTouched: (value: boolean) => void
   weightTouched: boolean
-  showWeightWarning: boolean
+  // showWeightWarning: boolean
   lastRecordedWeight: number | null
   lastRecordedHeight: number | null
   testTypes: string[]
@@ -28,14 +28,14 @@ export function ExaminationDetails({
   handleContinue, 
   setWeightTouched,
   weightTouched,
-  showWeightWarning,
+  // showWeightWarning,
   lastRecordedWeight,
   lastRecordedHeight,
   testTypes
 }: ExaminationDetailsProps) {
   const { register, setValue, formState: { errors }, watch, trigger } = useFormContext<FormDataMDW>()
   const watchedValues = watch()
-  const [showWeightWarningState, setShowWeightWarning] = useState(false);
+  const [showWeightWarning, setShowWeightWarning] = useState(false);
 
   return (
     <AccordionContent>
@@ -82,12 +82,12 @@ export function ExaminationDetails({
               {weightTouched && watchedValues.examinationDetails.weight && errors.examinationDetails?.weight && (
                 <p className="text-red-500 text-sm mt-1">{errors.examinationDetails.weight.message}</p>
               )}
-              {showWeightWarningState && (
+              {showWeightWarning && (
                 <div className="flex items-start space-x-2 p-3 bg-orange-100 border border-orange-300 rounded-md mt-2">
                   <WarningIcon className="w-5 h-5 text-orange-500 flex-shrink-0 mt-0.5" />
-                  <p className="text-sm text-orange-700">
+                  <div className="text-sm text-orange-700">
                     This helper has lost {'>'}=10% weight since the last examination. If her weight loss was unintentional or if its reason cannot be determined, please select 'Yes' for weight loss under the Physical examination details.
-                  </p>
+                  </div>
                 </div>
               )}
               {lastRecordedWeight && (

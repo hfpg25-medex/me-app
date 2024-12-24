@@ -10,7 +10,7 @@ export default function HomePage() {
         <div className="mb-8">
           <h1 className="text-4xl font-bold tracking-tight mb-2">Welcome to Medical Exam Portal</h1>
           <p className="text-xl text-muted-foreground">
-            Hello, Dr Margaret Du. We hope you are having a great day. What would you like to do?
+            Hello, Yanchao Du. We hope you are having a great day. What would you like to do?
           </p>
         </div>
 
@@ -42,7 +42,7 @@ export default function HomePage() {
                 Manage your clinic and doctor information
               </CardDescription>
               <Button asChild className="mt-2 w-full">
-                <Link href="/forms">Update Details</Link>
+                <Link href="/clinic-doctor-info">Update Details</Link>
               </Button>
             </CardHeader>
           </Card>
