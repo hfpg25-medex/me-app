@@ -15,40 +15,42 @@ export const helperDetailsSchema = z.object({
   })
 });
 
-function validateNRIC(str:String) {
-  if (str.length != 9) 
+function validateNRIC(str: string) {
+  if (str.length !== 9) 
       return false;
 
   str = str.toUpperCase();
 
-  var i, 
-      icArray = [];
-  for(i = 0; i < 9; i++) {
+  const icArray: (string | number)[] = [];
+  for (let i = 0; i < 9; i++) {
       icArray[i] = str.charAt(i);
   }
 
-  icArray[1] = parseInt(icArray[1], 10) * 2;
-  icArray[2] = parseInt(icArray[2], 10) * 7;
-  icArray[3] = parseInt(icArray[3], 10) * 6;
-  icArray[4] = parseInt(icArray[4], 10) * 5;
-  icArray[5] = parseInt(icArray[5], 10) * 4;
-  icArray[6] = parseInt(icArray[6], 10) * 3;
-  icArray[7] = parseInt(icArray[7], 10) * 2;
+  icArray[1] = parseInt(icArray[1] as string, 10) * 2;
+  icArray[2] = parseInt(icArray[2] as string, 10) * 7;
+  icArray[3] = parseInt(icArray[3] as string, 10) * 6;
+  icArray[4] = parseInt(icArray[4] as string, 10) * 5;
+  icArray[5] = parseInt(icArray[5] as string, 10) * 4;
+  icArray[6] = parseInt(icArray[6] as string, 10) * 3;
+  icArray[7] = parseInt(icArray[7] as string, 10) * 2;
 
-  var weight = 0;
-  for(i = 1; i < 8; i++) {
-      weight += icArray[i];
+  let weight = 0;
+  for (let i = 1; i < 8; i++) {
+      weight += icArray[i] as number;
   }
 
-  var offset = (icArray[0] == "T" || icArray[0] == "G") ? 4:0;
-  var temp = (offset + weight) % 11;
+  const offset = (icArray[0] === "T" || icArray[0] === "G") ? 4 : 0;
+  const temp = (offset + weight) % 11;
 
-  var st = ["J","Z","I","H","G","F","E","D","C","B","A"];
-  var fg = ["X","W","U","T","R","Q","P","N","M","L","K"];
+  const st = ["J", "Z", "I", "H", "G", "F", "E", "D", "C", "B", "A"];
+  const fg = ["X", "W", "U", "T", "R", "Q", "P", "N", "M", "L", "K"];
 
-  var theAlpha;
-  if (icArray[0] == "S" || icArray[0] == "T") { theAlpha = st[temp]; }
-  else if (icArray[0] == "F" || icArray[0] == "G") { theAlpha = fg[temp]; }
+  let theAlpha: string | undefined;
+  if (icArray[0] === "S" || icArray[0] === "T") { 
+      theAlpha = st[temp]; 
+  } else if (icArray[0] === "F" || icArray[0] === "G") { 
+      theAlpha = fg[temp]; 
+  }
 
   return (icArray[8] === theAlpha);
 }

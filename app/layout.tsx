@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
-// In the entry point
 import '@/app/globals.css'
 // import '@govtechsg/sgds/css/sgds.css'
 import '@govtechsg/sgds-masthead/dist/sgds-masthead/sgds-masthead.css';
@@ -24,19 +23,16 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  // const [isAuthenticated, setIsAuthenticated] = useState(false)
 
-  const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    // Check cookie on initial render
-    return document.cookie === 'isAuthenticated=true';
-  });
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const router = useRouter()
   const pathname = usePathname()
 
   useEffect(() => {
-    // const authStatus = localStorage.getItem('isAuthenticated')
-    // setIsAuthenticated(authStatus === 'true')
-    console.log('document.cookie=', document.cookie)
+    setIsAuthenticated(document.cookie === 'isAuthenticated=true');
+  }, []);
+
+  useEffect(() => {
     const authStatus = document.cookie === 'isAuthenticated=true'
     setIsAuthenticated(authStatus)
 
@@ -47,7 +43,6 @@ export default function RootLayout({
   }, [pathname, router])
 
   const handleLogout = () => {
-    // localStorage.removeItem('isAuthenticated')
     document.cookie = 'isAuthenticated=false; path=/'
     setIsAuthenticated(false)
     router.push('/')

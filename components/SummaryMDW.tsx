@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react'
 import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@/components/ui/label"
 import { Pencil } from 'lucide-react'
@@ -100,7 +99,7 @@ export function Summary({
               <p className="text-sm font-semibold">{clinicDetails.mcrNumber}</p>
             </div>
             <div>
-              <div className="text-sm text-gray-600">Doctor's name</div>
+              <div className="text-sm text-gray-600">Doctor&apos;s name</div>
               <p className="text-sm font-semibold">{clinicDetails.doctor}</p>
             </div>
           </div>

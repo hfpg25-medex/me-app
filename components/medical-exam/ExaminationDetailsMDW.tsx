@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -86,7 +86,7 @@ export function ExaminationDetails({
                 <div className="flex items-start space-x-2 p-3 bg-orange-100 border border-orange-300 rounded-md mt-2">
                   <WarningIcon className="w-5 h-5 text-orange-500 flex-shrink-0 mt-0.5" />
                   <div className="text-sm text-orange-700">
-                    This helper has lost {'>'}=10% weight since the last examination. If her weight loss was unintentional or if its reason cannot be determined, please select 'Yes' for weight loss under the Physical examination details.
+                    This helper has lost {'>'}=10% weight since the last examination. If her weight loss was unintentional or if its reason cannot be determined, please select {'Yes'} for weight loss under the Physical examination details.
                   </div>
                 </div>
               )}

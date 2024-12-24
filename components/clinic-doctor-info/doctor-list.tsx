@@ -6,7 +6,6 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent } from '@/components/ui/card'
 import { Plus, Trash2, Stethoscope, Pencil } from 'lucide-react'
-import { cn } from '@/lib/utils'
 import { doctorAction } from '@/lib/actions'
 
 interface Doctor {

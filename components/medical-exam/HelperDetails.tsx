@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -9,7 +8,7 @@ import { CalendarIcon } from 'lucide-react'
 import { cn } from "@/lib/utils"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { useFormContext } from "react-hook-form"
-import { FormDataMW, FormDataMDW } from "@/lib/schemas"
+import { FormDataMW,FormDataMDW  } from "@/lib/schemas"
 
 interface HelperDetailsProps {
   isSummaryActive: boolean
@@ -32,7 +31,7 @@ export function HelperDetails({
   visitDateTouched,
   isPendingMe
 }: HelperDetailsProps) {
-  const { register, setValue, formState: { errors }, watch, trigger }  = useFormContext<FormDataMW>()
+  const { register, setValue, formState: { errors }, watch, trigger }  = useFormContext<FormDataMW | FormDataMDW >()
   const watchedValues = watch()
 
   return (

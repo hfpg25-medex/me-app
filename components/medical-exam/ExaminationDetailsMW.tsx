@@ -1,13 +1,8 @@
-import { useState, useEffect } from 'react'
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { AccordionContent } from "@/components/ui/accordion"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Textarea } from "@/components/ui/textarea"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { format } from "date-fns"
-import { FileWarningIcon as WarningIcon } from 'lucide-react'
 import { cn } from "@/lib/utils"
 import { useFormContext } from "react-hook-form"
 import { FormDataMW } from "@/lib/schemas"
@@ -23,7 +18,7 @@ export function ExaminationDetails({
   handleContinue, 
   testTypes
 }: ExaminationDetailsProps) {
-  const { register, setValue, formState: { errors }, watch, trigger } = useFormContext<FormDataMW>()
+  const { register, setValue, formState: { errors }, watch } = useFormContext<FormDataMW>()
   const watchedValues = watch()
 
   return (

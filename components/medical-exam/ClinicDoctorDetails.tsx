@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -7,22 +6,15 @@ import { useFormContext } from "react-hook-form"
 import { FormDataMDW, FormDataMW } from "@/lib/schemas"
 
 interface ClinicDoctorDetailsProps {
-  // formType: string
   isSummaryActive: boolean
   handleContinue: (nextStep: string) => void
   clinics: Array<{ id: string; name: string; hciCode: string; contactNumber: string }>
   doctors: Array<{ id: string; name: string; mcrNumber: string }>
 }
 
-  export function ClinicDoctorDetails({ isSummaryActive, handleContinue, clinics, doctors, formType }: ClinicDoctorDetailsProps) {
+  export function ClinicDoctorDetails({ isSummaryActive, handleContinue, clinics, doctors}: ClinicDoctorDetailsProps) {
   const { setValue, formState: { errors }, watch } = useFormContext<FormDataMW | FormDataMDW>()
   const watchedValues = watch()
-
-  // if (formType === 'MDW') {
-  //   // Handle FormDataMDW specific logic if needed
-  // } else {
-  //   // Handle FormDataMW specific logic if needed
-  // }
 
   return (
     <AccordionContent>
