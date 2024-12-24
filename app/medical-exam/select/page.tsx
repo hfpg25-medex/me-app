@@ -1,9 +1,14 @@
+'use client'
+
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { ClipboardList } from 'lucide-react'
+import { useState } from 'react'
 
 export default function SelectExamPage() {
+  const [filter, setFilter] = useState('')
+
   const examTypes = [
     {
       title: "Six-monthly Medical Exam for Migrant Domestic Workers",
@@ -35,11 +40,27 @@ export default function SelectExamPage() {
       description: "ICA",
       href: "/medical-exam/pr"
     }
-  ]
+  ].filter(exam => filter === '' || exam.description === filter)
 
   return (
     <div className="container mx-auto p-6">
       <h1 className="text-3xl font-bold mb-6">Select Medical Examination</h1>
+      <div className="flex justify-between mb-4">
+        <div className="ml-auto flex items-center">
+          <select 
+            onChange={(e) => setFilter(e.target.value)}
+            className="border rounded p-2 mr-2 w-24"
+            defaultValue=""
+          >
+            <option value="">All</option>
+            <option value="MOM">MOM</option>
+            <option value="SPF">SPF</option>
+            <option value="LTA">LTA</option>
+            <option value="ICA">ICA</option>
+          </select>
+          <Button onClick={() => setFilter('')}>Clear Filter</Button>
+        </div>
+      </div>
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {examTypes.map((exam, index) => (
           <Card key={index} className="hover:shadow-lg transition-shadow">
