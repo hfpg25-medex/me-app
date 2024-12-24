@@ -9,7 +9,7 @@ export default function Header() {
   const loginRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const loginElement = document.getElementById('login-section')
+    const loginElement = document.getElementById('login-section') as HTMLDivElement | null
     if (loginElement) {
       loginRef.current = loginElement
     }
