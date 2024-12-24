@@ -31,7 +31,7 @@ const doctors = [
 // Mock API call
 const mockApiCall = async (fin: string) => {
   // Simulate API delay
-  await new Promise(resolve => setTimeout(resolve, 1000))
+  await new Promise(resolve => setTimeout(resolve, 0))
   
   // Mock response
   if (fin === 'F1234567N') {

@@ -3,6 +3,7 @@ import Image from "next/image"
 import { CheckCircle2 } from 'lucide-react'
 import { Card, CardContent } from "@/components/ui/card"
 import { v4 as uuidv4 } from 'uuid';
+import { useEffect } from "react";
 
 interface SubmissionDetailsProps {
   finNumber: string
@@ -12,20 +13,11 @@ interface SubmissionDetailsProps {
 }
 
 export function AcknowledgementPage({finNumber, helperName}: SubmissionDetailsProps){
-  // const submissionDetails: SubmissionDetailsProps = {
-  //   finNumber: "G1234567A",
-  //   helperName: "JUNAID** SULAIM**",
-  //   referenceNumber: "6ME2412230001",
-  //   submissionDateTime: new Date().toLocaleString('en-GB', { 
-  //       day: 'numeric', 
-  //       month: 'long', 
-  //       year: 'numeric', 
-  //       hour: 'numeric', 
-  //       minute: 'numeric', 
-  //       hour12: true 
-  //   }).replace(',', '').replace(' ', ' '),
-  // }
 
+  useEffect(() => {
+    window.scrollTo(0, 0); // Scroll to the top of the page
+  }, []); // Empty dependency array means this runs once on mount
+  
   const submissionDateTime = new Date().toLocaleString('en-GB', { 
     day: 'numeric', 
     month: 'long', 
@@ -105,7 +97,7 @@ const referenceNumber = generateReferenceNumber();
             </h2>
           </div>
 
-          <div className="bg-[#f4faff] p-6 rounded-md mb-6">
+          <div className="p-6 rounded-md mb-6">
             <dl className="grid grid-cols-[200px_1fr] gap-y-4">
               <dt className="text-gray-600">FIN of helper</dt>
               <dd>{finNumber}</dd>
@@ -124,7 +116,7 @@ const referenceNumber = generateReferenceNumber();
           <div className="flex items-center gap-2 mb-4">
             <Link
               href="/download-pdf"
-              className="text-[#0072a3] hover:underline flex items-center gap-2"
+              className="text-purple-600 hover:underline flex items-center gap-2"
             >
               Download acknowledgement and summary (PDF, ~100KB)
             </Link>
@@ -155,7 +147,7 @@ const referenceNumber = generateReferenceNumber();
             <li>
               <Link
                 href="/new-submission/same"
-                className="text-[#0072a3] hover:underline"
+                className="text-purple-600 hover:underline"
               >
                 Start a new submission (same clinic and doctor details)
               </Link>
@@ -163,7 +155,7 @@ const referenceNumber = generateReferenceNumber();
             <li>
               <Link
                 href="/new-submission/different"
-                className="text-[#0072a3] hover:underline"
+                className="text-purple-600 hover:underline"
               >
                 Start a new submission (different clinic and/or doctor details)
               </Link>
@@ -171,7 +163,7 @@ const referenceNumber = generateReferenceNumber();
             <li>
               <Link
                 href="/medical-exam/select"
-                className="text-[#0072a3] hover:underline"
+                className="text-purple-600 hover:underline"
               >
                 Start a new submission (different medical exam type)
               </Link>
@@ -179,7 +171,7 @@ const referenceNumber = generateReferenceNumber();
             <li>
               <Link
                 href="/submission-history"
-                className="text-[#0072a3] hover:underline"
+                className="text-purple-600 hover:underline"
               >
                 View submission history
               </Link>

@@ -6,7 +6,7 @@ import { ClipboardList } from 'lucide-react'
 export default function SelectExamPage() {
   const examTypes = [
     {
-      title: "Six-monthly Medical Exam for Migrant Domestic Workers (6ME for MDW)",
+      title: "Six-monthly Medical Exam for Migrant Domestic Workers",
       description: "MOM",
       href: "/medical-exam/mdw"
     },
@@ -16,7 +16,7 @@ export default function SelectExamPage() {
       href: "/medical-exam/wp"
     },
     {
-      title: "Six-monthly Medical Exam for Female Migrant Workers (6ME for FMW)",
+      title: "Six-monthly Medical Exam for Female Migrant Workers",
       description: "MOM",
       href: "/medical-exam/fmw"
     },
@@ -52,7 +52,7 @@ export default function SelectExamPage() {
             </CardHeader>
             <CardContent>
               <Button asChild className="w-full">
-                <Link href={exam.href}>Start Exam</Link>
+                <Link href={exam.href}>Start Submission</Link>
               </Button>
             </CardContent>
           </Card>

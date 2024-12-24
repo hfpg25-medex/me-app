@@ -26,8 +26,8 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle className="text-2xl font-bold">Login to Medical Portal</CardTitle>
-          <CardDescription>Enter your UEN and Corppass ID to access the portal</CardDescription>
+          <CardTitle className="text-2xl font-bold">Login to Medical Examination Portal</CardTitle>
+          <CardDescription>Enter your UEN and Corppass ID to access the portal. (Please note that this is a mock Corppass login)</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleLogin} className="space-y-4">
