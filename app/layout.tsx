@@ -13,6 +13,7 @@ import Link from 'next/link'
 import { Home, LogOut } from 'lucide-react'
 import { DefaultFooter } from '@/components/sgds/Footer'
 
+
 const geist = Geist({
   subsets: ['latin'],
   variable: '--font-geist',
