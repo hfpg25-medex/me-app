@@ -16,7 +16,7 @@ import { AcknowledgementPage } from '@/components/AcknowledgementPage'
 
 const clinics = [
   { id: '1', name: 'Healthline Medical Clinic (Bukit Batok)', hciCode: '2M12345', contactNumber: '+65 69991234' },
-  { id: '2', name: 'Healthline 24Hr Clinic (Jurong East)', hciCode: '2M54321', contactNumber: '+65 69995678' },
+  // { id: '2', name: 'Healthline 24Hr Clinic (Jurong East)', hciCode: '2M54321', contactNumber: '+65 69995678' },
   // { id: '3', name: 'Clinic C', hciCode: '21M0182', contactNumber: '+65 6999 9012' },
 ]
 
@@ -33,7 +33,7 @@ const doctors = [
 // Mock API call
 const mockApiCall = async (fin: string) => {
   // Simulate API delay
-  await new Promise(resolve => setTimeout(resolve, 1000))
+  await new Promise(resolve => setTimeout(resolve, 0))
   
   // Mock response
   if (fin === 'G1234567X') {
@@ -63,6 +63,7 @@ export default function MDWExamPage() {
   const [visitDateTouched, setVisitDateTouched] = useState(false);
   const [weightTouched, setWeightTouched] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false); // New state to track submission
+  const [isPendingMe, setIsPendingMe] = useState (true)
 
   const methods = useForm<FormDataMDW>({
     resolver: zodResolver(formSchemaMDW),
@@ -108,6 +109,8 @@ export default function MDWExamPage() {
   };
 
   const validateAndFetchHelperDetails = async (fin: string) => {
+    // trigger('helperDetails')
+
     const result = await mockApiCall(fin)
     if (result) {
       setValue('helperDetails.helperName', result.name)
@@ -115,14 +118,15 @@ export default function MDWExamPage() {
       setLastRecordedWeight(result.lastRecordedWeight)
       setLastRecordedHeight(result.lastRecordedHeight)
       setValue('examinationDetails.height', result.lastRecordedHeight)
+      setIsPendingMe(true)
     } else {
       setValue('helperDetails.helperName', '')
       setTestTypes([])
       setLastRecordedWeight(null)
       setLastRecordedHeight(null)
       setValue('examinationDetails.height', 0)
+      setIsPendingMe(false)
     }
-    trigger('helperDetails')
   }
 
   const confirmFinChange = async () => {
@@ -295,6 +299,7 @@ export default function MDWExamPage() {
                     setVisitDateTouched={setVisitDateTouched}
                     finTouched={finTouched}
                     visitDateTouched={visitDateTouched}
+                    isPendingMe={isPendingMe}
                   />
                 </AccordionItem>
                 <AccordionItem value="examination-details" className={!isExaminationEnabled ? "opacity-50 pointer-events-none" : ""}>

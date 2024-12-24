@@ -106,7 +106,7 @@ export function ExaminationDetails({
                 />
                 <span>cm</span>
               </div>
-              {errors.examinationDetails?.height && <p className="text-red-500 text-sm mt-1">{errors.examinationDetails.height.message}</p>}
+              {/* {errors.examinationDetails?.height && <p className="text-red-500 text-sm mt-1">{errors.examinationDetails.height.message}</p>} */}
               {lastRecordedHeight && (
                 <p className="text-sm text-muted-foreground mt-1">Last recorded height: {lastRecordedHeight} cm (Date: {format(new Date(), 'dd/MM/yyyy')})</p>
               )}

@@ -19,6 +19,7 @@ interface HelperDetailsProps {
   setVisitDateTouched: (value: boolean) => void
   finTouched: boolean
   visitDateTouched: boolean
+  isPendingMe: boolean
 }
 
 export function HelperDetails({ 
@@ -28,28 +29,34 @@ export function HelperDetails({
   setFinTouched, 
   setVisitDateTouched,
   finTouched,
-  visitDateTouched
+  visitDateTouched,
+  isPendingMe
 }: HelperDetailsProps) {
   const { register, setValue, formState: { errors }, watch, trigger }  = useFormContext<FormDataMW>()
   const watchedValues = watch()
 
   return (
     <AccordionContent>
-      <div className="space-y-4 w-1/5">
+      <div className="space-y-4">
         <div>
           <Label htmlFor="fin">FIN</Label>
-          <Input
+          <Input className="w-1/5"
             id="fin"
             {...register('helperDetails.fin')}
-            onChange={(e) => {
+            onBlur={(e) => {
               handleFinChange(e.target.value);
-              // setFinTouched(true);
-            }}
-            onBlur={() => setFinTouched(true)}
+              setFinTouched(true);
+              trigger('helperDetails.fin')
+         }
+            }
+            onChange={() => {}}
             placeholder="Enter FIN (e.g., F1234567N)"
           />
           {finTouched && errors.helperDetails?.fin && (
             <p className="text-red-500 text-sm mt-1">Please enter a valid FIN</p>
+          )}
+          {finTouched && !errors.helperDetails?.fin && !isPendingMe &&(
+            <p className="text-red-500 text-sm mt-1">The person does not have a pending medical examination.</p>
           )}
         </div>
         {watchedValues.helperDetails.helperName && (

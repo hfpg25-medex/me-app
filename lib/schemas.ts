@@ -12,7 +12,7 @@ export const helperDetailsSchema = z.object({
   visitDate: z.date({
     required_error: "Please select a visit date",
     invalid_type_error: "That's not a valid date",
-  }),
+  })
 });
 
 function validateNRIC(str:String) {

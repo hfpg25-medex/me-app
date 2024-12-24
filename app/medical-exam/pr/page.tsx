@@ -16,7 +16,7 @@ import { AcknowledgementPage } from '@/components/AcknowledgementPage'
 
 const clinics = [
   { id: '1', name: 'Healthline Medical Clinic (Bukit Batok)', hciCode: '2M12345', contactNumber: '+65 69991234' },
-  { id: '2', name: 'Healthline 24Hr Clinic (Jurong East)', hciCode: '2M54321', contactNumber: '+65 69995678' },
+  // { id: '2', name: 'Healthline 24Hr Clinic (Jurong East)', hciCode: '2M54321', contactNumber: '+65 69995678' },
 ]
 
 /*
@@ -55,6 +55,7 @@ export default function MWExamPage() {
   const [finTouched, setFinTouched] = useState(false);
   const [visitDateTouched, setVisitDateTouched] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false); // New state to track submission
+  const [isPendingMe, setIsPendingMe] = useState (true)
 
   const methods = useForm<FormDataMW>({
     resolver: zodResolver(formSchemaMW),
@@ -87,11 +88,15 @@ export default function MWExamPage() {
     if (result) {
       setValue('helperDetails.helperName', result.name)
       setTestTypes(result.testTypes)
+      setIsPendingMe(true)
+
     } else {
       setValue('helperDetails.helperName', '')
       setTestTypes([])
+      setIsPendingMe(false)
+
     }
-    trigger('helperDetails')
+    // trigger('helperDetails')
   }
 
   const confirmFinChange = async () => {
@@ -231,6 +236,8 @@ export default function MWExamPage() {
                     setVisitDateTouched={setVisitDateTouched}
                     finTouched={finTouched}
                     visitDateTouched={visitDateTouched}
+                    isPendingMe={isPendingMe}
+
                   />
                 </AccordionItem>
                 <AccordionItem value="examination-details" className={!isExaminationEnabled ? "opacity-50 pointer-events-none" : ""}>
