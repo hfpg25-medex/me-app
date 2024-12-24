@@ -49,7 +49,7 @@ export function Summary({
 
   return (
     <div className="max-w-4xl mx-auto">
-      <h1 className="text-2xl font-semibold mb-6">Six-monthly Medical Exam for Female Migrant Workers (MOM)</h1>
+      <h1 className="text-2xl font-semibold mb-6">Medical Exam for Permanent Residency Application (ICA)</h1>
       
       <div className="flex items-center mb-8">
         <div className="flex items-center text-primary">
@@ -102,7 +102,7 @@ export function Summary({
 
         <section className="border rounded-lg p-6">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-semibold">Migrant worker details</h2>
+            <h2 className="text-lg font-semibold">Applicant details</h2>
             <Button 
               variant="ghost" 
               onClick={() => onEdit('helper-details')}

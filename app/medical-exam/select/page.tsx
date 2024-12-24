@@ -33,7 +33,7 @@ export default function SelectExamPage() {
     {
       title: "Medical Exam for Permanant Residency Application",
       description: "ICA",
-      href: "/medical-exam/vocational-drivers"
+      href: "/medical-exam/pr"
     }
   ]
 

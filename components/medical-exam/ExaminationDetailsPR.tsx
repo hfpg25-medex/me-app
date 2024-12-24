@@ -94,7 +94,7 @@ export function ExaminationDetails({
                   )}
                 />
                 <Label htmlFor="something-to-report">
-                  I have something else to report to MOM about the person
+                  I have something else to report to ICA about the person
                 </Label>
               </div>
             

@@ -2,6 +2,8 @@ import Link from "next/link"
 import Image from "next/image"
 import { CheckCircle2 } from 'lucide-react'
 import { Card, CardContent } from "@/components/ui/card"
+import { v4 as uuidv4 } from 'uuid';
+
 interface SubmissionDetailsProps {
   finNumber: string
   helperName: string
@@ -9,20 +11,35 @@ interface SubmissionDetailsProps {
   submissionDateTime: string
 }
 
-export function AcknowledgementPage({finNumber, helperName, referenceNumber, submissionDateTime}: SubmissionDetailsProps){
-  const submissionDetails: SubmissionDetailsProps = {
-    finNumber: "G1234567A",
-    helperName: "JUNAID** SULAIM**",
-    referenceNumber: "6ME2412230001",
-    submissionDateTime: new Date().toLocaleString('en-GB', { 
-        day: 'numeric', 
-        month: 'long', 
-        year: 'numeric', 
-        hour: 'numeric', 
-        minute: 'numeric', 
-        hour12: true 
-    }).replace(',', '').replace(' ', ' '),
-  }
+export function AcknowledgementPage({finNumber, helperName}: SubmissionDetailsProps){
+  // const submissionDetails: SubmissionDetailsProps = {
+  //   finNumber: "G1234567A",
+  //   helperName: "JUNAID** SULAIM**",
+  //   referenceNumber: "6ME2412230001",
+  //   submissionDateTime: new Date().toLocaleString('en-GB', { 
+  //       day: 'numeric', 
+  //       month: 'long', 
+  //       year: 'numeric', 
+  //       hour: 'numeric', 
+  //       minute: 'numeric', 
+  //       hour12: true 
+  //   }).replace(',', '').replace(' ', ' '),
+  // }
+
+  const submissionDateTime = new Date().toLocaleString('en-GB', { 
+    day: 'numeric', 
+    month: 'long', 
+    year: 'numeric', 
+    hour: 'numeric', 
+    minute: 'numeric', 
+    hour12: true 
+}).replace(',', '').replace(' ', ' ')
+
+function generateReferenceNumber(): string {
+  return uuidv4(); // Generates a new UUID
+}
+
+const referenceNumber = generateReferenceNumber();
 
   return (
     // <div className="min-h-screen flex flex-col">
@@ -91,16 +108,16 @@ export function AcknowledgementPage({finNumber, helperName, referenceNumber, sub
           <div className="bg-[#f4faff] p-6 rounded-md mb-6">
             <dl className="grid grid-cols-[200px_1fr] gap-y-4">
               <dt className="text-gray-600">FIN of helper</dt>
-              <dd>{submissionDetails.finNumber}</dd>
+              <dd>{finNumber}</dd>
               
               <dt className="text-gray-600">Name of helper</dt>
-              <dd>{submissionDetails.helperName}</dd>
+              <dd>{helperName}</dd>
               
               <dt className="text-gray-600">Reference number</dt>
-              <dd>{submissionDetails.referenceNumber}</dd>
+              <dd>{referenceNumber}</dd>
               
               <dt className="text-gray-600">Date time submitted</dt>
-              <dd>{submissionDetails.submissionDateTime}</dd>
+              <dd>{submissionDateTime}</dd>
             </dl>
           </div>
 

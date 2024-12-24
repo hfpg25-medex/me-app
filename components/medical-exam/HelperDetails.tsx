@@ -30,7 +30,6 @@ export function HelperDetails({
   finTouched,
   visitDateTouched
 }: HelperDetailsProps) {
-  // const { register, setValue, formState: { errors }, watch, trigger } = useFormContext<FormData>()
   const { register, setValue, formState: { errors }, watch, trigger }  = useFormContext<FormDataMW>()
   const watchedValues = watch()
 
