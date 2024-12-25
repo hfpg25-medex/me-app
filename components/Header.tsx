@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { Button } from "@/components/ui/button"
-import { useRef, useEffect, useState } from 'react'
+import { useRef, useState } from 'react'
 import { Stethoscope, Menu } from 'lucide-react'
 
 export default function Header() {
