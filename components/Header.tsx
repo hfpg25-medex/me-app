@@ -2,12 +2,19 @@
 
 import Link from 'next/link'
 import { Button } from "@/components/ui/button"
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { Stethoscope, Menu } from 'lucide-react'
 
 export default function Header() {
   const loginRef = useRef<HTMLDivElement>(null)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+
+  useEffect(()=>{
+    const loginElement = document.getElementById('login-section') as HTMLDivElement | null
+    if(loginElement){
+      loginRef.current = loginElement 
+    }
+  }, [])
 
   const scrollToLogin = () => {
     if (loginRef.current) {
