@@ -23,6 +23,10 @@ const clinics = [
 /*
 66 Bukit Batok Central #01-24, Singapore 675689
 438 Jurong East #04-55, Singapore 289988
+
+201604123D
+S2358243J
+
 */
 const doctors = [
   { id: '1', name: 'Mary Ang', mcrNumber: 'M11111A' },
