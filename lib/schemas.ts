@@ -75,6 +75,8 @@ export const examinationDetailsMWSchema = z.object({
   remarks: z.string().max(500, "Remarks must be at most 500 characters"),
 });
 
+export const medicalHistoryItemsSchema = z.array(z.string());
+
 export const formSchemaMDW = z.object({
   clinicDoctor: clinicDoctorSchema,
   helperDetails: helperDetailsSchema,
@@ -91,4 +93,27 @@ export const formSchemaMW = z.object({
 });
 
 export type FormDataMW = z.infer<typeof formSchemaMW>;
+
+// export type HistoryItem = {
+//   condition: string
+//   hasCondition: boolean
+//   details: string
+// }
+
+export const medicalHistoryItemSchema = z.object({
+  condition: z.string(),
+  hasCondition: z.boolean(),
+  details: z.string()
+})
+
+export const medicalHistorySchema = z.array(medicalHistoryItemSchema)
+
+export const formSchemaWP = z.object({
+  clinicDoctor: clinicDoctorSchema,
+  helperDetails: helperDetailsSchema,
+  medicalHistory: medicalHistorySchema,
+  examinationDetails: examinationDetailsMWSchema,
+});
+
+export type FormDataWP = z.infer<typeof formSchemaWP>;
 

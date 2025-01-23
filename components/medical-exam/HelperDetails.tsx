@@ -16,6 +16,7 @@ interface HelperDetailsProps {
   finTouched: boolean
   visitDateTouched: boolean
   isPendingMe: boolean
+  nextStep: "examination-details" | "medical-history"
 }
 
 
@@ -27,7 +28,8 @@ export function HelperDetails({
   setVisitDateTouched,
   finTouched,
   visitDateTouched,
-  isPendingMe
+  isPendingMe,
+  nextStep
 }: HelperDetailsProps) {
   const { register, setValue, formState: { errors }, watch, trigger }  = useFormContext<FormDataMW | FormDataMDW >()
   const watchedValues = watch()
@@ -89,7 +91,7 @@ export function HelperDetails({
           const isDateValid = await trigger('helperDetails.visitDate');
           
           if (isFinValid && isDateValid) {
-            handleContinue(isSummaryActive ? 'summary' : 'examination-details');
+            handleContinue(isSummaryActive ? 'summary' : nextStep);
           }
         }} 
       >
