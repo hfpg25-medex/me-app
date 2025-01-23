@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Accordion, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { cn } from "@/lib/utils"
-import { Summary } from "@/components/SummaryMDW"
+import { Summary } from "@/components/Summary"
 import { FinChangeModal } from "@/components/FinChangeModal"
 import { formSchemaMDW, FormDataMDW } from "@/lib/schemas"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -222,6 +222,7 @@ export default function MDWExamPage() {
     return (
       <div className="container mx-auto p-6">
         <Summary
+          type="MDW"
           clinicDetails={{
             clinic: selectedClinicDetails?.name || '',
             doctor: selectedDoctorDetails?.name || '',
