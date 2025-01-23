@@ -17,9 +17,9 @@ export default function SelectExamPage() {
       href: "/medical-exam/mdw"
     },
     {
-      title: "Medical Exam for Work Permit Application",
+      title: "Medical Exam for Work Permit Issuance",
       description: "MOM",
-      href: "/medical-exam/wp"
+      href: "/medical-exam/wp-issue"
     },
     {
       title: "Six-monthly Medical Exam for Female Migrant Workers",
