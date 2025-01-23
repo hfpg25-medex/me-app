@@ -10,6 +10,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { useFormContext } from "react-hook-form"
 import { FormDataMW,FormDataMDW  } from "@/lib/schemas"
 
+
 interface HelperDetailsProps {
   isSummaryActive: boolean
   handleContinue: (nextStep: string) => void
@@ -20,6 +21,7 @@ interface HelperDetailsProps {
   visitDateTouched: boolean
   isPendingMe: boolean
 }
+
 
 export function HelperDetails({ 
   isSummaryActive, 
