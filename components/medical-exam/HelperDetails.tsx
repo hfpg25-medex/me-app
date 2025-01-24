@@ -5,7 +5,8 @@ import { AccordionContent } from "@/components/ui/accordion"
 import { useFormContext } from "react-hook-form"
 import { FormDataMW,FormDataMDW  } from "@/lib/schemas"
 import { Datepicker } from "@/components/ui/datepicker"
-
+import { useEffect, useMemo } from 'react'
+import React from "react"
 
 interface HelperDetailsProps {
   isSummaryActive: boolean
@@ -17,6 +18,7 @@ interface HelperDetailsProps {
   visitDateTouched: boolean
   isPendingMe: boolean
   nextStep: "examination-details" | "medical-history"
+  requireVisitDate?: boolean
 }
 
 
@@ -29,10 +31,13 @@ export function HelperDetails({
   finTouched,
   visitDateTouched,
   isPendingMe,
-  nextStep
+  nextStep,
+  requireVisitDate=true
 }: HelperDetailsProps) {
   const { register, setValue, formState: { errors }, watch, trigger }  = useFormContext<FormDataMW | FormDataMDW >()
+
   const watchedValues = watch()
+
 
   return (
     <AccordionContent>
@@ -65,10 +70,10 @@ export function HelperDetails({
               <Label>Person Name</Label>
               <p className="mt-2 text-sm">{watchedValues.helperDetails.helperName}</p>
             </div>
-            <Datepicker
+            {requireVisitDate &&<Datepicker
               label="Date person visits the clinic"
-              date={watchedValues.helperDetails.visitDate}
-              onSelect={(date) => {
+              date={watchedValues.helperDetails.visitDate || new Date()}
+              onSelect={(date) => {                
                 setValue('helperDetails.visitDate', date as Date);
                 setVisitDateTouched(true);
                 trigger('helperDetails.visitDate');
@@ -76,7 +81,7 @@ export function HelperDetails({
               disabled={(date) => 
                 date > new Date() || date < new Date(new Date().setDate(new Date().getDate() - 90))
               }
-            />
+            />}
             </div>
           </>
         )}

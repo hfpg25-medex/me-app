@@ -46,6 +46,8 @@ const mockApiCall = async (fin: string) => {
   return null
 }
 
+const requireVisitDate = true
+
 export default function WPExamPage() {
   const [step, setStep] = useState<'submission' | 'summary'>('submission')
   const [expandedAccordion, setExpandedAccordion] = useState<string | undefined>("clinic-doctor")
@@ -124,7 +126,6 @@ export default function WPExamPage() {
         break
       case 'medical-history':
         isValid = await trigger('helperDetails')
-        console.log('isValid6=', isValid)
         if (isValid) {
           setIsMedicalHistoryEnabled(true)
           setExpandedAccordion('medical-history')
@@ -132,6 +133,7 @@ export default function WPExamPage() {
         break
       case 'examination-details':
         isValid = await trigger('medicalHistory')
+        console.log('isValid6=', isValid)
         if (isValid) {
           setIsExaminationEnabled(true)
           setExpandedAccordion('examination-details')
@@ -208,7 +210,7 @@ export default function WPExamPage() {
     <div className="container mx-auto p-6">
       <Card>
         <CardHeader>
-          <CardTitle className="text-xl font-bold">Six-monthly Medical Exam for Female Migrant Workers (MOM)</CardTitle>
+          <CardTitle className="text-xl font-bold">Full Medical Exam for Work Permit Issuance (MOM)</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex items-center mb-6">
@@ -251,6 +253,7 @@ export default function WPExamPage() {
                     visitDateTouched={visitDateTouched}
                     isPendingMe={isPendingMe}
                     nextStep='medical-history'
+                    requireVisitDate={requireVisitDate}
                   />
                 </AccordionItem>
                 <AccordionItem value="medical-history" className={!isMedicalHistoryEnabled ? "opacity-50" : ""}>
