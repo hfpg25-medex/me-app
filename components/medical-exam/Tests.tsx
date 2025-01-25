@@ -24,17 +24,34 @@ export function Tests({ isSummaryActive, handleContinue }: TestsProps) {
     <AccordionContent>
       <div className="space-y-6">
         <div>
-          <div className="mt-6">
+          <div>
             <div className="grid grid-cols-[1fr,auto] gap-x-8 gap-y-4">
               <Label htmlFor="radiological">Radiological (eg. Chest X-ray – to be taken in Singapore)</Label>
-              <div className="flex items-center gap-2">
-                <Checkbox
-                  id="radiological"
-                  {...register('tests.radiological.result')}
-                />
-                <span className="text-sm text-gray-500">Abnormal</span>
+              <div className="flex flex-col gap-2">
+                <div className="flex items-center gap-2">
+                  <Checkbox
+                    id="radiological"
+                    {...register('tests.radiological.result')}
+                    onCheckedChange={(checked) => {
+                      setValue('tests.radiological.result', checked? 'abnormal': 'normal')
+                    }}
+                  />
+                  <span className="text-sm text-gray-500 mr-[49px]">Abnormal</span>
+                </div>
               </div>
+            </div>
+            {watchedValues.tests?.radiological?.result === 'abnormal' && (
+              <div className="mt-2 w-full">
+                <textarea
+                  id="radiologicalDetails"
+                  className="w-full min-h-[80px] p-2 border rounded-md"
+                  placeholder="Please provide details"
+                  {...register('tests.radiological.details')}
+                />
+              </div>
+            )}
 
+            <div className="grid grid-cols-[1fr,auto] gap-x-8 gap-y-4 mt-3">
               <Label htmlFor="syphilis">Syphilis Screen (or other treponemal tests)</Label>
               <div className="flex items-center gap-2">
                 <Checkbox
@@ -44,7 +61,7 @@ export function Tests({ isSummaryActive, handleContinue }: TestsProps) {
                 <span className="text-sm text-gray-500">Positive/Reactive</span>
               </div>
 
-              <Label htmlFor="malaria">Blood film for Malaria[2]</Label>
+              <Label htmlFor="malaria">Blood film for Malaria</Label>
               <div className="flex items-center gap-2">
                 <Checkbox
                   id="malaria"
@@ -82,7 +99,7 @@ export function Tests({ isSummaryActive, handleContinue }: TestsProps) {
               </div>
             </div>
           </div>        
-          </div>
+        </div>
       </div>
       <Button 
         className="mt-4" 

@@ -14,7 +14,6 @@ import { HelperDetails } from "@/components/medical-exam/HelperDetails"
 import { MedicalHistory } from "@/components/medical-exam/MedicalHistory"
 import { ClinicalExamination } from "@/components/medical-exam/ClinicalExamination"
 import { Tests } from "@/components/medical-exam/Tests"
-import { ExaminationDetails } from "@/components/medical-exam/ExaminationDetailsMW"
 import { AcknowledgementPage } from '@/components/AcknowledgementPage'
 
 const clinics = [
@@ -312,14 +311,6 @@ export default function WPExamPage() {
                   isSummaryActive={isSummaryActive}
                   handleContinue={handleContinue}
                  />
-                </AccordionItem>
-                <AccordionItem value="examination-details" className={!isExaminationEnabled ? "opacity-50 pointer-events-none" : ""}>
-                  <AccordionTrigger className="text-lg font-bold" disabled={!isExaminationEnabled}>Examination details</AccordionTrigger>
-                  <ExaminationDetails 
-                    isSummaryActive={isSummaryActive}
-                    handleContinue={handleContinue}
-                    testTypes={testTypes}
-                  />
                 </AccordionItem>
               </Accordion>
             {/* </form> */}
