@@ -13,9 +13,9 @@ import { ClinicDoctorDetails } from "@/components/medical-exam/ClinicDoctorDetai
 import { HelperDetails } from "@/components/medical-exam/HelperDetails"
 import { MedicalHistory } from "@/components/medical-exam/MedicalHistory"
 import { ClinicalExamination } from "@/components/medical-exam/ClinicalExamination"
+import { Tests } from "@/components/medical-exam/Tests"
 import { ExaminationDetails } from "@/components/medical-exam/ExaminationDetailsMW"
 import { AcknowledgementPage } from '@/components/AcknowledgementPage'
-import { AccordionContent } from '@radix-ui/react-accordion'
 
 const clinics = [
   { id: '1', name: 'Healthline Medical Clinic (Bukit Batok)', hciCode: '2M12345', contactNumber: '+65 69991234' },
@@ -57,6 +57,7 @@ export default function WPExamPage() {
   const [isExaminationEnabled, setIsExaminationEnabled] = useState(false)
   const [isMedicalHistoryEnabled, setIsMedicalHistoryEnabled] = useState(false)
   const [isClinicalExaminationEnabled, setIsClinicalExaminationEnabled] = useState(false)
+  const [isTestsEnabled, setIsTestsEnabled] = useState(false)
   const [isSummaryActive, setIsSummaryActive] = useState(false)
   const [isFinChangeModalOpen, setIsFinChangeModalOpen] = useState(false)
   const [tempFin, setTempFin] = useState('')
@@ -73,6 +74,20 @@ export default function WPExamPage() {
       clinicDoctor: { clinic: '', doctor: '' },
       helperDetails: { fin: '', helperName: '', visitDate: undefined },
       medicalHistory: [],
+      clinicalExamination: {
+        weight: 0,
+        height: 0,
+        waistCircumference: 0,
+        systolicBP: 0,
+        diastolicBP: 0,
+        rightEyeVision: '5/6',
+        leftEyeVision: '5/6',
+        urineAlbumin: 'normal',
+        urineGlucose: 'normal',
+        pregnancyTest: 'negative',
+        colorVision: 'normal',
+        hearing: 'normal'
+      },
       examinationDetails: {
         positiveTests: [],
         remarks: '',
@@ -141,6 +156,18 @@ export default function WPExamPage() {
           setIsClinicalExaminationEnabled(true)
           setExpandedAccordion('clinical-examination')
         }
+        break
+      case 'tests':
+          console.log(watchedValues.clinicalExamination)
+
+          isValid = await trigger('clinicalExamination')
+          console.log('Clinical Examination Errors:', methods.formState.errors.clinicalExamination)
+          console.log('isValid7=', isValid)
+          if (isValid) {
+            setIsTestsEnabled(true)
+            setExpandedAccordion('tests')
+            console.log("isTestsEnabled",isTestsEnabled)
+          }
         break
       case 'summary':
         isValid = await trigger('examinationDetails')
@@ -271,6 +298,13 @@ export default function WPExamPage() {
                 <AccordionItem value="clinical-examination" className={!isClinicalExaminationEnabled ? "opacity-50" : ""}>
                   <AccordionTrigger className="text-lg font-bold" disabled={!isClinicalExaminationEnabled}>Clinical examination</AccordionTrigger>
                 <ClinicalExamination
+                  isSummaryActive={isSummaryActive}
+                  handleContinue={handleContinue}
+                 />
+                </AccordionItem>
+                <AccordionItem value="tests" className={!isClinicalExaminationEnabled ? "opacity-50" : ""}>
+                  <AccordionTrigger className="text-lg font-bold" disabled={!isTestsEnabled}>Tests</AccordionTrigger>
+                <Tests
                   isSummaryActive={isSummaryActive}
                   handleContinue={handleContinue}
                  />
