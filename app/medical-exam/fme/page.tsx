@@ -210,7 +210,7 @@ export default function WPExamPage() {
     <div className="container mx-auto p-6">
       <Card>
         <CardHeader>
-          <CardTitle className="text-xl font-bold">Full Medical Exam for Work Permit Issuance (MOM)</CardTitle>
+          <CardTitle className="text-xl font-bold">Full Medical Exam for Foreign Workers (MOM)</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex items-center mb-6">
@@ -230,7 +230,9 @@ export default function WPExamPage() {
           </div>
 
           <FormProvider {...methods}>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            {/* <form onSubmit={
+              handleSubmit(onSubmit)
+              }> */}
               <Accordion type="single" value={expandedAccordion} onValueChange={setExpandedAccordion} collapsible>
                 <AccordionItem value="clinic-doctor">
                   <AccordionTrigger className="text-lg font-bold">Clinic and doctor details</AccordionTrigger>
@@ -272,7 +274,7 @@ export default function WPExamPage() {
                   />
                 </AccordionItem>
               </Accordion>
-            </form>
+            {/* </form> */}
           </FormProvider>
         </CardContent>
       </Card>
