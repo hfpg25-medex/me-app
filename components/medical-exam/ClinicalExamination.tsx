@@ -161,47 +161,61 @@ export function ClinicalExamination({ isSummaryActive, handleContinue }: Clinica
           </div>
 
           <div className="space-y-4 mt-6">
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="urineAlbumin"
-                {...register('clinicalExamination.urineAlbumin')}
-              />
-              <Label htmlFor="urineAlbumin">Urine Albumin (abnormal)</Label>
+            <div className="grid grid-cols-[1fr,auto] items-center gap-x-8">
+              <Label htmlFor="urineAlbumin">Urine Albumin</Label>
+              <div className="flex items-center gap-2">
+                <Checkbox
+                  id="urineAlbumin"
+                  {...register('clinicalExamination.urineAlbumin')}
+                />
+                <span>Positive/reactive</span>
+              </div>
+            </div>
+            <div className="grid grid-cols-[1fr,auto] items-center gap-x-8">
+              <Label htmlFor="urineGlucose">Urine Glucose</Label>
+              <div className="flex items-center gap-2">
+                <Checkbox
+                  id="urineGlucose"
+                  {...register('clinicalExamination.urineGlucose')}
+                />
+                <span>Positive/reactive</span>
+              </div>
             </div>
 
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="urineGlucose"
-                {...register('clinicalExamination.urineGlucose')}
-              />
-              <Label htmlFor="urineGlucose">Urine Glucose (abnormal)</Label>
+            <div className="grid grid-cols-[1fr,auto] items-center gap-x-8">
+              <Label htmlFor="pregnancyTest">Pregnancy Test</Label>
+              <div className="flex items-center gap-2">
+                <Checkbox
+                  id="pregnancyTest"
+                  {...register('clinicalExamination.pregnancyTest')}
+                />
+                <span>Positive/reactive</span>
+              </div>
             </div>
 
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="pregnancyTest"
-                {...register('clinicalExamination.pregnancyTest')}
-              />
-              <Label htmlFor="pregnancyTest">Pregnancy Test (positive)</Label>
+            <div className="grid grid-cols-[1fr,auto] items-center gap-x-8">
+              <Label htmlFor="colorVision">Color Vision</Label>
+              <div className="flex items-center gap-2">
+                <Checkbox
+                  id="colorVision"
+                  {...register('clinicalExamination.colorVision')}
+                />
+                <span>Abnormal</span>
+              </div>
             </div>
 
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="colorVision"
-                {...register('clinicalExamination.colorVision')}
-              />
-              <Label htmlFor="colorVision">Color Vision (abnormal)</Label>
+            <div className="grid grid-cols-[1fr,auto] items-center gap-x-8">
+              <Label htmlFor="hearing">Hearing</Label>
+              <div className="flex items-center gap-2">
+                <Checkbox
+                  id="hearing"
+                  {...register('clinicalExamination.hearing')}
+                />
+                <span>Abnormal</span>
+              </div>
             </div>
-
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="hearing"
-                {...register('clinicalExamination.hearing')}
-              />
-              <Label htmlFor="hearing">Hearing (abnormal)</Label>
-            </div>
+          </div>        
           </div>
-        </div>
       </div>
       <Button 
         className="mt-4" 
