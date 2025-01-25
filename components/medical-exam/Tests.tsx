@@ -57,6 +57,9 @@ export function Tests({ isSummaryActive, handleContinue }: TestsProps) {
                 <Checkbox
                   id="syphilis"
                   {...register('tests.syphilis')}
+                  onCheckedChange={(checked) => {
+                    setValue('tests.syphilis', checked? 'negative': 'positive')
+                  }}
                 />
                 <span className="text-sm text-gray-500">Positive/Reactive</span>
               </div>
@@ -66,6 +69,9 @@ export function Tests({ isSummaryActive, handleContinue }: TestsProps) {
                 <Checkbox
                   id="malaria"
                   {...register('tests.malaria')}
+                  onCheckedChange={(checked) => {
+                    setValue('tests.malaria', checked? 'negative': 'positive')
+                  }}
                 />
                 <span className="text-sm text-gray-500">Positive/Reactive</span>
               </div>
@@ -75,6 +81,9 @@ export function Tests({ isSummaryActive, handleContinue }: TestsProps) {
                 <Checkbox
                   id="hiv"
                   {...register('tests.hiv')}
+                  onCheckedChange={(checked) => {
+                    setValue('tests.hiv', checked? 'negative': 'positive')
+                  }}
                 />
                 <span className="text-sm text-gray-500">Positive/Reactive</span>
               </div>
@@ -85,6 +94,9 @@ export function Tests({ isSummaryActive, handleContinue }: TestsProps) {
                 <Checkbox
                   id="hba1c"
                   {...register('tests.hba1c')}
+                  onCheckedChange={(checked) => {
+                    setValue('tests.hba1c', checked? 'normal': 'abnormal')
+                  }}
                 />
                 <span className="text-sm text-gray-500">Abnormal</span>
               </div>
@@ -94,6 +106,9 @@ export function Tests({ isSummaryActive, handleContinue }: TestsProps) {
                 <Checkbox
                   id="lipids"
                   {...register('tests.lipids')}
+                  onCheckedChange={(checked) => {
+                    setValue('tests.lipids', checked? 'normal': 'abnormal')
+                  }}
                 />
                 <span className="text-sm text-gray-500">Abnormal</span>
               </div>
