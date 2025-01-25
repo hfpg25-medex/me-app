@@ -53,7 +53,6 @@ export function HelperDetails({
          }
             }
             onChange={() => {}}
-            placeholder="Enter FIN (e.g., F1234567N)"
           />
           {finTouched && errors.helperDetails?.fin && (
             <p className="text-red-500 text-sm mt-1">Please enter a valid FIN</p>
