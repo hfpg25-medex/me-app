@@ -2,24 +2,25 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
-import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
 import { AccordionContent } from "../ui/accordion"
 import { useFormContext } from "react-hook-form"
 import { FormDataWP } from "@/lib/schemas"
 
 const historyItems = [
-  "Mental Illness",
-  "Epilepsy",
-  "Heart Disease",
-  "Diabetes",
-  "Asthma",
-  "Cancer",
-  "High Blood Pressure",
-  "Stroke",
-  "Allergies",
+  { id: 1, text: "Cardiovascular disease (e.g. ischemic heart disease)", placeholder: "Include details of any heart conditions, treatments, and current status" },
+  { id: 2, text: "Metabolic disease (diabetes, hypertension)", placeholder: "Specify type of diabetes/hypertension, medications, and control status" },
+  { id: 3, text: "Respiratory disease (e.g. tuberculosis, asthma)", placeholder: "Include respiratory condition details, frequency of symptoms, and treatments" },
+  { id: 4, text: "Gastrointestinal disease (e.g. peptic ulcer disease)", placeholder: "Describe digestive conditions, symptoms, and current management" },
+  { id: 5, text: "Neurological disease (e.g. epilepsy, stroke)", placeholder: "Include details of neurological conditions, frequency of episodes if any" },
+  { id: 6, text: "Mental health condition (e.g. depression)", placeholder: "Describe mental health conditions, treatments, and current status" },
+  { id: 7, text: "Other medical condition", placeholder: "Specify any other medical conditions and their details" },
+  { id: 8, text: "Previous surgeries", placeholder: "List surgeries with dates and any ongoing effects" },
+  { id: 9, text: "Long-term medications", placeholder: "List medications that are taken daily for at least a months" },
+  { id: 10, text: "Smoking History (tobacco)", placeholder: "Quantify in pack-years" },
+  { id: 11, text: "Other lifestyle risk factors or significant family history", placeholder: "Describe relevant lifestyle factors or family medical history" },
+  { id: 12, text: "Previous infections of concern (e.g. COVID-19)", placeholder: "Include date of infection" }
 ]
 
 interface MedicalHistoryProps {
@@ -37,7 +38,7 @@ export function MedicalHistory({
   handleContinue, 
 }: MedicalHistoryProps) {
   const [medicalHistory, setMedicalHistory] = useState<HistoryItem[]>(
-    historyItems.map((item) => ({ condition: item, hasCondition: false, details: "" })),
+    historyItems.map((item) => ({ condition: item.text, hasCondition: false, details: "" })),
   )
   const { register, setValue, formState: { errors }, watch } = useFormContext<FormDataWP>()
 
@@ -56,10 +57,12 @@ export function MedicalHistory({
 
   function HistoryItemComponent({
     item,
+    index,
     onToggle,
     onDetailsChange,
   }: {
     item: HistoryItem
+    index: number
     onToggle: () => void
     onDetailsChange: (details: string) => void
   }) {
@@ -85,7 +88,7 @@ export function MedicalHistory({
         </div>
         {item.hasCondition && (
           <Textarea
-            placeholder={`Please provide details about ${item.condition.toLowerCase()}`}
+            placeholder={historyItems[index].placeholder}
             value={item.details}
             onChange={(e) => onDetailsChange(e.target.value)}
             className="mt-2"
@@ -97,14 +100,13 @@ export function MedicalHistory({
   return (
     <AccordionContent>
       <div className="w-full">
-        <div className="mb-4">
           <p className="text-sm text-gray-500">Please provide information about worker's medical history.</p>
-        </div>
         <div className="space-y-6">
           {medicalHistory.map((item, index) => (
             <HistoryItemComponent
               key={item.condition}
               item={item}
+              index={index}
               onToggle={() => handleToggle(index)}
               onDetailsChange={(details) => handleDetailsChange(index, details)}
             />
