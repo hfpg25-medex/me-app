@@ -72,7 +72,16 @@ export function MedicalHistory({
           >
             {item.condition}
           </Label>
-          <Switch id={`toggle-${item.condition}`} checked={item.hasCondition} onCheckedChange={onToggle} />
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              id={`toggle-${item.condition}`}
+              checked={item.hasCondition}
+              onChange={onToggle}
+              className="h-4 w-4 rounded border-gray-300"
+            />
+            <Label htmlFor={`toggle-${item.condition}`} className="text-sm">Yes</Label>
+          </div>
         </div>
         {item.hasCondition && (
           <Textarea
@@ -85,7 +94,6 @@ export function MedicalHistory({
       </div>
     )
   }
-
   return (
     <AccordionContent>
       <div className="w-full">
