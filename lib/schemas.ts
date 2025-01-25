@@ -70,6 +70,28 @@ export const examinationDetailsMDWSchema = z.object({
   remarks: z.string().max(500, "Remarks must be at most 500 characters"),
 });
 
+export const clinicalExaminationSchema = z.object({
+  weight: z.union([
+    z.string().refine((val) => val === '', { message: "Weight is required" }),
+    z.number().min(15, "Please input a valid weight").max(200, "Please input a valid weight"),
+    z.null()
+  ]),
+  height: z.number().min(90, "Height must be at least 90cm").max(250, "Height must be at most 250cm"),
+  bmi: z.number().nullable(),
+  waistCircumference: z.number().min(0, "Waist circumference must be a positive number"),
+  // positiveTests: z.array(z.string()),
+  systolicBP: z.number().min(0, "Systolic BP must be a positive number"),
+  diastolicBP: z.number().min(0, "Diastolic BP must be a positive number"),
+  // rightEyeVision: z.string().min(1, "Right eye vision is required"),
+  rightEyeVision: z.enum(["6/5", "6/6", "6/9", "6/12", "6/18", "6/24", "6/36", "blind"]),
+  leftEyeVision: z.string().min(1, "Left eye vision is required"),
+  urineAlbumin: z.boolean().default(false),
+  urineGlucose: z.boolean().default(false),
+  pregnancyTest: z.boolean().default(false),
+  colorVision: z.boolean().default(false),
+  hearing: z.boolean().default(false),
+});
+
 export const examinationDetailsMWSchema = z.object({
   positiveTests: z.array(z.string()),
   remarks: z.string().max(500, "Remarks must be at most 500 characters"),
@@ -112,6 +134,7 @@ export const formSchemaWP = z.object({
   clinicDoctor: clinicDoctorSchema,
   helperDetails: helperDetailsSchema,
   medicalHistory: medicalHistorySchema,
+  clinicalExamination: clinicalExaminationSchema,
   examinationDetails: examinationDetailsMWSchema,
 });
 

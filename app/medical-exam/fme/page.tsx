@@ -12,8 +12,10 @@ import { useForm, FormProvider } from "react-hook-form"
 import { ClinicDoctorDetails } from "@/components/medical-exam/ClinicDoctorDetails"
 import { HelperDetails } from "@/components/medical-exam/HelperDetails"
 import { MedicalHistory } from "@/components/medical-exam/MedicalHistory"
+import { ClinicalExamination } from "@/components/medical-exam/ClinicalExamination"
 import { ExaminationDetails } from "@/components/medical-exam/ExaminationDetailsMW"
 import { AcknowledgementPage } from '@/components/AcknowledgementPage'
+import { AccordionContent } from '@radix-ui/react-accordion'
 
 const clinics = [
   { id: '1', name: 'Healthline Medical Clinic (Bukit Batok)', hciCode: '2M12345', contactNumber: '+65 69991234' },
@@ -54,6 +56,7 @@ export default function WPExamPage() {
   const [isHelperDetailsEnabled, setIsHelperDetailsEnabled] = useState(false)
   const [isExaminationEnabled, setIsExaminationEnabled] = useState(false)
   const [isMedicalHistoryEnabled, setIsMedicalHistoryEnabled] = useState(false)
+  const [isClinicalExaminationEnabled, setIsClinicalExaminationEnabled] = useState(false)
   const [isSummaryActive, setIsSummaryActive] = useState(false)
   const [isFinChangeModalOpen, setIsFinChangeModalOpen] = useState(false)
   const [tempFin, setTempFin] = useState('')
@@ -131,12 +134,12 @@ export default function WPExamPage() {
           setExpandedAccordion('medical-history')
         }
         break
-      case 'examination-details':
+      case 'clinical-examination':
         isValid = await trigger('medicalHistory')
         console.log('isValid6=', isValid)
         if (isValid) {
-          setIsExaminationEnabled(true)
-          setExpandedAccordion('examination-details')
+          setIsClinicalExaminationEnabled(true)
+          setExpandedAccordion('clinical-examination')
         }
         break
       case 'summary':
@@ -264,6 +267,13 @@ export default function WPExamPage() {
                   isSummaryActive={isSummaryActive}
                   handleContinue={handleContinue}
                   />
+                </AccordionItem>
+                <AccordionItem value="clinical-examination" className={!isClinicalExaminationEnabled ? "opacity-50" : ""}>
+                  <AccordionTrigger className="text-lg font-bold" disabled={!isClinicalExaminationEnabled}>Clinical examination</AccordionTrigger>
+                <ClinicalExamination
+                  isSummaryActive={isSummaryActive}
+                  handleContinue={handleContinue}
+                 />
                 </AccordionItem>
                 <AccordionItem value="examination-details" className={!isExaminationEnabled ? "opacity-50 pointer-events-none" : ""}>
                   <AccordionTrigger className="text-lg font-bold" disabled={!isExaminationEnabled}>Examination details</AccordionTrigger>

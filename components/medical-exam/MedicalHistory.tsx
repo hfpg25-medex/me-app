@@ -112,7 +112,7 @@ export function MedicalHistory({
             />
           ))}
         </div>
-          <Button className="mt-4" onClick={() => handleContinue(isSummaryActive? 'summary': 'examination-details')}>
+          <Button className="mt-4" onClick={() => handleContinue(isSummaryActive? 'summary': 'clinical-examination')}>
             {isSummaryActive ? 'Continue to Summary' : 'Continue'}
           </Button>
       </div>
