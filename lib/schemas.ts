@@ -92,6 +92,15 @@ export const clinicalExaminationSchema = z.object({
   hearing: z.string().default("normal"),
 });
 
+export const testsSchema = z.object({
+  radiological: z.object({ result: z.string(), details: z.string().nullable() }),
+  syphilis: z.string(),  
+  malaria: z.string(),
+  hiv: z.string(),
+  hba1c: z.string(),
+  lipids: z.string(),
+});
+
 // export const clinicalExaminationSchema = z.object({
 //   weight: z.number().min(15, "Weight must be at least 15kg").max(200, "Weight must be at most 200kg"),
 //   height: z.number().min(90, "Height must be at least 90cm").max(250, "Height must be at most 250cm"),
@@ -151,7 +160,7 @@ export const formSchemaWP = z.object({
   helperDetails: helperDetailsSchema,
   medicalHistory: medicalHistorySchema,
   clinicalExamination: clinicalExaminationSchema,
-  examinationDetails: examinationDetailsMWSchema,
+  tests: testsSchema,
 });
 
 export type FormDataWP = z.infer<typeof formSchemaWP>;

@@ -88,10 +88,14 @@ export default function WPExamPage() {
         colorVision: 'normal',
         hearing: 'normal'
       },
-      examinationDetails: {
-        positiveTests: [],
-        remarks: '',
-      },
+      tests: {
+        radiological: { result: 'negative', details: null },
+          syphilis: 'negative',
+          malaria: 'negative',
+          hiv: 'negative',
+          hba1c: 'normal',
+          lipids: 'normal'
+      }
     },
   })
 
@@ -170,7 +174,7 @@ export default function WPExamPage() {
           }
         break
       case 'summary':
-        isValid = await trigger('examinationDetails')
+        isValid = await trigger('tests')
         isValid = true //temp
         if (isValid) {
           setIsSummaryActive(true)
