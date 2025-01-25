@@ -129,12 +129,16 @@ export function ClinicalExamination({ isSummaryActive, handleContinue }: Clinica
                 mmHg
               </span>
               </div>
-            </div>          </div>
+            </div>          
+            </div>
 
           <div className="grid grid-cols-2 gap-4 mt-4">
                 <div>
                   <Label htmlFor="rightEyeVision">Right Eye Vision</Label>
-                  <Select defaultValue="6/5">
+                  <Select 
+                    defaultValue="6/5"
+                    onValueChange={(value) => setValue('clinicalExamination.rightEyeVision', value)}
+                    >
                     <SelectTrigger>
                         <SelectValue placeholder="Select vision" />
                     </SelectTrigger>
@@ -147,7 +151,10 @@ export function ClinicalExamination({ isSummaryActive, handleContinue }: Clinica
                 </div>            
           <div>
             <Label htmlFor="leftEyeVision">Left Eye Vision</Label>
-            <Select defaultValue="6/5">
+            <Select 
+                defaultValue="6/5"
+                onValueChange={(value) => setValue('clinicalExamination.leftEyeVision', value)}
+            >
               <SelectTrigger>
                   <SelectValue placeholder="Select vision" />
               </SelectTrigger>
@@ -160,58 +167,66 @@ export function ClinicalExamination({ isSummaryActive, handleContinue }: Clinica
           </div>
           </div>
 
-          <div className="space-y-4 mt-6">
-            <div className="grid grid-cols-[1fr,auto] items-center gap-x-8">
+          <div className="mt-6">
+            <div className="grid grid-cols-[1fr,auto] gap-x-8 gap-y-4">
               <Label htmlFor="urineAlbumin">Urine Albumin</Label>
               <div className="flex items-center gap-2">
                 <Checkbox
                   id="urineAlbumin"
                   {...register('clinicalExamination.urineAlbumin')}
+                  onCheckedChange={(checked) => {
+                    setValue('clinicalExamination.urineAlbumin', checked? 'abnormal': 'normal')
+                  }}
                 />
-                <span>Positive/reactive</span>
+                <span className="text-sm text-gray-500">Abnormal</span>
               </div>
-            </div>
-            <div className="grid grid-cols-[1fr,auto] items-center gap-x-8">
+
               <Label htmlFor="urineGlucose">Urine Glucose</Label>
               <div className="flex items-center gap-2">
                 <Checkbox
                   id="urineGlucose"
                   {...register('clinicalExamination.urineGlucose')}
+                  onCheckedChange={(checked) => {
+                    setValue('clinicalExamination.urineGlucose', checked? 'abnormal': 'normal')
+                  }}
                 />
-                <span>Positive/reactive</span>
+                <span className="text-sm text-gray-500">Abnormal</span>
               </div>
-            </div>
 
-            <div className="grid grid-cols-[1fr,auto] items-center gap-x-8">
               <Label htmlFor="pregnancyTest">Pregnancy Test</Label>
               <div className="flex items-center gap-2">
                 <Checkbox
                   id="pregnancyTest"
                   {...register('clinicalExamination.pregnancyTest')}
+                  onCheckedChange={(checked) => {
+                    setValue('clinicalExamination.pregnancyTest', checked? 'positive': 'negative')
+                  }}
                 />
-                <span>Positive/reactive</span>
+                <span className="text-sm text-gray-500">Positive</span>
               </div>
-            </div>
 
-            <div className="grid grid-cols-[1fr,auto] items-center gap-x-8">
               <Label htmlFor="colorVision">Color Vision</Label>
               <div className="flex items-center gap-2">
                 <Checkbox
                   id="colorVision"
                   {...register('clinicalExamination.colorVision')}
+                  onCheckedChange={(checked) => {
+                    setValue('clinicalExamination.colorVision', checked? 'abnormal': 'normal')
+                  }}
                 />
-                <span>Abnormal</span>
+                <span className="text-sm text-gray-500">Abnormal</span>
               </div>
-            </div>
 
-            <div className="grid grid-cols-[1fr,auto] items-center gap-x-8">
               <Label htmlFor="hearing">Hearing</Label>
               <div className="flex items-center gap-2">
                 <Checkbox
                   id="hearing"
                   {...register('clinicalExamination.hearing')}
+                  onCheckedChange={(checked) => {
+                    setValue('clinicalExamination.hearing', checked? 'abnormal': 'normal')
+                  }}
                 />
-                <span>Abnormal</span>
+                <span className="text-sm text-gray-500">Abnormal</span>
               </div>
             </div>
           </div>        
@@ -219,7 +234,7 @@ export function ClinicalExamination({ isSummaryActive, handleContinue }: Clinica
       </div>
       <Button 
         className="mt-4" 
-        onClick={() => handleContinue('examination-details')}
+        onClick={() => handleContinue('tests')}
       >
         {isSummaryActive ? 'Continue to Summary' : 'Continue'}
       </Button>

@@ -83,14 +83,30 @@ export const clinicalExaminationSchema = z.object({
   systolicBP: z.number().min(0, "Systolic BP must be a positive number"),
   diastolicBP: z.number().min(0, "Diastolic BP must be a positive number"),
   // rightEyeVision: z.string().min(1, "Right eye vision is required"),
-  rightEyeVision: z.enum(["6/5", "6/6", "6/9", "6/12", "6/18", "6/24", "6/36", "blind"]),
-  leftEyeVision: z.string().min(1, "Left eye vision is required"),
-  urineAlbumin: z.boolean().default(false),
-  urineGlucose: z.boolean().default(false),
-  pregnancyTest: z.boolean().default(false),
-  colorVision: z.boolean().default(false),
-  hearing: z.boolean().default(false),
+  rightEyeVision: z.string(),
+  leftEyeVision: z.string(),
+  urineAlbumin: z.string().default("normal"),
+  urineGlucose: z.string().default("normal"),
+  pregnancyTest: z.string().default("negative"),
+  colorVision: z.string().default("normal"),
+  hearing: z.string().default("normal"),
 });
+
+// export const clinicalExaminationSchema = z.object({
+//   weight: z.number().min(15, "Weight must be at least 15kg").max(200, "Weight must be at most 200kg"),
+//   height: z.number().min(90, "Height must be at least 90cm").max(250, "Height must be at most 250cm"),
+//   bmi: z.number(),
+//   waistCircumference: z.number(),
+//   systolicBP: z.number(),
+//   diastolicBP: z.number(),
+//   rightEyeVision: z.enum(["6/5", "6/6", "6/9", "6/12", "6/18", "6/24", "6/36", "blind"]),
+//   leftEyeVision: z.enum(["6/5", "6/6", "6/9", "6/12", "6/18", "6/24", "6/36", "blind"]),
+//   urineAlbumin: z.enum(["normal", "abnormal"]),
+//   urineGlucose: z.enum(["normal", "abnormal"]),
+//   pregnancyTest: z.enum(["negative", "positive"]),
+//   colorVision: z.enum(["normal", "abnormal"]),
+//   hearing: z.enum(["normal", "abnormal"])
+// });
 
 export const examinationDetailsMWSchema = z.object({
   positiveTests: z.array(z.string()),
