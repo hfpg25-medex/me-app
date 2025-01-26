@@ -1,14 +1,11 @@
 "use client"
 
-import { useState, useEffect } from "react"
 import { useFormContext } from "react-hook-form"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
-import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { AccordionContent } from "@/components/ui/accordion"
 import { FormDataWP } from "@/lib/schemas"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
 
 
 interface TestsProps {
@@ -47,7 +44,11 @@ export function Tests({ isSummaryActive, handleContinue }: TestsProps) {
                   className="w-full min-h-[80px] p-2 border rounded-md"
                   placeholder="Please provide details"
                   {...register('tests.radiological.details')}
+                  maxLength={500}
                 />
+                <p className="text-sm text-muted-foreground">
+                  {500 - (watchedValues.tests.radiological.details?.length || 0)} characters left
+                </p>
               </div>
             )}
 
