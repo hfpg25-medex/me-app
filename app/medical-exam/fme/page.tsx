@@ -49,11 +49,11 @@ const mockApiCall = async (fin: string) => {
 
 const requireVisitDate = true
 
+
 export default function WPExamPage() {
   const [step, setStep] = useState<'submission' | 'summary'>('submission')
   const [expandedAccordion, setExpandedAccordion] = useState<string | undefined>("clinic-doctor")
   const [isHelperDetailsEnabled, setIsHelperDetailsEnabled] = useState(false)
-  const [isExaminationEnabled, setIsExaminationEnabled] = useState(false)
   const [isMedicalHistoryEnabled, setIsMedicalHistoryEnabled] = useState(false)
   const [isClinicalExaminationEnabled, setIsClinicalExaminationEnabled] = useState(false)
   const [isTestsEnabled, setIsTestsEnabled] = useState(false)
@@ -72,7 +72,7 @@ export default function WPExamPage() {
     defaultValues: {
       clinicDoctor: { clinic: '', doctor: '' },
       helperDetails: { fin: '', helperName: '', visitDate: undefined },
-      medicalHistory: [],
+      medicalHistory:  [],
       clinicalExamination: {
         weight: 0,
         height: 0,
@@ -183,7 +183,7 @@ export default function WPExamPage() {
     }
   }
 
-  const handleEdit = (section: 'clinic-doctor' | 'helper-details' | 'examination-details') => {
+  const handleEdit = (section: 'clinic-doctor' | 'helper-details' | 'medical-history' | 'clinical-examination' | 'tests') => {
     setStep('submission')
     setExpandedAccordion(section)
   }
@@ -277,7 +277,7 @@ export default function WPExamPage() {
                   />
                 </AccordionItem>
                 <AccordionItem value="helper-details" className={!isHelperDetailsEnabled ? "opacity-50" : ""}>
-                  <AccordionTrigger className="text-lg font-bold" disabled={!isHelperDetailsEnabled}>Migrant worker details</AccordionTrigger>
+                  <AccordionTrigger className="text-lg font-bold" disabled={!isHelperDetailsEnabled}>Foreign worker details</AccordionTrigger>
                   <HelperDetails 
                     isSummaryActive={isSummaryActive}
                     handleContinue={handleContinue}
