@@ -97,8 +97,8 @@ export const testsSchema = z.object({
   syphilis: z.string(),  
   malaria: z.string(),
   hiv: z.string(),
-  hba1c: z.string(),
-  lipids: z.string(),
+  hba1c: z.string().nullable(),
+  lipids: z.string().nullable(),
 });
 
 // export const clinicalExaminationSchema = z.object({
@@ -122,7 +122,12 @@ export const examinationDetailsMWSchema = z.object({
   remarks: z.string().max(500, "Remarks must be at most 500 characters"),
 });
 
-export const medicalHistoryItemsSchema = z.array(z.string());
+
+// export const medicalHistoryItemsSchema = z.array(z.object({
+//   condition: z.string(),
+//   hasCondition: z.boolean(),
+//   details: z.string().nullable()
+// }));
 
 export const formSchemaMDW = z.object({
   clinicDoctor: clinicDoctorSchema,
@@ -141,17 +146,14 @@ export const formSchemaMW = z.object({
 
 export type FormDataMW = z.infer<typeof formSchemaMW>;
 
-// export type HistoryItem = {
-//   condition: string
-//   hasCondition: boolean
-//   details: string
-// }
 
 export const medicalHistoryItemSchema = z.object({
   condition: z.string(),
   hasCondition: z.boolean(),
-  details: z.string()
+  details: z.string().optional()
 })
+
+export type MedicalHistoryItem = z.infer<typeof medicalHistoryItemSchema>
 
 export const medicalHistorySchema = z.array(medicalHistoryItemSchema)
 
