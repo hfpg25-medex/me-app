@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
@@ -29,18 +29,40 @@ interface MedicalHistoryProps {
 }
 
 type HistoryItem = {
-  condition: string
-  hasCondition: boolean
-  details: string
-}
+  id: number; // Add ID field
+  condition: string;
+  hasCondition: boolean;
+  details: string;
+};
 export function MedicalHistory({ 
   isSummaryActive, 
   handleContinue, 
 }: MedicalHistoryProps) {
-  const [medicalHistory, setMedicalHistory] = useState<HistoryItem[]>(
-    historyItems.map((item) => ({ condition: item.text, hasCondition: false, details: "" })),
-  )
   const { register, setValue, formState: { errors }, watch } = useFormContext<FormDataWP>()
+  // const [medicalHistory, setMedicalHistory] = useState<HistoryItem[]>(
+  //   historyItems.map((item) => ({ condition: item.text, hasCondition: false, details: "" })),
+  // )
+  // const [medicalHistory, setMedicalHistory] = useState<HistoryItem[]>(
+  //   historyItems.map((item) => ({ id: item.id, condition: item.text, hasCondition: false, details: "" })),
+  // );
+  const [medicalHistory, setMedicalHistory] = useState<HistoryItem[]>([])
+
+  // useEffect(() => {
+  //   setValue('medicalHistory', medicalHistory);
+  // }, [medicalHistory, setValue]);
+  useEffect(() => {
+    // Set initial state after hydration
+    setMedicalHistory(
+      historyItems.map((item) => ({ id: item.id, condition: item.text, hasCondition: false, details: "" }))
+    )
+  }, [])
+
+  useEffect(() => {
+    if (medicalHistory.length > 0) {
+      setValue('medicalHistory', medicalHistory)
+    }
+  }, [medicalHistory, setValue])
+
 
   const watchedValues = watch()
 
@@ -48,7 +70,7 @@ export function MedicalHistory({
     setMedicalHistory((prev) =>
       prev.map((item, i) => (i === index ? { ...item, hasCondition: !item.hasCondition } : item)),
     )
-    setValue('medicalHistory',medicalHistory)
+    // setValue('medicalHistory',medicalHistory)
   }
 
   const handleDetailsChange = (index: number, details: string) => {
@@ -79,6 +101,7 @@ export function MedicalHistory({
             <input
               type="checkbox"
               id={`toggle-${item.condition}`}
+              name={`toggle-${item.condition}`}
               checked={item.hasCondition}
               onChange={onToggle}
               className="h-4 w-4 rounded border-gray-300"
@@ -95,9 +118,10 @@ export function MedicalHistory({
             onChange={(e) => onDetailsChange(e.target.value)}
             className="mt-2 w-[502px] min-h-[100px]"
             maxLength={500}
+            {...register(`medicalHistory.${index}.details`)}
           />
           <p className="text-sm text-muted-foreground">
-          {500 - (watchedValues.tests.radiological.details?.length || 0)} characters left
+            {500 - item.details.length} characters left
           </p>
           </div>
         )}
@@ -112,7 +136,7 @@ export function MedicalHistory({
         <div className="space-y-6">
           {medicalHistory.map((item, index) => (
             <HistoryItemComponent
-              key={item.condition}
+              key={historyItems[index].id}
               item={item}
               index={index}
               onToggle={() => handleToggle(index)}
@@ -120,6 +144,9 @@ export function MedicalHistory({
             />
           ))}
         </div>
+        {errors.medicalHistory && (
+          <p className="text-sm text-red-500">{errors.medicalHistory.message}</p>
+        )}
           <Button className="mt-4" onClick={() => handleContinue(isSummaryActive? 'summary': 'clinical-examination')}>
             {isSummaryActive ? 'Continue to Summary' : 'Continue'}
           </Button>
