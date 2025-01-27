@@ -18,7 +18,7 @@ interface ClinicDoctorDetailsProps {
 
   return (
     <AccordionContent>
-      <div className="space-y-4 w-1/2">
+      <div className="space-y-4 w-full">
       
           <Label htmlFor="clinic">Select Clinic</Label>
           <div>
