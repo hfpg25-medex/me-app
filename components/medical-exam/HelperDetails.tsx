@@ -43,7 +43,7 @@ export function HelperDetails({
       <div className="space-y-4">
         <div>
           <Label htmlFor="fin">FIN</Label>
-          <Input className="w-[200px]"
+          <Input className="w-[200px] mt-1"
             id="fin"
             {...register('helperDetails.fin')}
             onBlur={(e) => {

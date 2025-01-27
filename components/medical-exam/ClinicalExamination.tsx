@@ -42,10 +42,11 @@ export function ClinicalExamination({ isSummaryActive, handleContinue }: Clinica
     <AccordionContent>
       <div className="space-y-6">
         <div>
-          <div className="grid grid-cols-2 gap-4">
+          {/* <div className="grid grid-cols-3 gap-4"> */}
+          <div className="flex flex-start items-start gap-4">
             <div>
               <Label htmlFor="weight">Weight</Label>
-              <div className="relative">
+              <div className="relative max-w-[216px]">
               <Input
                 id="weight"
                 type="number"
@@ -53,7 +54,7 @@ export function ClinicalExamination({ isSummaryActive, handleContinue }: Clinica
                   valueAsNumber: true,
                   validate: (value) => !value || (value >= 15 && value <= 200) || "Weight must be between 15kg and 200kg"
                 })}
-                className="mr-2 pr-12"
+                className="mr-2 mt-1 pr-12 w-[216px]"
               />
              <span className="absolute right-8 top-1/2 -translate-y-1/2 text-gray-500">
                 kg
@@ -65,12 +66,12 @@ export function ClinicalExamination({ isSummaryActive, handleContinue }: Clinica
             </div>
             <div>
               <Label htmlFor="height">Height</Label>
-              <div className="relative">
+              <div className="relative max-w-[240px]">
               <Input
                 id="height"
                 type="number"
                 {...register('clinicalExamination.height', { valueAsNumber: true })}
-                className="mr-2 pr-12"
+                className="mr-2 mt-1 pr-12 w-[216px]"
               />
             <span className="absolute right-8 top-1/2 -translate-y-1/2 text-gray-500">
                 cm
@@ -81,19 +82,19 @@ export function ClinicalExamination({ isSummaryActive, handleContinue }: Clinica
 
           <div className="mt-4">
             <Label>BMI</Label>
-            <div className="text-lg font-medium text-gray-500">
+            <div className="text-sm font-medium text-gray-500">
               {watch('clinicalExamination.bmi') || '-'}
             </div>
           </div>
 
           <div className="mt-4">
             <Label htmlFor="waistCircumference">Waist Circumference</Label>
-            <div className="relative">
+            <div className="relative max-w-[216px]">
               <Input
                 id="waistCircumference"
                 type="number"
                 {...register('clinicalExamination.waistCircumference', { valueAsNumber: true })}
-                className="mr-2 pr-12"
+                className="mr-2 mt-1 pr-12 w-[216px]"
               />
               <span className="absolute right-8 top-1/2 -translate-y-1/2 text-gray-500">
                 cm
@@ -101,15 +102,15 @@ export function ClinicalExamination({ isSummaryActive, handleContinue }: Clinica
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4 mt-4">
+          <div className="flex flex-start items-start gap-4 mt-4">
             <div>
               <Label htmlFor="systolicBP">Systolic BP</Label>
-              <div className="relative">
+              <div className="relative max-w-[216px]">
               <Input
                 id="systolicBP"
                 type="number"
                 {...register('clinicalExamination.systolicBP', { valueAsNumber: true })}
-                className="mr-2 pr-12"
+                className="mr-2 mt-1 pr-12 w-[216px]"
               />
               <span className="absolute right-8 top-1/2 -translate-y-1/2 text-gray-500">
                 mmHg
@@ -118,12 +119,12 @@ export function ClinicalExamination({ isSummaryActive, handleContinue }: Clinica
             </div>
             <div>
               <Label htmlFor="diastolicBP">Diastolic BP</Label>
-              <div className="relative">
+              <div className="relative max-w-[216px]">
               <Input
                 id="diastolicBP"
                 type="number"
                 {...register('clinicalExamination.diastolicBP', { valueAsNumber: true })}
-                className="mr-2 pr-12"
+                className="mr-2 mt-1 pr-12 w-[216px]"
               />
               <span className="absolute right-8 top-1/2 -translate-y-1/2 text-gray-500">
                 mmHg
@@ -132,9 +133,10 @@ export function ClinicalExamination({ isSummaryActive, handleContinue }: Clinica
             </div>          
             </div>
 
-          <div className="grid grid-cols-2 gap-4 mt-4">
+          <div className="flex flex-start items-start gap-4 mt-4">
                 <div>
                   <Label htmlFor="rightEyeVision">Right Eye Vision</Label>
+                  <div className="w-[216px] mt-1">
                   <Select 
                     defaultValue="6/5"
                     onValueChange={(value) => setValue('clinicalExamination.rightEyeVision', value)}
@@ -147,10 +149,12 @@ export function ClinicalExamination({ isSummaryActive, handleContinue }: Clinica
                             <SelectItem key={value} value={value}>{value}</SelectItem>
                         ))}
                     </SelectContent>
-                  </Select>            
+                  </Select>
+                  </div>            
                 </div>            
           <div>
             <Label htmlFor="leftEyeVision">Left Eye Vision</Label>
+            <div className="w-[216px] mt-1">
             <Select 
                 defaultValue="6/5"
                 onValueChange={(value) => setValue('clinicalExamination.leftEyeVision', value)}
@@ -163,12 +167,14 @@ export function ClinicalExamination({ isSummaryActive, handleContinue }: Clinica
                       <SelectItem key={value} value={value}>{value}</SelectItem>
                   ))}
               </SelectContent>
-            </Select>            
+            </Select>
+            </div>            
           </div>
           </div>
 
           <div className="mt-6">
-            <div className="grid grid-cols-[1fr,auto] gap-x-8 gap-y-4">
+            {/* <div className="grid grid-cols-[1fr,auto] gap-x-8 gap-y-4"> */}
+            <div className="grid grid-cols-[210px,1fr] gap-x-8 gap-y-4 mt-4">
               <Label htmlFor="urineAlbumin">Urine Albumin</Label>
               <div className="flex items-center gap-2">
                 <Checkbox
