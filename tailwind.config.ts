@@ -77,7 +77,16 @@ export default {
   		animation: {
   			'accordion-down': 'accordion-down 0.2s ease-out',
   			'accordion-up': 'accordion-up 0.2s ease-out'
-  		}
+  		},
+		container: {
+			screens: {
+			  sm: '640px',
+			  md: '760px',  // This will force max-width to 760px
+			  lg: '760px',  // Keep it at 760px for larger screens
+			  xl: '760px',  // Keep it at 760px for xl screens
+			  '2xl': '760px', // Keep it at 760px for 2xl screens
+			},
+		},
   	}
   },
   plugins: [require("tailwindcss-animate")],

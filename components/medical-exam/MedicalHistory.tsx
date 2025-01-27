@@ -68,10 +68,10 @@ export function MedicalHistory({
   }) {
     return (
       <div className="space-y-2">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-start gap-8">
           <Label
             htmlFor={`toggle-${item.condition}`}
-            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            className="text-sm w-[400px] font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
           >
             {item.condition}
           </Label>
@@ -86,14 +86,22 @@ export function MedicalHistory({
             <Label htmlFor={`toggle-${item.condition}`} className="text-sm">Yes</Label>
           </div>
         </div>
+        
         {item.hasCondition && (
+          <div>
           <Textarea
             placeholder={historyItems[index].placeholder}
             value={item.details}
             onChange={(e) => onDetailsChange(e.target.value)}
-            className="mt-2"
+            className="mt-2 w-[502px] min-h-[100px]"
+            maxLength={500}
           />
+          <p className="text-sm text-muted-foreground">
+          {500 - (watchedValues.tests.radiological.details?.length || 0)} characters left
+          </p>
+          </div>
         )}
+        
       </div>
     )
   }

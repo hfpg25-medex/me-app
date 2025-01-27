@@ -41,7 +41,7 @@ export function Tests({ isSummaryActive, handleContinue }: TestsProps) {
               <div className="mt-2 w-full">
                 <textarea
                   id="radiologicalDetails"
-                  className="w-full min-h-[80px] p-2 border rounded-md"
+                  className="w-full min-h-[100px] p-2 border rounded-md"
                   placeholder="Please provide details"
                   {...register('tests.radiological.details')}
                   maxLength={500}
