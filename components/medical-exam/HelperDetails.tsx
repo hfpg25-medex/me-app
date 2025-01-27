@@ -43,7 +43,7 @@ export function HelperDetails({
       <div className="space-y-4">
         <div>
           <Label htmlFor="fin">FIN</Label>
-          <Input className="w-[120px]"
+          <Input className="w-[200px]"
             id="fin"
             {...register('helperDetails.fin')}
             onBlur={(e) => {
@@ -68,6 +68,8 @@ export function HelperDetails({
               <Label>Person Name</Label>
               <p className="mt-2 text-sm">{watchedValues.helperDetails.helperName}</p>
             </div>
+
+            </div>
             {requireVisitDate &&<Datepicker
               label="Date person visits the clinic"
               date={watchedValues.helperDetails.visitDate || new Date()}
@@ -80,7 +82,6 @@ export function HelperDetails({
                 date > new Date() || date < new Date(new Date().setDate(new Date().getDate() - 90))
               }
             />}
-            </div>
           </>
         )}
         
