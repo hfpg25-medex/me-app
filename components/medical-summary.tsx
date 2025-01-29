@@ -1,4 +1,3 @@
-import { Avatar } from "@/components/ui/avatar"
 import { Card } from "@/components/ui/card"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { SectionHeader } from "@/components/ui/section-header"
@@ -80,7 +79,7 @@ export function MedicalSummary({
         <div className="space-y-6">
           {/* Personal Details Section */}
           <Card className="p-4">
-            <SectionHeader title="Personal details" onEdit={() => {}} />
+            <SectionHeader title="Personal details" onEdit={() => onEdit('helper-details')} />
             <div className="grid gap-3 text-sm">
               <div className="grid grid-cols-2 gap-4">
                 <div>
@@ -230,31 +229,37 @@ export function MedicalSummary({
               <div>
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-lg font-semibold">Clinic & doctor details</h2>
-                  <button className="text-sm text-gray-500 hover:text-gray-700">
+                  <button 
+                    onClick={() => onEdit('clinic-doctor')}
+                    className="text-sm text-gray-500 hover:text-gray-700"
+                  >
                     Edit
                   </button>
                 </div>
                 <div className="space-y-4">
                   <div>
+                    <div className="text-gray-500 text-sm">Clinic name</div>
+                    <div>{clinicDetails.clinic}</div>
+                  </div>
+                  <div>
+                    <div className="text-gray-500 text-sm">HCI code</div>
+                    <div>{clinicDetails.hciCode}</div>
+                  </div>
+                  <div>
+                    <div className="text-gray-500 text-sm">Contact number</div>
+                    <div>{clinicDetails.contactNumber}</div>
+                  </div>
+                </div>
+                <div className="space-y-4 mt-6">
+                  <div>
                     <div className="text-gray-500 text-sm">Doctor's name</div>
                     <div className="flex items-center gap-2">
-                      <span>Mary Ang</span>
-                      <Avatar className="h-8 w-8">
-                        <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-6o2Fmiw1CBSbM9j75q8g9l9r0tb6Xu.png" alt="Doctor" />
-                      </Avatar>
+                      <span>{clinicDetails.doctor}</span>
                     </div>
                   </div>
                   <div>
                     <div className="text-gray-500 text-sm">Medical Registration (MCR) no.</div>
-                    <div>M11111A</div>
-                  </div>
-                  <div>
-                    <div className="text-gray-500 text-sm">Medical Institution (HCI) code</div>
-                    <div>2M12345</div>
-                  </div>
-                  <div>
-                  <div className="text-gray-500 text-sm">Clinic contact number</div>
-                    <div>+65 6999 1234</div>
+                    <div>{clinicDetails.mcrNumber}</div>
                   </div>
                   <div className="space-y-2 pt-4">
                     <div className="flex items-center gap-2 text-sm">
