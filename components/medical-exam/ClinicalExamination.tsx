@@ -179,6 +179,7 @@ export function ClinicalExamination({ isSummaryActive, handleContinue }: Clinica
               <div className="flex items-center gap-2">
                 <Checkbox
                   id="urineAlbumin"
+                  checked={watchedValues.clinicalExamination?.urineAlbumin === 'abnormal'}
                   {...register('clinicalExamination.urineAlbumin')}
                   onCheckedChange={(checked) => {
                     setValue('clinicalExamination.urineAlbumin', checked? 'abnormal': 'normal')
@@ -191,6 +192,7 @@ export function ClinicalExamination({ isSummaryActive, handleContinue }: Clinica
               <div className="flex items-center gap-2">
                 <Checkbox
                   id="urineGlucose"
+                  checked={watchedValues.clinicalExamination?.urineGlucose === 'abnormal'}
                   {...register('clinicalExamination.urineGlucose')}
                   onCheckedChange={(checked) => {
                     setValue('clinicalExamination.urineGlucose', checked? 'abnormal': 'normal')
@@ -203,6 +205,7 @@ export function ClinicalExamination({ isSummaryActive, handleContinue }: Clinica
               <div className="flex items-center gap-2">
                 <Checkbox
                   id="pregnancyTest"
+                  checked={watchedValues.clinicalExamination?.pregnancyTest === 'positive'}
                   {...register('clinicalExamination.pregnancyTest')}
                   onCheckedChange={(checked) => {
                     setValue('clinicalExamination.pregnancyTest', checked? 'positive': 'negative')
@@ -215,6 +218,7 @@ export function ClinicalExamination({ isSummaryActive, handleContinue }: Clinica
               <div className="flex items-center gap-2">
                 <Checkbox
                   id="colorVision"
+                  checked={watchedValues.clinicalExamination?.colorVision === 'abnormal'}
                   {...register('clinicalExamination.colorVision')}
                   onCheckedChange={(checked) => {
                     setValue('clinicalExamination.colorVision', checked? 'abnormal': 'normal')
@@ -227,6 +231,7 @@ export function ClinicalExamination({ isSummaryActive, handleContinue }: Clinica
               <div className="flex items-center gap-2">
                 <Checkbox
                   id="hearing"
+                  checked={watchedValues.clinicalExamination?.hearing === 'abnormal'}
                   {...register('clinicalExamination.hearing')}
                   onCheckedChange={(checked) => {
                     setValue('clinicalExamination.hearing', checked? 'abnormal': 'normal')
