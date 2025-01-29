@@ -28,6 +28,7 @@ export function Tests({ isSummaryActive, handleContinue }: TestsProps) {
                 <div className="flex items-center gap-2">
                   <Checkbox
                     id="radiological"
+                    checked={watchedValues.tests?.radiological?.result === 'abnormal'}
                     {...register('tests.radiological.result')}
                     onCheckedChange={(checked) => {
                       setValue('tests.radiological.result', checked? 'abnormal': 'normal')
@@ -57,9 +58,10 @@ export function Tests({ isSummaryActive, handleContinue }: TestsProps) {
               <div className="flex items-center gap-2">
                 <Checkbox
                   id="syphilis"
+                  checked={watchedValues.tests?.syphilis === 'positive'}
                   {...register('tests.syphilis')}
                   onCheckedChange={(checked) => {
-                    setValue('tests.syphilis', checked? 'negative': 'positive')
+                    setValue('tests.syphilis', checked? 'positive': 'negative')
                   }}
                 />
                 <span className="text-sm text-gray-500">Positive/Reactive</span>
@@ -69,9 +71,10 @@ export function Tests({ isSummaryActive, handleContinue }: TestsProps) {
               <div className="flex items-center gap-2">
                 <Checkbox
                   id="malaria"
+                  checked={watchedValues.tests?.malaria === 'positive'}
                   {...register('tests.malaria')}
                   onCheckedChange={(checked) => {
-                    setValue('tests.malaria', checked? 'negative': 'positive')
+                    setValue('tests.malaria', checked? 'positive': 'negative')
                   }}
                 />
                 <span className="text-sm text-gray-500">Positive/Reactive</span>
@@ -81,9 +84,10 @@ export function Tests({ isSummaryActive, handleContinue }: TestsProps) {
               <div className="flex items-center gap-2">
                 <Checkbox
                   id="hiv"
+                  checked={watchedValues.tests?.hiv === 'positive'}
                   {...register('tests.hiv')}
                   onCheckedChange={(checked) => {
-                    setValue('tests.hiv', checked? 'negative': 'positive')
+                    setValue('tests.hiv', checked? 'positive': 'negative')
                   }}
                 />
                 <span className="text-sm text-gray-500">Positive/Reactive</span>
@@ -94,9 +98,10 @@ export function Tests({ isSummaryActive, handleContinue }: TestsProps) {
               <div className="flex items-center gap-2">
                 <Checkbox
                   id="hba1c"
+                  checked={watchedValues.tests?.hba1c === 'abnormal'}
                   {...register('tests.hba1c')}
                   onCheckedChange={(checked) => {
-                    setValue('tests.hba1c', checked? 'normal': 'abnormal')
+                    setValue('tests.hba1c', checked? 'abnormal': 'normal')
                   }}
                 />
                 <span className="text-sm text-gray-500">Abnormal</span>
@@ -106,9 +111,10 @@ export function Tests({ isSummaryActive, handleContinue }: TestsProps) {
               <div className="flex items-center gap-2">
                 <Checkbox
                   id="lipids"
+                  checked={watchedValues.tests?.lipids === 'abnormal'}
                   {...register('tests.lipids')}
                   onCheckedChange={(checked) => {
-                    setValue('tests.lipids', checked? 'normal': 'abnormal')
+                    setValue('tests.lipids', checked? 'abnormal': 'normal')
                   }}
                 />
                 <span className="text-sm text-gray-500">Abnormal</span>
