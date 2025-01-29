@@ -11,20 +11,57 @@ import { FormDataWP } from "@/lib/schemas"
 
 
 
-const historyItems = [
-  "Cardiovascular disease (e.g. ischemic heart disease)",
-  "Metabolic disease (diabetes, hypertension)",
-  "Respiratory disease (e.g. tuberculosis, asthma)",
-  "Gastrointestinal disease (e.g. peptic ulcer disease)",
-  "Neurological disease (e.g. epilepsy, stroke)",
-  "Mental health condition (e.g. depression)",
-  "Other medical condition",
-  "Previous surgeries",
-  "Long-term medications",
-  "Smoking History (tobacco)",
-  "Other lifestyle risk factors or significant family history",
-  "Previous infections of concern (e.g. COVID-19)"
+const medicalHistoryItems = [
+  {
+    text: "Cardiovascular disease (e.g. ischemic heart disease)",
+    placeholder: "Include details of any heart conditions, treatments, and current status"
+  },
+  {
+    text: "Metabolic disease (diabetes, hypertension)",
+    placeholder: "Specify type of diabetes/hypertension, medications, and control status"
+  },
+  {
+    text: "Respiratory disease (e.g. tuberculosis, asthma)",
+    placeholder: "Include respiratory condition details, frequency of symptoms, and treatments"
+  },
+  {
+    text: "Gastrointestinal disease (e.g. peptic ulcer disease)",
+    placeholder: "Describe digestive conditions, symptoms, and current management"
+  },
+  {
+    text: "Neurological disease (e.g. epilepsy, stroke)",
+    placeholder: "Include details of neurological conditions, frequency of episodes if any"
+  },
+  {
+    text: "Mental health condition (e.g. depression)",
+    placeholder: "Describe mental health conditions, treatments, and current status"
+  },
+  {
+    text: "Other medical condition",
+    placeholder: "Specify any other medical conditions and their details"
+  },
+  {
+    text: "Previous surgeries",
+    placeholder: "List surgeries with dates and any ongoing effects"
+  },
+  {
+    text: "Long-term medications",
+    placeholder: "List medications that are taken daily for at least a months"
+  },
+  {
+    text: "Smoking History (tobacco)",
+    placeholder: "Quantify in pack-years"
+  },
+  {
+    text: "Other lifestyle risk factors or significant family history",
+    placeholder: "Describe relevant lifestyle factors or family medical history"
+  },
+  {
+    text: "Previous infections of concern (e.g. COVID-19)",
+    placeholder: "Include date of infection"
+  }
 ]
+
 
 type HistoryItem = {
   condition: string
@@ -44,7 +81,7 @@ export function MedicalHistory({
     const { register, setValue, formState: { errors } } = useFormContext<FormDataWP>()
   
   const [medicalHistory, setMedicalHistory] = useState<HistoryItem[]>(
-    historyItems.map((item) => ({ condition: item, hasCondition: false, details: "" })),
+    medicalHistoryItems.map((item) => ({ condition: item.text, hasCondition: false, details: "" })),
   )
 
   const handleToggle = (index: number) => {
@@ -66,6 +103,7 @@ export function MedicalHistory({
             <HistoryItemComponent
               key={item.condition}
               item={item}
+              index={index}
               onToggle={() => handleToggle(index)}
               onDetailsChange={(details) => handleDetailsChange(index, details)}
             />
@@ -85,10 +123,12 @@ export function MedicalHistory({
 
 function HistoryItemComponent({
   item,
+  index,
   onToggle,
   onDetailsChange,
 }: {
   item: HistoryItem
+  index: number
   onToggle: () => void
   onDetailsChange: (details: string) => void
 }) {
@@ -108,7 +148,7 @@ function HistoryItemComponent({
       </div>
       {item.hasCondition && (
         <Textarea
-          placeholder={`Please provide details about your ${item.condition.toLowerCase()}`}
+          placeholder={medicalHistoryItems[index].placeholder}
           value={item.details}
           onChange={(e) => onDetailsChange(e.target.value)}
           className="mt-1"
