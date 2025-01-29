@@ -73,8 +73,7 @@ export const examinationDetailsMDWSchema = z.object({
 export const clinicalExaminationSchema = z.object({
   weight: z.union([
     z.string().refine((val) => val === '', { message: "Weight is required" }),
-    z.number().min(15, "Please input a valid weight").max(200, "Please input a valid weight"),
-    z.null()
+    z.number().min(15, "Please input a valid weight").max(200, "Please input a valid weight")
   ]),
   height: z.number().min(90, "Height must be at least 90cm").max(250, "Height must be at most 250cm"),
   bmi: z.number().nullable(),

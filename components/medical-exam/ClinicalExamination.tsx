@@ -22,17 +22,30 @@ export function ClinicalExamination({ isSummaryActive, handleContinue }: Clinica
 
   const VISION_OPTIONS = ['6/5', '6/6', '6/9', '6/12', '6/18', '6/24', '6/36', 'blind']
 
+  // Calculate BMI function
+  const calculateBMI = (weight: number, height: number) => {
+    if (weight > 0 && height > 0) {
+      const bmiValue = weight / (height / 100) ** 2
+      setValue("clinicalExamination.bmi", Number.parseFloat(bmiValue.toFixed(2)))
+    } else {
+      setValue("clinicalExamination.bmi", 0)
+    }
+  }
+
+  // Calculate BMI on mount if weight and height exist
+  useEffect(() => {
+    const weight = watchedValues.clinicalExamination?.weight as number
+    const height = watchedValues.clinicalExamination?.height as number
+    calculateBMI(weight, height)
+  }, [])
+
+  // Watch for weight and height changes
   useEffect(() => {
     const subscription = watch((value, { name }) => {
       if (name === "clinicalExamination.weight" || name === "clinicalExamination.height") {
         const weight = value.clinicalExamination?.weight as number
         const height = value.clinicalExamination?.height as number
-        if (weight > 0 && height > 0) {
-          const bmiValue = weight / (height / 100) ** 2
-          setValue("clinicalExamination.bmi", Number.parseFloat(bmiValue.toFixed(2)))
-        } else {
-          setValue("clinicalExamination.bmi", 0)
-        }
+        calculateBMI(weight, height)
       }
     })
     return () => subscription.unsubscribe()

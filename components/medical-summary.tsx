@@ -3,210 +3,327 @@ import { Card } from "@/components/ui/card"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { SectionHeader } from "@/components/ui/section-header"
 import { StatusBadge } from "@/components/ui/status-badge"
+import { examTitles } from '@/constants/exam-titles'
+import { Checkbox } from "@/components/ui/checkbox"
+import { Separator } from "@/components/ui/separator"
+import { useEffect, useState } from 'react'
+import { format } from "date-fns"
 
-export function MedicalSummary() {
+
+
+interface SummaryProps {
+    clinicDetails: {
+      clinic: string
+      doctor: string
+      hciCode: string
+      contactNumber: string
+      mcrNumber: string
+    }
+    helperDetails: {
+      fin: string
+      name: string
+      visitDate: Date | null
+    }
+    medicalHistory: Array<{
+      condition: string
+      hasCondition: boolean
+      details?: string | null
+    }>
+    clinicalExamination: {
+      weight: number
+      height: number
+      bmi: number
+      waistCircumference: number
+      systolicBP: number
+      diastolicBP: number
+      rightEyeVision: string
+      leftEyeVision: string
+      urineAlbumin: string
+      urineGlucose: string
+      pregnancyTest: string
+      colorVision: string
+      hearing: string
+    }
+    tests: {
+      radiological: { result: string; details: string | null }
+      syphilis: string
+      malaria: string
+      hiv: string
+      hba1c?: string
+      lipids?: string
+    }
+    onEdit: (section: 'clinic-doctor' | 'helper-details' | 'medical-history' | 'clinical-examination' | 'tests') => void
+    onSubmit: () => void
+  }
+
+export function MedicalSummary({
+    clinicDetails,
+    helperDetails,
+    medicalHistory,
+    clinicalExamination,
+    tests,
+    onEdit,
+    onSubmit
+  }: SummaryProps) {
+      
+    const [declarationChecked, setDeclarationChecked] = useState(false)
+
+      useEffect(() => {
+        window.scrollTo(0, 0); // Scroll to the top of the page
+      }, []); // Empty dependency array means this runs once on mount
+    
+      console.log(clinicalExamination)
+    
   return (
     <div className="container mx-auto p-6 space-y-6">
       <div className="grid gap-6 md:grid-cols-[2fr,1fr]">
-        {/* Personal Details Section */}
-        <Card className="p-6">
-          <SectionHeader title="Personal details" onEdit={() => {}} />
-          <div className="grid gap-4 text-sm">
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <div className="text-gray-500">FIN</div>
-                <div>G1234567X</div>
-              </div>
-              <div>
-                <div className="text-gray-500">Name</div>
-                <div>Prasetyo Makuta Dabukke</div>
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <div className="text-gray-500">Date of visit</div>
-                <div>27 Jan 2025</div>
-              </div>
-              <div>
-                <div className="text-gray-500">Medical type</div>
-                <div>6-month foreign domestic worker (MOM)</div>
-              </div>
-            </div>
-          </div>
-        </Card>
-
-        {/* Lab Tests Section */}
-        <Card className="p-6">
-          <StatusBadge status="pending">Pending</StatusBadge>
-          <h2 className="text-lg font-semibold mt-4 mb-6">Lab tests & specialists</h2>
-          <RadioGroup defaultValue="x-ray" className="space-y-4">
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="x-ray" id="x-ray" />
-              <label htmlFor="x-ray">X-Ray</label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="blood" id="blood" />
-              <label htmlFor="blood">Blood Test</label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="cardio" id="cardio" />
-              <label htmlFor="cardio">Cardiologist — Heartcare Specialists</label>
-            </div>
-          </RadioGroup>
-        </Card>
-
-        {/* Medical Examination Section */}
-        <Card className="p-6">
-          <SectionHeader title="Medical examination" onEdit={() => {}} />
-          <div className="space-y-4 text-sm">
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <div className="text-gray-500">Height</div>
-                <div>45.2 kg</div>
-              </div>
-              <div>
-                <div className="text-gray-500">Weight</div>
-                <div>165 cm</div>
-              </div>
-            </div>
-            <div>
-              <div className="text-gray-500">BMI</div>
-              <div>16.2</div>
-            </div>
-            <div>
-              <div className="text-gray-500">Pregnancy</div>
-              <div>Negative / Non-reactive</div>
-            </div>
-            <div>
-              <div className="text-gray-500">Syphilis test</div>
-              <div className="text-red-600">Positive / Reactive</div>
-            </div>
-            <div>
-              <div className="text-gray-500">Chest X-ray to screen for TB</div>
-              <div>Negative / Non-reactive</div>
-            </div>
-            <div>
-              <div className="text-gray-500">HIV</div>
-              <div>Negative / Non-reactive</div>
-            </div>
-            <div>
-              <div className="text-gray-500">Signs of suspicious or unexplained injuries</div>
-              <div className="text-red-600">Yes</div>
-            </div>
-            <div>
-              <div className="text-gray-500">Unintentional weight loss</div>
-              <div>No</div>
-            </div>
-            <div>
-              <div className="text-gray-500">Has a police report been made?</div>
-              <div>No</div>
-            </div>
-            <div>
-              <div className="text-gray-500">Remarks</div>
-              <div className="text-red-600">
-                Migrant worker reported verbally that there has been violent behaviours exhibited by the Employer.
-              </div>
-            </div>
-          </div>
-        </Card>
-
-        {/* Clinic Details Section */}
-        <Card className="p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold">Clinic & doctor details</h2>
-            <button className="text-sm text-gray-500 hover:text-gray-700">Edit</button>
-          </div>
-          <div className="space-y-4">
-            <div>
-              <div className="text-gray-500 text-sm">Doctor's name</div>
-              <div className="flex items-center gap-2">
-                <span>Mary Ang</span>
-                <Avatar className="h-8 w-8">
-                  <img
-                    src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-6o2Fmiw1CBSbM9j75q8g9l9r0tb6Xu.png"
-                    alt="Doctor"
-                  />
-                </Avatar>
-              </div>
-            </div>
-            <div>
-              <div className="text-gray-500 text-sm">Medical Registration (MCR) no.</div>
-              <div>M11111A</div>
-            </div>
-            <div>
-              <div className="text-gray-500 text-sm">Medical Institution (HCI) code</div>
-              <div>2M12345</div>
-            </div>
-            <div>
-              <div className="text-gray-500 text-sm">Clinic contact number</div>
-              <div>+65 6999 1234</div>
-            </div>
-            <div className="space-y-2 pt-4">
-              <div className="flex items-center gap-2 text-sm">
-                <div className="h-2 w-2 rounded-full bg-gray-300" />
-                <div className="flex-1">
-                  <div>X-Ray results submitted</div>
-                  <div className="text-gray-500">2025-01-28 10:52am</div>
+        <div className="space-y-6">
+          {/* Personal Details Section */}
+          <Card className="p-4">
+            <SectionHeader title="Personal details" onEdit={() => {}} />
+            <div className="grid gap-3 text-sm">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <div className="text-gray-500">FIN</div>
+                  <div>{helperDetails.fin}</div>
+                </div>
+                <div>
+                  <div className="text-gray-500">Name</div>
+                  <div>{helperDetails.name}</div>
                 </div>
               </div>
-              <div className="flex items-center gap-2 text-sm">
-                <div className="h-2 w-2 rounded-full bg-gray-300" />
-                <div className="flex-1">
-                  <div>Clinical exam completed</div>
-                  <div className="text-gray-500">2025-01-27 5:23pm</div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <div className="text-gray-500">Date of visit</div>
+                  <div>{helperDetails.visitDate ? format(helperDetails.visitDate, 'dd MMM yyyy') : '-'}</div>
                 </div>
-              </div>
-              <div className="flex items-center gap-2 text-sm">
-                <div className="h-2 w-2 rounded-full bg-gray-300" />
-                <div className="flex-1">
-                  <div>Clinical exam created</div>
-                  <div className="text-gray-500">2025-01-27 5:11pm</div>
+                <div>
+                  <div className="text-gray-500">Medical type</div>
+                  <div>{examTitles.fme}</div>
                 </div>
               </div>
             </div>
-          </div>
-        </Card>
+          </Card>
 
-        {/* Lab Tests Table */}
-        <Card className="p-6 md:col-span-2">
-          <SectionHeader title="Lab tests & specialist referrals" onEdit={() => {}} />
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="text-left border-b">
-                  <th className="pb-2">Date submitted</th>
-                  <th className="pb-2">Type</th>
-                  <th className="pb-2">Results</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y">
-                <tr>
-                  <td className="py-2">2025-01-25 10:52</td>
-                  <td>X-Ray</td>
-                  <td>
-                    <StatusBadge status="normal">Normal</StatusBadge>
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-2">2025-01-25 10:52</td>
-                  <td>Blood Test</td>
-                  <td>
-                    <StatusBadge status="pending">Pending</StatusBadge>
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-2">2025-01-25 10:52</td>
-                  <td>Cardiologist - Hearcare Specialists</td>
-                  <td>
-                    <StatusBadge status="pending">Pending</StatusBadge>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </Card>
+          {/* Medical History Section */}
+          <Card className="p-4">
+            <SectionHeader title="Medical history" onEdit={() => {}} />
+            <div className="space-y-3 text-sm">
+              {medicalHistory.map((item) => (
+                <div key={item.condition} className="space-y-1">
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="space-y-1">
+                      <div>{item.condition}</div>
+                      {item.hasCondition && item.details && (
+                        <div className="text-gray-500 mt-1">{item.details}</div>
+                      )}
+                    </div>
+                    <div className={`w-12 text-right ${item.hasCondition ? 'text-red-600 font-medium' : 'text-gray-600'}`}>
+                      {item.hasCondition ? 'Yes' : 'No'}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Card>
+
+          {/* Medical Examination Section */}
+          <Card className="p-4">
+            <SectionHeader title="Clinical examination" onEdit={() => onEdit('clinical-examination')} />
+            <div className="space-y-3 text-sm">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <div className="text-gray-500">Weight</div>
+                  <div>{clinicalExamination.weight} kg</div>
+                </div>
+                <div>
+                  <div className="text-gray-500">Height</div>
+                  <div>{clinicalExamination.height} cm</div>
+                </div>
+              </div>
+              <div>
+                <div className="text-gray-500">BMI</div>
+                <div>{clinicalExamination.bmi && clinicalExamination.bmi > 0 ? clinicalExamination.bmi.toFixed(2) : '-'}</div>
+              </div>
+              <div>
+                <div className="text-gray-500">Waist Circumference</div>
+                <div>{clinicalExamination.waistCircumference} cm</div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <div className="text-gray-500">Systolic BP</div>
+                  <div>{clinicalExamination.systolicBP} mmHg</div>
+                </div>
+                <div>
+                  <div className="text-gray-500">Diastolic BP</div>
+                  <div>{clinicalExamination.diastolicBP} mmHg</div>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <div className="text-gray-500">Right Eye Vision</div>
+                  <div>{clinicalExamination.rightEyeVision}</div>
+                </div>
+                <div>
+                  <div className="text-gray-500">Left Eye Vision</div>
+                  <div>{clinicalExamination.leftEyeVision}</div>
+                </div>
+              </div>
+              <div>
+                <div className="text-gray-500">Urine Albumin</div>
+                <div className={clinicalExamination.urineAlbumin === 'abnormal' ? 'text-red-600' : ''}>
+                  {clinicalExamination.urineAlbumin === 'abnormal' ? 'Abnormal' : 'Normal'}
+                </div>
+              </div>
+              <div>
+                <div className="text-gray-500">Urine Glucose</div>
+                <div className={clinicalExamination.urineGlucose === 'abnormal' ? 'text-red-600' : ''}>
+                  {clinicalExamination.urineGlucose === 'abnormal' ? 'Abnormal' : 'Normal'}
+                </div>
+              </div>
+              <div>
+                <div className="text-gray-500">Pregnancy Test</div>
+                <div className={clinicalExamination.pregnancyTest === 'positive' ? 'text-red-600' : ''}>
+                  {clinicalExamination.pregnancyTest === 'positive' ? 'Positive' : 'Negative'}
+                </div>
+              </div>
+              <div>
+                <div className="text-gray-500">Color Vision</div>
+                <div className={clinicalExamination.colorVision === 'abnormal' ? 'text-red-600' : ''}>
+                  {clinicalExamination.colorVision === 'abnormal' ? 'Abnormal' : 'Normal'}
+                </div>
+              </div>
+              <div>
+                <div className="text-gray-500">Hearing</div>
+                <div className={clinicalExamination.hearing === 'abnormal' ? 'text-red-600' : ''}>
+                  {clinicalExamination.hearing === 'abnormal' ? 'Abnormal' : 'Normal'}
+                </div>
+              </div>
+            </div>
+          </Card>
+        </div>
+
+        <div className="space-y-6">
+          {/* Lab Tests Section */}
+          <Card className="p-6">
+            <div className="space-y-6">
+              <div>
+                <StatusBadge status="pending">Pending</StatusBadge>
+                <h2 className="text-lg font-semibold mt-4 mb-6">Lab tests & specialists</h2>
+                <RadioGroup defaultValue="x-ray" className="space-y-4">
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="x-ray" id="x-ray" />
+                    <label htmlFor="x-ray">X-Ray</label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="blood" id="blood" />
+                    <label htmlFor="blood">Blood Test</label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="cardio" id="cardio" />
+                    <label htmlFor="cardio">Cardiologist — Heartcare Specialists</label>
+                  </div>
+                </RadioGroup>
+              </div>
+              <Separator />
+              {/* Clinic Details Section */}
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-lg font-semibold">Clinic & doctor details</h2>
+                  <button className="text-sm text-gray-500 hover:text-gray-700">
+                    Edit
+                  </button>
+                </div>
+                <div className="space-y-4">
+                  <div>
+                    <div className="text-gray-500 text-sm">Doctor's name</div>
+                    <div className="flex items-center gap-2">
+                      <span>Mary Ang</span>
+                      <Avatar className="h-8 w-8">
+                        <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-6o2Fmiw1CBSbM9j75q8g9l9r0tb6Xu.png" alt="Doctor" />
+                      </Avatar>
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-gray-500 text-sm">Medical Registration (MCR) no.</div>
+                    <div>M11111A</div>
+                  </div>
+                  <div>
+                    <div className="text-gray-500 text-sm">Medical Institution (HCI) code</div>
+                    <div>2M12345</div>
+                  </div>
+                  <div>
+                  <div className="text-gray-500 text-sm">Clinic contact number</div>
+                    <div>+65 6999 1234</div>
+                  </div>
+                  <div className="space-y-2 pt-4">
+                    <div className="flex items-center gap-2 text-sm">
+                      <div className="h-2 w-2 rounded-full bg-gray-300" />
+                      <div className="flex-1">
+                        <div>X-Ray results submitted</div>
+                        <div className="text-gray-500">2025-01-28 10:52am</div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm">
+                      <div className="h-2 w-2 rounded-full bg-gray-300" />
+                      <div className="flex-1">
+                        <div>Clinical exam completed</div>
+                        <div className="text-gray-500">2025-01-27 5:23pm</div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm">
+                      <div className="h-2 w-2 rounded-full bg-gray-300" />
+                      <div className="flex-1">
+                      <div>Clinical exam created</div>
+                        <div className="text-gray-500">2025-01-27 5:11pm</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Card>
+
+          {/* Lab Tests Table */}
+          <Card className="p-6">
+            <SectionHeader title="Lab tests & specialist referrals" onEdit={() => {}} />
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="text-left border-b">
+                    <th className="pb-2">Date submitted</th>
+                    <th className="pb-2">Type</th>
+                    <th className="pb-2">Results</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y">
+                  <tr>
+                    <td className="py-2">2025-01-25 10:52</td>
+                    <td>X-Ray</td>
+                    <td>
+                      <StatusBadge status="normal">Normal</StatusBadge>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="py-2">2025-01-25 10:52</td>
+                    <td>Blood Test</td>
+                    <td>
+                      <StatusBadge status="pending">Pending</StatusBadge>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="py-2">2025-01-25 10:52</td>
+                    <td>Cardiologist - Hearcare Specialists</td>
+                    <td>
+                      <StatusBadge status="pending">Pending</StatusBadge>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </Card>
+        </div>
       </div>
     </div>
   )
 }
-

@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Accordion, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { cn } from "@/lib/utils"
-import { Summary } from "@/components/SummaryMW"
+import { Summary } from "@/components/SummaryFME"
 import { FinChangeModal } from "@/components/FinChangeModal"
 import { formSchemaWP, FormDataWP } from "@/lib/schemas"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -15,6 +15,7 @@ import { MedicalHistory } from "@/components/medical-exam/MedicalHistory"
 import { ClinicalExamination } from "@/components/medical-exam/ClinicalExamination"
 import { Tests } from "@/components/medical-exam/Tests"
 import { AcknowledgementPage } from '@/components/AcknowledgementPage'
+import { MedicalSummary } from '@/components/medical-summary'
 
 const clinics = [
   { id: '1', name: 'Healthline Medical Clinic (Bukit Batok)', hciCode: '2M12345', contactNumber: '+65 69991234' },
@@ -30,7 +31,6 @@ const doctors = [
   { id: '2', name: 'Danny Lim', mcrNumber: 'M22222B' },
 ]
 
-const medicalHistoryItems = ['Mental Illness', 'Epilepsy', 'Chronic Asthma', 'Diabetes Mellitus', 'Hypertension', 'Tuberculosis', 'Heart Disease', 'Malaria', 'Operations']
 // Mock API call
 const mockApiCall = async (fin: string) => {
   // Simulate API delay
@@ -42,6 +42,8 @@ const mockApiCall = async (fin: string) => {
       name: 'R** ME**', 
       testTypes: ['Pregnancy', 'Syphilis test', 'HIV', 'Chest X-ray to screen for TB'],
       doe: '2025-08-10',
+      dob: '1990-01-01',
+      occupation: 'Driver'
     }
   }
   return null
@@ -71,7 +73,7 @@ export default function WPExamPage() {
     resolver: zodResolver(formSchemaWP),
     defaultValues: {
       clinicDoctor: { clinic: '', doctor: '' },
-      helperDetails: { fin: '', helperName: '', visitDate: undefined },
+      helperDetails: { fin: '', helperName: '', visitDate: new Date() },
       medicalHistory:  [],
       clinicalExamination: {
         weight: 0,
@@ -139,6 +141,7 @@ export default function WPExamPage() {
     switch (nextStep) {
       case 'helper-details':
         isValid = await trigger('clinicDoctor')
+        console.log(watchedValues)
         console.log('isValid1=', isValid)
         if (isValid) {
           setIsHelperDetailsEnabled(true)
@@ -147,6 +150,7 @@ export default function WPExamPage() {
         break
       case 'medical-history':
         isValid = await trigger('helperDetails')
+        console.log(watchedValues)
         if (isValid) {
           setIsMedicalHistoryEnabled(true)
           setExpandedAccordion('medical-history')
@@ -154,6 +158,7 @@ export default function WPExamPage() {
         break
       case 'clinical-examination':
         isValid = await trigger('medicalHistory')
+        console.log(watchedValues)
         console.log('isValid6=', isValid)
         if (isValid) {
           setIsClinicalExaminationEnabled(true)
@@ -161,8 +166,7 @@ export default function WPExamPage() {
         }
         break
       case 'tests':
-          console.log(watchedValues.clinicalExamination)
-
+          console.log(watchedValues)
           isValid = await trigger('clinicalExamination')
           console.log('Clinical Examination Errors:', methods.formState.errors.clinicalExamination)
           console.log('isValid7=', isValid)
@@ -174,7 +178,8 @@ export default function WPExamPage() {
         break
       case 'summary':
         isValid = await trigger('tests')
-        isValid = true //temp
+        console.log(watchedValues)
+
         if (isValid) {
           setIsSummaryActive(true)
           setStep('summary')
@@ -210,7 +215,7 @@ export default function WPExamPage() {
   if (step === 'summary') {
     return (
       <div className="container mx-auto p-6">
-        <Summary
+        <MedicalSummary
           clinicDetails={{
             clinic: selectedClinicDetails?.name || '',
             doctor: selectedDoctorDetails?.name || '',
@@ -223,14 +228,29 @@ export default function WPExamPage() {
             name: watchedValues.helperDetails.helperName,
             visitDate: watchedValues.helperDetails.visitDate || null
           }}
-          // medicalHistory={watchedValues.medicalHistory}
-          examinationDetails={{
-            positiveTests: watchedValues.examinationDetails.positiveTests,
-            testResults: testTypes.map(test => ({
-              name: test,
-              result: watchedValues.examinationDetails.positiveTests.includes(test) ? 'Positive/Reactive' : 'Negative/Non-reactive'
-            })),
-            remarks: watchedValues.examinationDetails.remarks
+          medicalHistory={watchedValues.medicalHistory}
+          clinicalExamination={{
+            weight: watchedValues.clinicalExamination.weight,
+            height: watchedValues.clinicalExamination.height,
+            bmi: watchedValues.clinicalExamination.bmi,
+            waistCircumference: watchedValues.clinicalExamination.waistCircumference,
+            systolicBP: watchedValues.clinicalExamination.systolicBP,
+            diastolicBP: watchedValues.clinicalExamination.diastolicBP,
+            rightEyeVision: watchedValues.clinicalExamination.rightEyeVision,
+            leftEyeVision: watchedValues.clinicalExamination.leftEyeVision,
+            urineAlbumin: watchedValues.clinicalExamination.urineAlbumin,
+            urineGlucose: watchedValues.clinicalExamination.urineGlucose,
+            pregnancyTest: watchedValues.clinicalExamination.pregnancyTest,
+            colorVision: watchedValues.clinicalExamination.colorVision,
+            hearing: watchedValues.clinicalExamination.hearing,
+          }}
+          tests= {{
+            radiological: watchedValues.tests.radiological,
+            syphilis: watchedValues.tests.syphilis,
+            malaria: watchedValues.tests.malaria,
+            hiv: watchedValues.tests.hiv,
+            hba1c: watchedValues.tests.hba1c,
+            lipids: watchedValues.tests.lipids,
           }}
           onEdit={handleEdit}
           onSubmit={handleSubmit(onSubmit)}
