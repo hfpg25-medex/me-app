@@ -1,16 +1,22 @@
+'use client'
+
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { ClipboardList, Stethoscope, FileEdit, History } from 'lucide-react'
+import { useAuth } from '@/lib/context/auth-context'
+import Header from '@/components/Header'
 
 export default function HomePage() {
+  const { user } = useAuth()
+
   return (
     <div className="min-h-screen bg-gray-50">
       <main className="container mx-auto p-6">
         <div className="mb-8">
           <h1 className="text-4xl font-bold tracking-tight mb-2">Welcome to Medical Exam Portal</h1>
           <p className="text-xl text-muted-foreground">
-            Hello, Yanchao Du. We hope you are having a great day. What would you like to do?
+            Hello, {user?.name}. We hope you are having a great day. What would you like to do?
           </p>
         </div>
 
@@ -83,4 +89,3 @@ export default function HomePage() {
     </div>
   )
 }
-

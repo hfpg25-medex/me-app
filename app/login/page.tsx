@@ -1,87 +1,94 @@
 'use client'
 
 import { useState } from 'react'
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { useToast } from "@/hooks/use-toast"
 import { useAuth } from '@/lib/context/auth-context'
-import { Card } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
 import { mockUsers } from '@/lib/auth/mock-users'
+import Image from 'next/image'
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
+  const [uen, setUen] = useState('')
+  const [corppassId, setCorppassId] = useState('')
+  const { toast } = useToast()
   const { login } = useAuth()
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-      await login(email, password)
-    } catch (err) {
-      setError('Invalid credentials')
+      await login(uen, corppassId)
+      toast({
+        title: "Login Successful",
+        description: "Welcome to the Medical Examination Portal",
+      })
+    } catch (error) {
+      toast({
+        title: "Login Failed",
+        description: "Invalid UEN or CorpPass ID",
+        variant: "destructive",
+      })
     }
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <Card className="w-full max-w-md p-8">
-        <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold">Login</h1>
-          <p className="text-gray-600 mt-2">Sign in to your account</p>
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8">
+        <div>
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+            Sign in with Singpass
+          </h2>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-              Email
-            </label>
-            <Input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="mt-1"
-              required
-            />
+        <div className="mt-8 p-4 bg-gray-100 rounded-lg">
+          <h3 className="font-medium mb-2">Test Accounts:</h3>
+          {mockUsers.map((user) => (
+            <div key={user.id} className="text-sm mb-2">
+              <div>{user.name} ({user.role})</div>
+              <div className="text-gray-600">UEN: {user.uen}</div>
+              <div className="text-gray-600">CorpPass ID: {user.corpPassId}</div>
+            </div>
+          ))}
+        </div>
+
+        <form onSubmit={handleLogin} className="mt-8 space-y-6">
+          <div className="rounded-md shadow-sm space-y-4">
+            <div>
+              <Label htmlFor="uen">UEN (Unique Entity Number)</Label>
+              <Input
+                id="uen"
+                name="uen"
+                type="text"
+                required
+                value={uen}
+                onChange={(e) => setUen(e.target.value)}
+                placeholder="Enter your UEN"
+                className="mt-1"
+              />
+            </div>
+            <div>
+              <Label htmlFor="corppassId">CorpPass ID</Label>
+              <Input
+                id="corppassId"
+                name="corppassId"
+                type="text"
+                required
+                value={corppassId}
+                onChange={(e) => setCorppassId(e.target.value)}
+                placeholder="Enter your CorpPass ID"
+                className="mt-1"
+              />
+            </div>
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-              Password
-            </label>
-            <Input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="mt-1"
-              required
-            />
+            <Button type="submit" className="w-full">
+              Sign in
+            </Button>
           </div>
-
-          {error && (
-            <div className="text-red-500 text-sm">{error}</div>
-          )}
-
-          <Button type="submit" className="w-full">
-            Sign in
-          </Button>
         </form>
-
-        <div className="mt-8">
-          <h2 className="text-lg font-semibold mb-4">Available test accounts:</h2>
-          <div className="space-y-4">
-            {mockUsers.map((user) => (
-              <div key={user.id} className="p-4 bg-gray-50 rounded-lg">
-                <div className="font-medium">{user.name}</div>
-                <div className="text-sm text-gray-600">Email: {user.email}</div>
-                <div className="text-sm text-gray-600">Role: {user.role}</div>
-                {user.mcr && <div className="text-sm text-gray-600">MCR: {user.mcr}</div>}
-              </div>
-            ))}
-          </div>
-        </div>
-      </Card>
+      </div>
     </div>
   )
 }

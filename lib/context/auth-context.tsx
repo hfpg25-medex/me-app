@@ -1,81 +1,56 @@
 'use client'
 
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
-import { User } from '../types/user'
-import { authenticate } from '../auth/mock-users'
+import { createContext, useContext, useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Cookies from 'js-cookie'
+import { authenticate } from '@/lib/auth/mock-users'
+import { User } from '@/lib/types/user'
 
 interface AuthContextType {
   user: User | null
-  login: (email: string, password: string) => Promise<void>
+  login: (uen: string, corpPassId: string) => Promise<void>
   logout: () => void
-  isLoading: boolean
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
-const COOKIE_OPTIONS = {
-  expires: 1, // 1 day
-  path: '/',
-  sameSite: 'strict' as const,
-  secure: process.env.NODE_ENV === 'production'
-}
-
-export function AuthProvider({ children }: { children: ReactNode }) {
+export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
   const router = useRouter()
 
   useEffect(() => {
-    // Check for saved user in cookies on mount
-    const savedUser = Cookies.get('currentUser')
-    if (savedUser) {
-      try {
-        const parsedUser = JSON.parse(savedUser)
-        setUser(parsedUser)
-        // Ensure auth status is set if we have a valid user
-        Cookies.set('authStatus', 'true', COOKIE_OPTIONS)
-      } catch (error) {
-        console.error('Error parsing saved user:', error)
-        handleLogout()
-      }
+    const authStatus = Cookies.get('authStatus') === 'true'
+    const storedUser = Cookies.get('user')
+    if (authStatus && storedUser) {
+      setUser(JSON.parse(storedUser))
     }
-    setIsLoading(false)
   }, [])
 
-  const handleLogout = () => {
-    setUser(null)
-    Cookies.remove('currentUser', { path: '/' })
-    Cookies.remove('authStatus', { path: '/' })
-  }
-
-  const login = async (email: string, password: string) => {
+  const login = async (uen: string, corpPassId: string) => {
     try {
-      const authenticatedUser = await authenticate({ email, password })
+      const authenticatedUser = await authenticate({ uen, corpPassId })
       if (authenticatedUser) {
-        // Set both cookies with the same options
-        Cookies.set('currentUser', JSON.stringify(authenticatedUser), COOKIE_OPTIONS)
-        Cookies.set('authStatus', 'true', COOKIE_OPTIONS)
+        Cookies.set('user', JSON.stringify(authenticatedUser))
+        Cookies.set('authStatus', 'true')
         setUser(authenticatedUser)
-        router.push('/medical-exam')
+        router.push('/home')
       } else {
         throw new Error('Invalid credentials')
       }
     } catch (error) {
-      console.error('Login error:', error)
-      handleLogout()
       throw error
     }
   }
 
   const logout = () => {
-    handleLogout()
-    router.push('/login')
+    setUser(null)
+    Cookies.remove('user')
+    Cookies.remove('authStatus')
+    router.push('/')
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, isLoading }}>
+    <AuthContext.Provider value={{ user, login, logout }}>
       {children}
     </AuthContext.Provider>
   )

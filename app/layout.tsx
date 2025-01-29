@@ -23,12 +23,6 @@ function MainLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter()
   const pathname = usePathname()
 
-  useEffect(() => {
-    if (!user && pathname !== '/') {
-      router.push('/')
-    }
-  }, [pathname, router, user])
-
   const handleLogout = () => {
     document.cookie = 'isAuthenticated=false; path=/'
     logout()

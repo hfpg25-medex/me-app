@@ -4,7 +4,9 @@ export interface User {
   id: string
   name: string
   role: UserRole
-  email: string
+  uen: string
+  corpPassId: string
+  email?: string
   mcr?: string // Only for doctors
 }
 

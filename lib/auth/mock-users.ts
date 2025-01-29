@@ -5,38 +5,43 @@ export const mockUsers: User[] = [
     id: '1',
     name: 'Dr. John Doe',
     role: 'doctor',
-    email: 'john.doe@example.com',
+    uen: '201234567A',
+    corpPassId: 'DOCTOR001',
     mcr: 'M12345A'
   },
   {
     id: '2',
     name: 'Dr. Sarah Chen',
     role: 'doctor',
-    email: 'sarah.chen@example.com',
+    uen: '201234567B',
+    corpPassId: 'DOCTOR002',
     mcr: 'M67890B'
   },
   {
     id: '3',
     name: 'Jane Smith',
     role: 'nurse',
-    email: 'jane.smith@example.com'
+    uen: '201234567C',
+    corpPassId: 'NURSE001'
   },
   {
     id: '4',
     name: 'Mike Johnson',
     role: 'nurse',
-    email: 'mike.johnson@example.com'
+    uen: '201234567D',
+    corpPassId: 'NURSE002'
   }
 ]
 
 interface Credentials {
-  email: string
-  password: string
+  uen: string
+  corpPassId: string
 }
 
 export async function authenticate(credentials: Credentials): Promise<User | null> {
-  // In a real app, you would hash the password and check against a database
-  // For this mock version, we'll accept any password and just check the email
-  const user = mockUsers.find(u => u.email === credentials.email)
+  // Find user by UEN and CorpPass ID
+  const user = mockUsers.find(
+    u => u.uen === credentials.uen && u.corpPassId === credentials.corpPassId
+  )
   return user || null
 }
