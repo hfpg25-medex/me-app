@@ -12,6 +12,7 @@ import { Geist } from 'next/font/google'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { Home, LogOut } from 'lucide-react'
+import { NavBar } from '@/components/ui/navbar'
 
 const geist = Geist({
   subsets: ['latin'],
@@ -32,26 +33,9 @@ function MainLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen flex flex-col">
       <SgdsMasthead />
-      {user && (
-        <header className="bg-white shadow-sm">
-          <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-center">
-              <h1 className="text-lg font-semibold leading-6 text-gray-900">
-                Medical Examination System
-              </h1>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleLogout}
-              >
-                Logout
-              </Button>
-            </div>
-          </div>
-        </header>
-      )}
+      {user && <NavBar userName={user.name} userUen={user.uen} />}
       <UserProvider initialUser={user}>
-        {children}
+        <main>{children}</main>
       </UserProvider>
     </div>
   )
