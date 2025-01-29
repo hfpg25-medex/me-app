@@ -85,14 +85,21 @@ export function MedicalHistory({
   )
 
   const handleToggle = (index: number) => {
-    setMedicalHistory((prev) =>
-      prev.map((item, i) => (i === index ? { ...item, hasCondition: !item.hasCondition } : item)),
-    )
+    const updatedHistory = medicalHistory.map((item, i) => 
+      i === index ? { ...item, hasCondition: !item.hasCondition } : item
+    );
+    setMedicalHistory(updatedHistory);
+    setValue('medicalHistory', updatedHistory);
   }
-
+  
   const handleDetailsChange = (index: number, details: string) => {
-    setMedicalHistory((prev) => prev.map((item, i) => (i === index ? { ...item, details } : item)))
+    const updatedHistory = medicalHistory.map((item, i) => 
+      i === index ? { ...item, details } : item
+    );
+    setMedicalHistory(updatedHistory);
+    setValue('medicalHistory', updatedHistory);
   }
+  
 
   return (
     <AccordionContent>
@@ -112,7 +119,9 @@ export function MedicalHistory({
         {errors.medicalHistory && (
           <p className="text-sm text-red-500">{errors.medicalHistory.message}</p>
         )}
-        <Button className="mt-4" onClick={() => handleContinue(isSummaryActive ? 'summary' : 'clinical-examination')}>
+        <Button className="mt-4" onClick={() => {
+              setValue('medicalHistory', medicalHistory);
+              handleContinue(isSummaryActive ? 'summary' : 'clinical-examination')}}>
           {isSummaryActive ? 'Continue to Summary' : 'Continue'}
         </Button>
       </div>
