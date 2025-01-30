@@ -14,10 +14,10 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <main className="container mx-auto p-6">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold tracking-tight mb-2">Welcome to Medical Exam Portal</h1>
+        <div className="mb-4">
+          <h1 className="text-4xl font-bold tracking-tight mb-2 ">Hello, {user?.name}!</h1>
           <p className="text-xl text-muted-foreground">
-            Hello, {user?.name}. We hope you are having a great day. What would you like to do?
+            What would you like to do?
           </p>
         </div>
 

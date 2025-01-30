@@ -34,7 +34,7 @@ const reviews: ReviewItem[] = [
 
 export function ReviewSection() {
   return (
-    <div className="bg-white rounded-xl shadow-sm p-6 w-[550px] mt-4 bg-primary/10">
+    <div className="bg-white border border-black rounded-xl shadow-sm p-6 w-[550px] mt-6 bg-primary/10">
       <div className="space-y-4">
         <div>
           <h2 className="text-xl font-semibold">For Your Review</h2>
