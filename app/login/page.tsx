@@ -7,7 +7,6 @@ import { Label } from "@/components/ui/label"
 import { useToast } from "@/hooks/use-toast"
 import { useAuth } from '@/lib/context/auth-context'
 import { mockUsers } from '@/lib/auth/mock-users'
-import Image from 'next/image'
 
 export default function LoginPage() {
   const [uen, setUen] = useState('')
