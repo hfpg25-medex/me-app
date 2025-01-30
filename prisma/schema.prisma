@@ -57,6 +57,7 @@ model DraftSubmission {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   
+  @@unique([userId, examType], name: "userId_examType")
   @@index([userId])
   @@index([examType])
 }
