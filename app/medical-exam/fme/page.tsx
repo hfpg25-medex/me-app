@@ -3,8 +3,6 @@
 import { useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Accordion, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { cn } from "@/lib/utils"
-import { Summary } from "@/components/SummaryFME"
 import { FinChangeModal } from "@/components/FinChangeModal"
 import { formSchemaWP, FormDataWP } from "@/lib/schemas"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -16,6 +14,8 @@ import { ClinicalExamination } from "@/components/medical-exam/ClinicalExaminati
 import { Tests } from "@/components/medical-exam/Tests"
 import { AcknowledgementPage } from '@/components/AcknowledgementPage'
 import { MedicalSummary } from '@/components/medical-summary'
+import { StepIndicator } from "@/components/step-indicator"
+import { examTitles } from '@/constants/exam-titles'
 
 const clinics = [
   { id: '1', name: 'Healthline Medical Clinic (Bukit Batok)', hciCode: '2M12345', contactNumber: '+65 69991234' },
@@ -51,9 +51,15 @@ const mockApiCall = async (fin: string) => {
 
 const requireVisitDate = true
 
+const STEPS = {
+  SUBMISSION: 'submission',
+  SUMMARY: 'summary'
+} as const;
+
+type StepType = typeof STEPS[keyof typeof STEPS];
 
 export default function WPExamPage() {
-  const [step, setStep] = useState<'submission' | 'summary'>('submission')
+  const [step, setStep] = useState<StepType>(STEPS.SUBMISSION);
   const [expandedAccordion, setExpandedAccordion] = useState<string | undefined>("clinic-doctor")
   const [isHelperDetailsEnabled, setIsHelperDetailsEnabled] = useState(false)
   const [isMedicalHistoryEnabled, setIsMedicalHistoryEnabled] = useState(false)
@@ -182,14 +188,14 @@ export default function WPExamPage() {
 
         if (isValid) {
           setIsSummaryActive(true)
-          setStep('summary')
+          setStep(STEPS.SUMMARY)
         }
         break
     }
   }
 
   const handleEdit = (section: 'clinic-doctor' | 'helper-details' | 'medical-history' | 'clinical-examination' | 'tests') => {
-    setStep('submission')
+    setStep(STEPS.SUBMISSION)
     setExpandedAccordion(section)
   }
 
@@ -212,7 +218,7 @@ export default function WPExamPage() {
   const selectedClinicDetails = clinics.find(clinic => clinic.id === watchedValues.clinicDoctor.clinic)
   const selectedDoctorDetails = doctors.find(doctor => doctor.id === watchedValues.clinicDoctor.doctor)
 
-  if (step === 'summary') {
+  if (step === STEPS.SUMMARY) {
     return (
       <div className="container mx-auto p-6">
         <MedicalSummary
@@ -230,13 +236,12 @@ export default function WPExamPage() {
           }}
           medicalHistory={watchedValues.medicalHistory}
           clinicalExamination={{
-            weight: watchedValues.clinicalExamination.weight,
-            height: watchedValues.clinicalExamination.height,
-            bmi: watchedValues.clinicalExamination.bmi,
-            waistCircumference: watchedValues.clinicalExamination.waistCircumference,
-            systolicBP: watchedValues.clinicalExamination.systolicBP,
-            diastolicBP: watchedValues.clinicalExamination.diastolicBP,
-            rightEyeVision: watchedValues.clinicalExamination.rightEyeVision,
+            weight: watchedValues.clinicalExamination.weight === "" ? 0 : Number(watchedValues.clinicalExamination.weight),
+            height: watchedValues.clinicalExamination.height === "" ? 0 : Number(watchedValues.clinicalExamination.height),
+            bmi: watchedValues.clinicalExamination.bmi === "" ? 0 : Number(watchedValues.clinicalExamination.bmi),
+            waistCircumference: watchedValues.clinicalExamination.waistCircumference === "" ? 0 : Number(watchedValues.clinicalExamination.waistCircumference),
+            systolicBP: watchedValues.clinicalExamination.systolicBP === "" ? 0 : Number(watchedValues.clinicalExamination.systolicBP),
+            diastolicBP: watchedValues.clinicalExamination.diastolicBP === "" ? 0 : Number(watchedValues.clinicalExamination.diastolicBP),
             leftEyeVision: watchedValues.clinicalExamination.leftEyeVision,
             urineAlbumin: watchedValues.clinicalExamination.urineAlbumin,
             urineGlucose: watchedValues.clinicalExamination.urineGlucose,
@@ -263,25 +268,27 @@ export default function WPExamPage() {
     <div className="w-full max-w-[760px] mx-auto mt-6 ">
       <Card>
         <CardHeader>
-          <CardTitle className="text-xl font-bold">Full Medical Exam for Foreign Workers (MOM)</CardTitle>
+          <CardTitle className="text-xl font-bold">{examTitles.fme}</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="flex items-center mb-6">
-            <div className={cn("flex items-center", step === 'submission' ? "text-primary" : "text-muted-foreground")}>
-              <div className="w-8 h-8 rounded-full border-2 border-current flex items-center justify-center mr-2">
-                1
-              </div>
-              Submission
-            </div>
-            <div className="mx-2 w-10 h-0.5 bg-gray-300"></div>
-            <div className={cn("flex items-center", isSummaryActive ? "text-primary" : "text-muted-foreground opacity-50")}>
-              <div className="w-8 h-8 rounded-full border-2 border-current flex items-center justify-center mr-2">
-                2
-              </div>
-              Summary
-            </div>
-          </div>
-
+          <StepIndicator 
+            className="mb-6"
+            steps={[
+              {
+                number: 1,
+                label: "Submission",
+                isActive: step === STEPS.SUBMISSION,
+                isEnabled: true
+              },
+              {
+                number: 2,
+                label: "Summary",
+                // @ts-ignore
+                isActive: step === STEPS.SUMMARY,
+                isEnabled: isSummaryActive
+              }
+            ]}
+          />
           <FormProvider {...methods}>
             {/* <form onSubmit={
               handleSubmit(onSubmit)
