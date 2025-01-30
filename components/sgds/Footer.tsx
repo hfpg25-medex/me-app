@@ -1,6 +1,15 @@
 import {Footer} from "@govtechsg/sgds-react";
 
 export function DefaultFooter() {
+
+  const today = new Date();
+
+  const formattedDate = today.toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+
   return (
     <Footer>
       <Footer.Bottom>
@@ -13,7 +22,7 @@ export function DefaultFooter() {
           <a href="">Contact us</a>
         </Footer.Bottom.Links>
         <Footer.Bottom.Copyrights className="text-end">
-          © 2025 Government of Singapore. Last updated 23 December 2024.
+          © 2025 Government of Singapore. Last updated {formattedDate}.
         </Footer.Bottom.Copyrights>
       </Footer.Bottom>
     </Footer>

@@ -1,17 +1,13 @@
 'use client'
 
 import './globals.css'
-// import DefaultFooter from '@/components/default-footer'
+import { DefaultFooter } from '@/components/sgds/Footer'
 import { usePathname, useRouter } from 'next/navigation'
-import { useState, useEffect } from 'react'
 import '@govtechsg/sgds-masthead/dist/sgds-masthead/sgds-masthead.css';
 import {SgdsMasthead} from "@govtechsg/sgds-masthead-react"
 import { UserProvider } from '@/lib/context/user-context'
 import { AuthProvider, useAuth } from '@/lib/context/auth-context'
 import { Geist } from 'next/font/google'
-import { Button } from '@/components/ui/button'
-import Link from 'next/link'
-import { Home, LogOut } from 'lucide-react'
 import { NavBar } from '@/components/ui/navbar'
 
 const geist = Geist({
@@ -61,7 +57,7 @@ export default function RootLayout({
           <MainLayout>
             {children}
           </MainLayout>
-          {/* <DefaultFooter /> */}
+          <DefaultFooter />
         </AuthProvider>
       </body>
     </html>
