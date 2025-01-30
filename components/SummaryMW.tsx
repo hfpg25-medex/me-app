@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label"
 import { Pencil } from 'lucide-react'
 import { format } from "date-fns"
 import { cn } from "@/lib/utils"
+import { StepIndicator } from "@/components/ui/step-indicator"
 
 interface SummaryProps {
   clinicDetails: {
@@ -50,21 +51,23 @@ export function Summary({
     <div className="max-w-4xl mx-auto">
       <h1 className="text-2xl font-semibold mb-6">Six-monthly Medical Exam for Female Migrant Workers (MOM)</h1>
       
-      <div className="flex items-center mb-8">
-        <div className="flex items-center text-primary">
-          <div className="w-8 h-8 rounded-full border-2 border-current flex items-center justify-center mr-2">
-            1
-          </div>
-          Submission
-        </div>
-        <div className="mx-2 w-10 h-0.5 bg-gray-300"></div>
-        <div className="flex items-center text-primary">
-          <div className="w-8 h-8 rounded-full border-2 border-current flex items-center justify-center mr-2">
-            2
-          </div>
-          Summary
-        </div>
-      </div>
+      <StepIndicator
+        className="mb-8"
+        steps={[
+          {
+            number: 1,
+            label: "Submission",
+            isActive: false,
+            isEnabled: true
+          },
+          {
+            number: 2,
+            label: "Summary",
+            isActive: true,
+            isEnabled: true
+          }
+        ]}
+      />
 
       <div className="space-y-8">
         <section className="border rounded-lg p-6">
@@ -193,4 +196,3 @@ export function Summary({
     </div>
   )
 }
-

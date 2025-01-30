@@ -72,7 +72,6 @@ export function MedicalSummary({
       window.scrollTo(0, 0); // Scroll to the top of the page
     }, []); // Empty dependency array means this runs once on mount
     
-    console.log(clinicalExamination)
     
     const handleEdit = (section: 'clinic-doctor' | 'helper-details' | 'medical-history' | 'clinical-examination' | 'tests') => {
       if (canEditSection(section)) {

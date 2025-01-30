@@ -13,6 +13,7 @@ import { ClinicDoctorDetails } from "@/components/medical-exam/ClinicDoctorDetai
 import { HelperDetails } from "@/components/medical-exam/HelperDetails"
 import { ExaminationDetails } from "@/components/medical-exam/ExaminationDetailsMW"
 import { AcknowledgementPage } from '@/components/AcknowledgementPage'
+import { StepIndicator } from "@/components/ui/step-indicator"
 
 const clinics = [
   { id: '1', name: 'Healthline Medical Clinic (Bukit Batok)', hciCode: '2M12345', contactNumber: '+65 69991234' },
@@ -196,21 +197,24 @@ export default function MWExamPage() {
           <CardTitle className="text-xl font-bold">Six-monthly Medical Exam for Female Migrant Workers (MOM)</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="flex items-center mb-6">
-            <div className={cn("flex items-center", step === 'submission' ? "text-primary" : "text-muted-foreground")}>
-              <div className="w-8 h-8 rounded-full border-2 border-current flex items-center justify-center mr-2">
-                1
-              </div>
-              Submission
-            </div>
-            <div className="mx-2 w-10 h-0.5 bg-gray-300"></div>
-            <div className={cn("flex items-center", isSummaryActive ? "text-primary" : "text-muted-foreground opacity-50")}>
-              <div className="w-8 h-8 rounded-full border-2 border-current flex items-center justify-center mr-2">
-                2
-              </div>
-              Summary
-            </div>
-          </div>
+          <StepIndicator
+            className="mb-6"
+            steps={[
+              {
+                number: 1,
+                label: "Submission",
+                isActive: step === 'submission',
+                isEnabled: true
+              },
+              {
+                number: 2,
+                label: "Summary",
+                //@ts-expect-error
+                isActive: step === 'summary',
+                isEnabled: isSummaryActive
+              }
+            ]}
+          />
 
           <FormProvider {...methods}>
             <form onSubmit={handleSubmit(onSubmit)}>
@@ -259,4 +263,3 @@ export default function MWExamPage() {
     </div>
   )
 }
-
