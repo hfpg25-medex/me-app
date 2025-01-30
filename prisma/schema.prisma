@@ -1,0 +1,62 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Clinic {
+  id            String         @id @default(cuid())
+  hci           String        @unique
+  name          String
+  address       String
+  contactNumber String
+  doctors       ClinicDoctor[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+}
+
+model Doctor {
+  id        String         @id @default(cuid())
+  name      String
+  mcr       String        @unique
+  clinics   ClinicDoctor[]
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+}
+
+model ClinicDoctor {
+  id        String   @id @default(cuid())
+  clinic    Clinic   @relation(fields: [clinicId], references: [id])
+  clinicId  String
+  doctor    Doctor   @relation(fields: [doctorId], references: [id])
+  doctorId  String
+  startDate DateTime @default(now())
+  endDate   DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([clinicId, doctorId])
+}
+
+model DraftSubmission {
+  id          String   @id @default(cuid())
+  userId      String   // ID of the user who created the draft
+  examType    String   // Type of medical exam (e.g., 'FME', 'MDW', etc.)
+  formData    Json     // The actual form data stored as JSON
+  status      String   @default("draft") // Status of the submission (draft, submitted, etc.)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([userId])
+  @@index([examType])
+}
