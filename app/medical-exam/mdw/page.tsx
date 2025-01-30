@@ -29,9 +29,8 @@ S2358243J
 
 */
 const doctors = [
-  { id: '1', name: 'Mary Ang', mcrNumber: 'M11111A' },
-  { id: '2', name: 'Danny Lim', mcrNumber: 'M22222B' },
-  // { id: '3', name: 'Dr. Lee', mcrNumber: 'M33333C' },
+  { id: '1', name: 'Dr. John Doe', mcrNumber: 'M12345A' },
+  { id: '2', name: 'Dr. Sarah Chen', mcrNumber: 'M67890B' },
 ]
 
 // Mock API call
@@ -257,7 +256,7 @@ export default function MDWExamPage() {
   }
 
   return (
-    <div className="container mx-auto p-6">
+    <div className="w-full max-w-[760px] mx-auto mt-6 ">
       <Card>
         <CardHeader>
           <CardTitle className="text-xl font-bold">Six-monthly Medical Exam for Migrant Domestic Workers (MOM)</CardTitle>

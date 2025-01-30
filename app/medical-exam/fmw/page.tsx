@@ -203,7 +203,7 @@ export default function MWExamPage() {
   }
 
   return (
-    <div className="container mx-auto p-6">
+    <div className="w-full max-w-[760px] mx-auto mt-6 ">
       <Card>
         <CardHeader>
           <CardTitle className="text-xl font-bold">Six-monthly Medical Exam for Female Migrant Workers (MOM)</CardTitle>

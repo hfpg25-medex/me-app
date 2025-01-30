@@ -24,8 +24,8 @@ const clinics = [
 438 Jurong East #04-55, Singapore 289988
 */
 const doctors = [
-  { id: '1', name: 'Mary Ang', mcrNumber: 'M11111A' },
-  { id: '2', name: 'Danny Lim', mcrNumber: 'M22222B' },
+  { id: '1', name: 'Dr. John Doe', mcrNumber: 'M12345A' },
+  { id: '2', name: 'Dr. Sarah Chen', mcrNumber: 'M67890B' },
 ]
 
 // Mock API call
@@ -192,7 +192,7 @@ export default function MWExamPage() {
   }
 
   return (
-    <div className="container mx-auto p-6">
+    <div className="w-full max-w-[760px] mx-auto mt-6 ">
       <Card>
         <CardHeader>
           <CardTitle className="text-xl font-bold">Medical Exam for Permanant Residency Application (ICA)</CardTitle>
