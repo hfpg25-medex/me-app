@@ -19,7 +19,7 @@ export function NavBar({ userName, userUen }: NavBarProps) {
 
   return (
     <div className="bg-primary text-primary-foreground py-4">
-      <div className="container mx-auto px-4 flex items-center justify-between">
+      <div className="container !pl-0 flex items-center justify-between">
         <div className="flex items-center space-x-6">
           <Link href="/" className="flex items-center">
             <Image

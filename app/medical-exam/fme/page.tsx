@@ -14,7 +14,7 @@ import { ClinicalExamination } from "@/components/medical-exam/ClinicalExaminati
 import { Tests } from "@/components/medical-exam/Tests"
 import { AcknowledgementPage } from '@/components/AcknowledgementPage'
 import { MedicalSummary } from '@/components/medical-summary'
-import { StepIndicator } from "@/components/step-indicator"
+import { StepIndicator } from "@/components/ui/step-indicator"
 import { examTitles } from '@/constants/exam-titles'
 
 const clinics = [

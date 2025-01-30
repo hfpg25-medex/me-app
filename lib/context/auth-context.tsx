@@ -33,7 +33,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         Cookies.set('user', JSON.stringify(authenticatedUser))
         Cookies.set('authStatus', 'true')
         setUser(authenticatedUser)
-        router.push('/home')
+        router.push('/dashboard')
       } else {
         throw new Error('Invalid credentials')
       }

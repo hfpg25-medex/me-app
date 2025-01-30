@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react'
 import { format } from "date-fns"
 import { usePermissions } from '@/lib/hooks/use-permissions'
 import { Button } from "@/components/ui/button"
-import { StepIndicator } from "@/components/step-indicator"
+import { StepIndicator } from "@/components/ui/step-indicator"
 
 interface SummaryProps {
     clinicDetails: {
