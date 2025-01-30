@@ -6,6 +6,7 @@ import Link from "next/link"
 import { ClipboardList, Stethoscope, FileEdit, History } from 'lucide-react'
 import { useAuth } from '@/lib/context/auth-context'
 import Header from '@/components/Header'
+import { ReviewSection } from "@/components/review-section"
 
 export default function HomePage() {
   const { user } = useAuth()
@@ -85,6 +86,8 @@ export default function HomePage() {
             </CardHeader>
           </Card>
         </div>
+
+        <ReviewSection/>
       </main>
     </div>
   )
