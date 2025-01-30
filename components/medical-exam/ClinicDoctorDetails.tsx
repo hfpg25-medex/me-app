@@ -4,6 +4,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { AccordionContent } from "@/components/ui/accordion"
 import { useFormContext } from "react-hook-form"
 import { FormDataMDW, FormDataMW } from "@/lib/schemas"
+import { useAuth } from "@/lib/context/auth-context"
+import { useEffect } from "react"
 
 interface ClinicDoctorDetailsProps {
   isSummaryActive: boolean
@@ -12,9 +14,20 @@ interface ClinicDoctorDetailsProps {
   doctors: Array<{ id: string; name: string; mcrNumber: string }>
 }
 
-  export function ClinicDoctorDetails({ isSummaryActive, handleContinue, clinics, doctors}: ClinicDoctorDetailsProps) {
+export function ClinicDoctorDetails({ isSummaryActive, handleContinue, clinics, doctors}: ClinicDoctorDetailsProps) {
   const { setValue, formState: { errors }, watch } = useFormContext<FormDataMW | FormDataMDW>()
   const watchedValues = watch()
+  const { user } = useAuth()
+
+  useEffect(() => {
+    // Auto-select the doctor if the user is a doctor
+    if (user?.role === 'doctor' && user.mcr) {
+      const doctorId = doctors.find(d => d.mcrNumber === user.mcr)?.id
+      if (doctorId) {
+        setValue('clinicDoctor.doctor', doctorId)
+      }
+    }
+  }, [user, doctors, setValue])
 
   return (
     <AccordionContent>
@@ -35,9 +48,13 @@ interface ClinicDoctorDetailsProps {
         </div>
         <div>
           <Label className="mb-2" htmlFor="doctor">Doctor</Label>
-          <Select onValueChange={(value) => setValue('clinicDoctor.doctor', value)} value={watchedValues.clinicDoctor.doctor}>
+          <Select 
+            onValueChange={(value) => setValue('clinicDoctor.doctor', value)} 
+            value={watchedValues.clinicDoctor.doctor}
+            disabled={user?.role === 'doctor'} // Disable selection if user is a doctor
+          >
             <SelectTrigger id="doctor">
-              <SelectValue placeholder="Select a doctor" />
+              <SelectValue placeholder={user?.role === 'doctor' ? user.name : "Select a doctor"} />
             </SelectTrigger>
             <SelectContent>
               {doctors.map(doctor => (
@@ -63,4 +80,3 @@ interface ClinicDoctorDetailsProps {
     </AccordionContent>
   )
 }
-
