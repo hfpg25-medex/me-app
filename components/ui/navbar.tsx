@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
 import { useState } from "react"
 import { User } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -19,14 +20,25 @@ export function NavBar({ userName, userUen }: NavBarProps) {
   return (
     <div className="bg-primary text-primary-foreground py-4">
       <div className="container mx-auto px-4 flex items-center justify-between">
-        <nav className="flex items-center space-x-4">
-          <Link href="/" className="text-white font-semibold no-underline hover:text-gray-400 transition-colors">
-            Home
+        <div className="flex items-center space-x-6">
+          <Link href="/" className="flex items-center">
+            <Image
+              src="/medex-logo.svg"
+              alt="MedEx Logo"
+              width={120}
+              height={40}
+              priority
+            />
           </Link>
-          <Link href="/medical-exams" className="text-white font-semibold no-underline hover:text-gray-400 transition-colors">
-            Medical Exams
-          </Link>
-        </nav>
+          <nav className="flex items-center space-x-4">
+            <Link href="/" className="text-white font-semibold no-underline hover:text-gray-400 transition-colors">
+              Home
+            </Link>
+            <Link href="/medical-exams" className="text-white font-semibold no-underline hover:text-gray-400 transition-colors">
+              Medical Exams
+            </Link>
+          </nav>
+        </div>
         <DropdownMenu open={isMenuOpen} onOpenChange={setIsMenuOpen}>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="flex items-center space-x-2 text-white hover:text-gray-400 transition-colors hover:bg-transparent">
