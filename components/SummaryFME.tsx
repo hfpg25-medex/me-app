@@ -23,6 +23,7 @@ interface SummaryProps {
     name: string
     visitDate: Date | null
   }
+  medicalHistory: []
   clinicalExamination: {
     weight: number
     height: number
@@ -46,13 +47,14 @@ interface SummaryProps {
     hba1c?: string
     lipids?: string
   }
-  onEdit: (section: 'clinic-doctor' | 'helper-details' | 'clinical-examination' | 'tests') => void
+  onEdit: (section: 'clinic-doctor' | 'helper-details' | 'medical-history' | 'clinical-examination' | 'tests') => void
   onSubmit: () => void
 }
 
 export function Summary({
   clinicDetails,
   helperDetails,
+  medicalHistory,
   clinicalExamination,
   tests,
   onEdit,

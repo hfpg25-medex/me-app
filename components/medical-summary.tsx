@@ -3,7 +3,6 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { SectionHeader } from "@/components/ui/section-header"
 import { StatusBadge } from "@/components/ui/status-badge"
 import { examTitles } from '@/constants/exam-titles'
-import { Checkbox } from "@/components/ui/checkbox"
 import { Separator } from "@/components/ui/separator"
 import { useEffect, useState } from 'react'
 import { format } from "date-fns"
@@ -282,7 +281,7 @@ export function MedicalSummary({
                 </div>
                 <div className="space-y-4 mt-6">
                   <div>
-                    <div className="text-gray-500 text-sm">Doctor's name</div>
+                    <div className="text-gray-500 text-sm">Doctor name</div>
                     <div className="flex items-center gap-2">
                       <span>{clinicDetails.doctor}</span>
                     </div>

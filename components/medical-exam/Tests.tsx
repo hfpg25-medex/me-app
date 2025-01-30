@@ -14,7 +14,7 @@ interface TestsProps {
 }
 
 export function Tests({ isSummaryActive, handleContinue }: TestsProps) {
-  const { register, setValue, formState: { errors }, watch } = useFormContext<FormDataWP>()
+  const { register, setValue, watch } = useFormContext<FormDataWP>()
   const watchedValues = watch()
 
   return (

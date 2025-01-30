@@ -40,7 +40,6 @@ const mockApiCall = async (fin: string) => {
   if (fin === 'F2770033X') {
     return { 
       name: 'R** ME**', 
-      testTypes: ['Pregnancy', 'Syphilis test', 'HIV', 'Chest X-ray to screen for TB'],
       doe: '2025-08-10',
       dob: '1990-01-01',
       occupation: 'Driver'
@@ -68,7 +67,6 @@ export default function WPExamPage() {
   const [isSummaryActive, setIsSummaryActive] = useState(false)
   const [isFinChangeModalOpen, setIsFinChangeModalOpen] = useState(false)
   const [tempFin, setTempFin] = useState('')
-  const [testTypes, setTestTypes] = useState<string[]>([])
   const [finTouched, setFinTouched] = useState(false);
   const [visitDateTouched, setVisitDateTouched] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false); // New state to track submission
@@ -126,11 +124,9 @@ export default function WPExamPage() {
     const result = await mockApiCall(fin)
     if (result) {
       setValue('helperDetails.helperName', result.name)
-      setTestTypes(result.testTypes)
       setIsPendingMe(true)
     } else {
       setValue('helperDetails.helperName', '')
-      setTestTypes([])
       setIsPendingMe(false)
     }
   }

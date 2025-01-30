@@ -28,7 +28,7 @@ export function HelperDetails({
   setFinTouched, 
   setVisitDateTouched,
   finTouched,
-  visitDateTouched,
+  // visitDateTouched,
   isPendingMe,
   nextStep,
   requireVisitDate=true

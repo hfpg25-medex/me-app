@@ -14,17 +14,17 @@ import { format, subMonths, subYears, parseISO, isWithinInterval } from "date-fn
 import { CalendarIcon, MoreHorizontal, Plus } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 
-interface Record {
-  id: string
-  foreignerId: string
-  dateCreated: string
-  lastUpdate: string
-  agency: string
-  type: string
-  name: string
-  status: string
-  pending: string
-}
+// interface Record {
+//   id: string
+//   foreignerId: string
+//   dateCreated: string
+//   lastUpdate: string
+//   agency: string
+//   type: string
+//   name: string
+//   status: string
+//   pending: string
+// }
 
 // Function to generate a random ID
 const generateForeignerId = () => {

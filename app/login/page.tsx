@@ -28,6 +28,7 @@ export default function LoginPage() {
         description: "Invalid UEN or CorpPass ID",
         variant: "destructive",
       })
+      console.log(error)
     }
   }
 

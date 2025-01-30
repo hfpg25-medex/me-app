@@ -78,7 +78,7 @@ export function MedicalHistory({
   isSummaryActive, 
   handleContinue, 
 }: MedicalHistoryProps) {
-    const { register, setValue, formState: { errors } } = useFormContext<FormDataWP>()
+    const { setValue, formState: { errors } } = useFormContext<FormDataWP>()
   
   const [medicalHistory, setMedicalHistory] = useState<HistoryItem[]>(
     medicalHistoryItems.map((item) => ({ condition: item.text, hasCondition: false, details: "" })),
@@ -104,7 +104,7 @@ export function MedicalHistory({
   return (
     <AccordionContent>
       <div className="w-full">
-        <p className="text-sm text-gray-500">Please provide information about worker's medical history.</p>
+        <p className="text-sm text-gray-500">Please provide information about worker&apos;s medical history.</p>
         <div className="space-y-6">
           {medicalHistory.map((item, index) => (
             <HistoryItemComponent

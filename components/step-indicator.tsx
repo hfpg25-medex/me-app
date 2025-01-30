@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils"
+import React from "react"
 
 interface Step {
   number: number
@@ -16,12 +17,11 @@ export function StepIndicator({ steps, className }: StepIndicatorProps) {
   return (
     <div className={cn("flex items-center", className)}>
       {steps.map((step, index) => (
-        <>
+        <React.Fragment key={step.number}>
           {index > 0 && (
             <div className="mx-2 w-10 h-0.5 bg-gray-300" />
           )}
           <div 
-            key={step.number}
             className={cn(
               "flex items-center",
               step.isActive ? "text-primary" : "text-muted-foreground",
@@ -33,7 +33,7 @@ export function StepIndicator({ steps, className }: StepIndicatorProps) {
             </div>
             {step.label}
           </div>
-        </>
+        </React.Fragment>
       ))}
     </div>
   )

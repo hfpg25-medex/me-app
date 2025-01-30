@@ -18,17 +18,10 @@ const geist = Geist({
 function MainLayout({ children }: { children: React.ReactNode }) {
   const { user, logout } = useAuth()
   const router = useRouter()
-  const pathname = usePathname()
-
-  const handleLogout = () => {
-    document.cookie = 'isAuthenticated=false; path=/'
-    logout()
-    router.push('/')
-  }
 
   return (
     <div className="min-h-screen flex flex-col">
-      <SgdsMasthead />
+      <SgdsMasthead placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />
       {user && <NavBar userName={user.name} userUen={user.uen} />}
       <UserProvider initialUser={user}>
         <main>{children}</main>
