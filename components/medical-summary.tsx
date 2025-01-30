@@ -9,6 +9,9 @@ import { format } from "date-fns"
 import { usePermissions } from '@/lib/hooks/use-permissions'
 import { Button } from "@/components/ui/button"
 import { StepIndicator } from "@/components/ui/step-indicator"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Label } from "./ui/label"
+
 
 interface SummaryProps {
     clinicDetails: {
@@ -81,6 +84,8 @@ export function MedicalSummary({
 
   return (
     <div className="container mx-auto p-6 space-y-6">
+      <h1 className="text-2xl font-semibold mb-6">{examTitles.fme}</h1>
+
       <StepIndicator
         className="mb-6"
         steps={[
@@ -226,6 +231,33 @@ export function MedicalSummary({
               </div>
             </div>
           </Card>
+          <Card className="bg-blue-50 p-4 text-sm">
+            <SectionHeader title="Declaration" />
+              <p className="mb-4">Please read and acknowledge the following:</p>
+              <ul className="list-disc pl-5 space-y-2 mb-4">
+                <li>I am authorised by the clinic to submit the results and make the declarations in this form on its behalf.</li>
+                <li>By submitting this form, I understand that the information given will be submitted to the Controller or an authorised officer who may act on the information given by me. I further declare that the information provided by me is true to the best of my knowledge and belief.</li>
+              </ul>
+              <div className="flex items-center space-x-2">
+                <Checkbox 
+                  id="declaration" 
+                  checked={declarationChecked}
+                  onCheckedChange={(checked) => setDeclarationChecked(checked as boolean)}
+                />
+                <Label htmlFor="declaration">I declare that all of the above is true.</Label>
+              </div>
+              {canSubmitReport && (
+                <div className="mt-6">
+                  <Button
+                    onClick={onSubmit}
+                    disabled={!declarationChecked}
+                    className="bg-orange-500 hover:bg-orange-600 text-white"
+                  >
+                    Submit Report
+                  </Button>
+                </div>
+              )}
+          </Card>
         </div>
 
         <div className="space-y-6">
@@ -356,16 +388,6 @@ export function MedicalSummary({
             </div>
           </Card>
         </div>
-      </div>
-      <div className="flex justify-end gap-4">
-        {canSubmitReport && (
-          <Button
-            onClick={onSubmit}
-            disabled={!declarationChecked}
-          >
-            Submit report
-          </Button>
-        )}
       </div>
     </div>
   )
