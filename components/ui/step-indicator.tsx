@@ -15,26 +15,41 @@ interface StepIndicatorProps {
 
 export function StepIndicator({ steps, className }: StepIndicatorProps) {
   return (
-    <div className={cn("flex items-center", className)}>
-      {steps.map((step, index) => (
-        <React.Fragment key={step.number}>
-          {index > 0 && (
-            <div className="mx-2 w-10 h-0.5 bg-gray-300" />
-          )}
-          <div 
-            className={cn(
-              "flex items-center",
-              step.isActive ? "text-primary" : "text-muted-foreground",
-              !step.isEnabled && "opacity-50"
+    <div className={cn("flex flex-col gap-2", className)}>
+      {/* First row: Numbers with connecting line */}
+      <div className="flex items-center">
+        {steps.map((step, index) => (
+          <React.Fragment key={step.number}>
+            {index > 0 && (
+              <div className="h-[1px] w-24 bg-gray-300" />
             )}
-          >
-            <div className="w-8 h-8 rounded-full border-2 border-current flex items-center justify-center mr-2">
+            <div className={cn(
+              "w-5 h-5 rounded-full flex items-center justify-center text-xs font-medium",
+              step.isActive ? "bg-primary text-white" : "bg-gray-200"
+            )}>
               {step.number}
             </div>
-            {step.label}
-          </div>
-        </React.Fragment>
-      ))}
+          </React.Fragment>
+        ))}
+      </div>
+
+      {/* Second row: Labels */}
+      <div className="flex">
+        {steps.map((step, index) => (
+          <React.Fragment key={step.number}>
+            {index > 0 && <div className="w-24" />}
+            <div className={index === 0 ? "w-5" : undefined}>
+              <span className={cn(
+                "text-sm",
+                step.isActive ? "text-primary" : "text-muted-foreground",
+                !step.isEnabled && "opacity-50"
+              )}>
+                {step.label}
+              </span>
+            </div>
+          </React.Fragment>
+        ))}
+      </div>
     </div>
   )
 }

@@ -2,7 +2,7 @@
 
 import './globals.css'
 import { DefaultFooter } from '@/components/sgds/Footer'
-import { usePathname, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import '@govtechsg/sgds-masthead/dist/sgds-masthead/sgds-masthead.css';
 import {SgdsMasthead} from "@govtechsg/sgds-masthead-react"
 import { UserProvider } from '@/lib/context/user-context'
@@ -16,8 +16,7 @@ const geist = Geist({
 })
 
 function MainLayout({ children }: { children: React.ReactNode }) {
-  const { user, logout } = useAuth()
-  const router = useRouter()
+  const { user} = useAuth()
 
   return (
     <div className="min-h-screen flex flex-col">

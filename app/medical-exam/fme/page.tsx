@@ -71,7 +71,6 @@ export default function WPExamPage() {
   const [visitDateTouched, setVisitDateTouched] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false); // New state to track submission
   const [isPendingMe, setIsPendingMe] = useState (false)
-  const [medicalHistoryItems, setMedicalHistoryItems] = useState<string[]>([]);
 
   const methods = useForm<FormDataWP>({
     resolver: zodResolver(formSchemaWP),
@@ -279,7 +278,7 @@ export default function WPExamPage() {
               {
                 number: 2,
                 label: "Summary",
-                // @ts-ignore
+                // @ts-expect-error
                 isActive: step === STEPS.SUMMARY,
                 isEnabled: isSummaryActive
               }
