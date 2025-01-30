@@ -13,6 +13,8 @@ import { ClinicDoctorDetails } from "@/components/medical-exam/ClinicDoctorDetai
 import { HelperDetails } from "@/components/medical-exam/HelperDetails"
 import { ExaminationDetails } from "@/components/medical-exam/ExaminationDetailsPR"
 import { AcknowledgementPage } from '@/components/AcknowledgementPage'
+import { StepIndicator } from "@/components/ui/step-indicator"
+import { STEPS, StepType } from '@/constants/steps'
 
 const clinics = [
   { id: '1', name: 'Healthline Medical Clinic (Bukit Batok)', hciCode: '2M12345', contactNumber: '+65 69991234' },
@@ -44,7 +46,7 @@ const mockApiCall = async (fin: string) => {
 }
 
 export default function MWExamPage() {
-  const [step, setStep] = useState<'submission' | 'summary'>('submission')
+  const [step, setStep] = useState<StepType>(STEPS.SUBMISSION)
   const [expandedAccordion, setExpandedAccordion] = useState<string | undefined>("clinic-doctor")
   const [isHelperDetailsEnabled, setIsHelperDetailsEnabled] = useState(false)
   const [isExaminationEnabled, setIsExaminationEnabled] = useState(false)
@@ -130,14 +132,14 @@ export default function MWExamPage() {
         isValid = true //temp
         if (isValid) {
           setIsSummaryActive(true)
-          setStep('summary')
+          setStep(STEPS.SUMMARY)
         }
         break
     }
   }
 
   const handleEdit = (section: 'clinic-doctor' | 'helper-details' | 'examination-details') => {
-    setStep('submission')
+    setStep(STEPS.SUBMISSION)
     setExpandedAccordion(section)
   }
 
@@ -160,7 +162,7 @@ export default function MWExamPage() {
   const selectedClinicDetails = clinics.find(clinic => clinic.id === watchedValues.clinicDoctor.clinic)
   const selectedDoctorDetails = doctors.find(doctor => doctor.id === watchedValues.clinicDoctor.doctor)
 
-  if (step === 'summary') {
+  if (step === STEPS.SUMMARY) {
     return (
       <div className="container mx-auto p-6">
         <Summary
@@ -198,21 +200,24 @@ export default function MWExamPage() {
           <CardTitle className="text-xl font-bold">Medical Exam for Permanant Residency Application (ICA)</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="flex items-center mb-6">
-            <div className={cn("flex items-center", step === 'submission' ? "text-primary" : "text-muted-foreground")}>
-              <div className="w-8 h-8 rounded-full border-2 border-current flex items-center justify-center mr-2">
-                1
-              </div>
-              Submission
-            </div>
-            <div className="mx-2 w-10 h-0.5 bg-gray-300"></div>
-            <div className={cn("flex items-center", isSummaryActive ? "text-primary" : "text-muted-foreground opacity-50")}>
-              <div className="w-8 h-8 rounded-full border-2 border-current flex items-center justify-center mr-2">
-                2
-              </div>
-              Summary
-            </div>
-          </div>
+        <StepIndicator 
+            className="mb-6"
+            steps={[
+              {
+                number: 1,
+                label: "Submission",
+                isActive: step === STEPS.SUBMISSION,
+                isEnabled: true
+              },
+              {
+                number: 2,
+                label: "Summary",
+                // @ts-expect-error
+                isActive: step === STEPS.SUMMARY,
+                isEnabled: isSummaryActive
+              }
+            ]}
+          />
 
           <FormProvider {...methods}>
             <form onSubmit={handleSubmit(onSubmit)}>
@@ -261,4 +266,3 @@ export default function MWExamPage() {
     </div>
   )
 }
-

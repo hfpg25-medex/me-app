@@ -16,6 +16,7 @@ import { AcknowledgementPage } from '@/components/AcknowledgementPage'
 import { MedicalSummary } from '@/components/medical-summary'
 import { StepIndicator } from "@/components/ui/step-indicator"
 import { examTitles } from '@/constants/exam-titles'
+import { STEPS, StepType } from '@/constants/steps'
 
 const clinics = [
   { id: '1', name: 'ABC Medical Clinic (Bukit Batok)', hciCode: '2M12345', contactNumber: '+65 69991234' },
@@ -50,12 +51,6 @@ const mockApiCall = async (fin: string) => {
 
 const requireVisitDate = true
 
-const STEPS = {
-  SUBMISSION: 'submission',
-  SUMMARY: 'summary'
-} as const;
-
-type StepType = typeof STEPS[keyof typeof STEPS];
 
 export default function WPExamPage() {
   const [step, setStep] = useState<StepType>(STEPS.SUBMISSION);

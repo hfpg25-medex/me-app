@@ -13,6 +13,8 @@ import { ClinicDoctorDetails } from "@/components/medical-exam/ClinicDoctorDetai
 import { HelperDetails } from "@/components/medical-exam/HelperDetails"
 import { ExaminationDetails } from "@/components/medical-exam/ExaminationDetailsMDW"
 import { AcknowledgementPage } from '@/components/AcknowledgementPage'
+import { STEPS, StepType } from '@/constants/steps'
+import { StepIndicator } from '@/components/ui/step-indicator'
 
 const clinics = [
   { id: '1', name: 'Healthline Medical Clinic (Bukit Batok)', hciCode: '2M12345', contactNumber: '+65 69991234' },
@@ -51,7 +53,7 @@ const mockApiCall = async (fin: string) => {
 }
 
 export default function MDWExamPage() {
-  const [step, setStep] = useState<'submission' | 'summary'>('submission')
+  const [step, setStep] = useState<StepType>(STEPS.SUBMISSION)
   const [expandedAccordion, setExpandedAccordion] = useState<string | undefined>("clinic-doctor")
   const [isHelperDetailsEnabled, setIsHelperDetailsEnabled] = useState(false)
   const [isExaminationEnabled, setIsExaminationEnabled] = useState(false)
@@ -265,22 +267,24 @@ export default function MDWExamPage() {
           </CardDescription> */}
         </CardHeader>
         <CardContent>
-          <div className="flex items-center mb-6">
-            <div className={cn("flex items-center", step === 'submission' ? "text-primary" : "text-muted-foreground")}>
-              <div className="w-8 h-8 rounded-full border-2 border-current flex items-center justify-center mr-2">
-                1
-              </div>
-              Submission
-            </div>
-            <div className="mx-2 w-10 h-0.5 bg-gray-300"></div>
-            <div className={cn("flex items-center", isSummaryActive ? "text-primary" : "text-muted-foreground opacity-50")}>
-              <div className="w-8 h-8 rounded-full border-2 border-current flex items-center justify-center mr-2">
-                2
-              </div>
-              Summary
-            </div>
-          </div>
-
+        <StepIndicator 
+            className="mb-6"
+            steps={[
+              {
+                number: 1,
+                label: "Submission",
+                isActive: step === STEPS.SUBMISSION,
+                isEnabled: true
+              },
+              {
+                number: 2,
+                label: "Summary",
+                // @ts-expect-error
+                isActive: step === STEPS.SUMMARY,
+                isEnabled: isSummaryActive
+              }
+            ]}
+        />
           <FormProvider {...methods}>
             <form onSubmit={handleSubmit(onSubmit)}>
               <Accordion type="single" value={expandedAccordion} onValueChange={setExpandedAccordion} collapsible>
@@ -333,4 +337,3 @@ export default function MDWExamPage() {
     </div>
   )
 }
-

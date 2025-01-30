@@ -15,6 +15,7 @@ import { ExaminationDetails } from "@/components/medical-exam/ExaminationDetails
 import { AcknowledgementPage } from '@/components/AcknowledgementPage'
 import { StepIndicator } from "@/components/ui/step-indicator"
 import { useAuth } from "@/lib/context/auth-context"
+import { STEPS, StepType } from '@/constants/steps'
 
 const clinics = [
   { id: '1', name: 'Healthline Medical Clinic (Bukit Batok)', hciCode: '2M12345', contactNumber: '+65 69991234' },
@@ -46,7 +47,7 @@ const mockApiCall = async (fin: string) => {
 }
 
 export default function MWExamPage() {
-  const [step, setStep] = useState<'submission' | 'summary'>('submission')
+  const [step, setStep] = useState<StepType>(STEPS.SUBMISSION)
   const [expandedAccordion, setExpandedAccordion] = useState<string | undefined>("clinic-doctor")
   const [isHelperDetailsEnabled, setIsHelperDetailsEnabled] = useState(false)
   const [isExaminationEnabled, setIsExaminationEnabled] = useState(false)
@@ -141,14 +142,14 @@ export default function MWExamPage() {
         isValid = true //temp
         if (isValid) {
           setIsSummaryActive(true)
-          setStep('summary')
+          setStep(STEPS.SUMMARY)
         }
         break
     }
   }
 
   const handleEdit = (section: 'clinic-doctor' | 'helper-details' | 'examination-details') => {
-    setStep('submission')
+    setStep(STEPS.SUBMISSION)
     setExpandedAccordion(section)
   }
 
@@ -171,7 +172,7 @@ export default function MWExamPage() {
   const selectedClinicDetails = clinics.find(clinic => clinic.id === watchedValues.clinicDoctor.clinic)
   const selectedDoctorDetails = doctors.find(doctor => doctor.id === watchedValues.clinicDoctor.doctor)
 
-  if (step === 'summary') {
+  if (step === STEPS.SUMMARY) {
     return (
       <div className="container mx-auto p-6">
         <Summary
@@ -215,14 +216,14 @@ export default function MWExamPage() {
               {
                 number: 1,
                 label: "Submission",
-                isActive: step === 'submission',
+                isActive: step === STEPS.SUBMISSION,
                 isEnabled: true
               },
               {
                 number: 2,
                 label: "Summary",
                 //@ts-expect-error
-                isActive: step === 'summary',
+                isActive: step === STEPS.SUMMARY,
                 isEnabled: isSummaryActive
               }
             ]}
