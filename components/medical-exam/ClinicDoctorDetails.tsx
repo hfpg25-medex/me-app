@@ -19,9 +19,8 @@ interface ClinicDoctorDetailsProps {
   return (
     <AccordionContent>
       <div className="space-y-4 w-full">
-      
-          <Label htmlFor="clinic">Select Clinic</Label>
           <div>
+          <Label className="mb-2"htmlFor="clinic">Clinic</Label>
           <Select onValueChange={(value) => setValue('clinicDoctor.clinic', value)} value={watchedValues.clinicDoctor.clinic}>
             <SelectTrigger id="clinic">
               <SelectValue placeholder="Select a clinic" />
@@ -35,7 +34,7 @@ interface ClinicDoctorDetailsProps {
           {errors.clinicDoctor?.clinic && <p className="text-red-500 text-sm mt-1">{errors.clinicDoctor.clinic.message}</p>}
         </div>
         <div>
-          <Label htmlFor="doctor">Select Doctor</Label>
+          <Label className="mb-2" htmlFor="doctor">Doctor</Label>
           <Select onValueChange={(value) => setValue('clinicDoctor.doctor', value)} value={watchedValues.clinicDoctor.doctor}>
             <SelectTrigger id="doctor">
               <SelectValue placeholder="Select a doctor" />
