@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Accordion, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { cn } from "@/lib/utils"
@@ -14,6 +14,7 @@ import { HelperDetails } from "@/components/medical-exam/HelperDetails"
 import { ExaminationDetails } from "@/components/medical-exam/ExaminationDetailsMW"
 import { AcknowledgementPage } from '@/components/AcknowledgementPage'
 import { StepIndicator } from "@/components/ui/step-indicator"
+import { useAuth } from "@/lib/context/auth-context"
 
 const clinics = [
   { id: '1', name: 'Healthline Medical Clinic (Bukit Batok)', hciCode: '2M12345', contactNumber: '+65 69991234' },
@@ -57,6 +58,7 @@ export default function MWExamPage() {
   const [visitDateTouched, setVisitDateTouched] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false); // New state to track submission
   const [isPendingMe, setIsPendingMe] = useState (false)
+  const { user } = useAuth()
 
   const methods = useForm<FormDataMW>({
     resolver: zodResolver(formSchemaMW),
@@ -72,6 +74,16 @@ export default function MWExamPage() {
 
   const { setValue, watch, trigger, handleSubmit } = methods
   const watchedValues = watch()
+
+  useEffect(() => {
+    // Set default doctor when user is a doctor
+    if (user?.role === 'doctor' && user.mcr) {
+      const doctorId = doctors.find(d => d.mcrNumber === user.mcr)?.id
+      if (doctorId) {
+        setValue('clinicDoctor.doctor', doctorId)
+      }
+    }
+  }, [user, doctors, setValue])
 
   const handleFinChange = async (value: string) => {
     if (isSummaryActive && value !== watchedValues.helperDetails.fin) {

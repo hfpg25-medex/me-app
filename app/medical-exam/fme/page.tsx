@@ -27,8 +27,8 @@ const clinics = [
 438 Jurong East #04-55, Singapore 289988
 */
 const doctors = [
-  { id: '1', name: 'Mary Ang', mcrNumber: 'M11111A' },
-  { id: '2', name: 'Danny Lim', mcrNumber: 'M22222B' },
+  { id: '1', name: 'Dr. John Doe', mcrNumber: 'M12345A' },
+  { id: '2', name: 'Dr. Sarah Chen', mcrNumber: 'M67890B' },
 ]
 
 // Mock API call

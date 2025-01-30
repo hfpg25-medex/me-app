@@ -23,11 +23,19 @@ export function ClinicDoctorDetails({ isSummaryActive, handleContinue, clinics, 
     // Auto-select the doctor if the user is a doctor
     if (user?.role === 'doctor' && user.mcr) {
       const doctorId = doctors.find(d => d.mcrNumber === user.mcr)?.id
-      if (doctorId) {
-        setValue('clinicDoctor.doctor', doctorId)
+      if (doctorId && !watchedValues.clinicDoctor.doctor) {
+        console.log('Setting doctor:', doctorId)
+        setValue('clinicDoctor.doctor', doctorId, { shouldValidate: true })
       }
     }
-  }, [user, doctors, setValue])
+  }, [user, doctors, setValue, watchedValues.clinicDoctor.doctor])
+
+  useEffect(() => {
+    // Auto-select clinic if there's only one option
+    if (clinics.length === 1 && !watchedValues.clinicDoctor.clinic) {
+      setValue('clinicDoctor.clinic', clinics[0].id, { shouldValidate: true })
+    }
+  }, [clinics, setValue, watchedValues.clinicDoctor.clinic])
 
   return (
     <AccordionContent>
@@ -51,7 +59,7 @@ export function ClinicDoctorDetails({ isSummaryActive, handleContinue, clinics, 
           <Select 
             onValueChange={(value) => setValue('clinicDoctor.doctor', value)} 
             value={watchedValues.clinicDoctor.doctor}
-            disabled={user?.role === 'doctor'} // Disable selection if user is a doctor
+            // disabled={user?.role === 'doctor'} // Disable selection if user is a doctor
           >
             <SelectTrigger id="doctor">
               <SelectValue placeholder={user?.role === 'doctor' ? user.name : "Select a doctor"} />
