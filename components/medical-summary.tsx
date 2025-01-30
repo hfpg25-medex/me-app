@@ -7,8 +7,9 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Separator } from "@/components/ui/separator"
 import { useEffect, useState } from 'react'
 import { format } from "date-fns"
-
-
+import { usePermissions } from '@/lib/hooks/use-permissions'
+import { Button } from "@/components/ui/button"
+import { StepIndicator } from "@/components/step-indicator"
 
 interface SummaryProps {
     clinicDetails: {
@@ -66,20 +67,47 @@ export function MedicalSummary({
   }: SummaryProps) {
       
     const [declarationChecked, setDeclarationChecked] = useState(false)
+    const { canEditSection, canSubmitReport } = usePermissions()
 
-      useEffect(() => {
-        window.scrollTo(0, 0); // Scroll to the top of the page
-      }, []); // Empty dependency array means this runs once on mount
+    useEffect(() => {
+      window.scrollTo(0, 0); // Scroll to the top of the page
+    }, []); // Empty dependency array means this runs once on mount
     
-      console.log(clinicalExamination)
+    console.log(clinicalExamination)
     
+    const handleEdit = (section: 'clinic-doctor' | 'helper-details' | 'medical-history' | 'clinical-examination' | 'tests') => {
+      if (canEditSection(section)) {
+        onEdit(section)
+      }
+    }
+
   return (
     <div className="container mx-auto p-6 space-y-6">
+      <StepIndicator
+        className="mb-6"
+        steps={[
+          {
+            number: 1,
+            label: "Submission",
+            isActive: false,
+            isEnabled: true
+          },
+          {
+            number: 2,
+            label: "Summary",
+            isActive: true,
+            isEnabled: true
+          }
+        ]}
+      />
       <div className="grid gap-6 md:grid-cols-[2fr,1fr]">
         <div className="space-y-6">
           {/* Personal Details Section */}
           <Card className="p-4">
-            <SectionHeader title="Personal details" onEdit={() => onEdit('helper-details')} />
+            <SectionHeader 
+              title="Personal details" 
+              onEdit={canEditSection('helper-details') ? () => handleEdit('helper-details') : undefined} 
+            />
             <div className="grid gap-3 text-sm">
               <div className="grid grid-cols-2 gap-4">
                 <div>
@@ -128,7 +156,7 @@ export function MedicalSummary({
 
           {/* Medical Examination Section */}
           <Card className="p-4">
-            <SectionHeader title="Clinical examination" onEdit={() => onEdit('clinical-examination')} />
+            <SectionHeader title="Clinical examination" onEdit={canEditSection('clinical-examination') ? () => handleEdit('clinical-examination') : undefined} />
             <div className="space-y-3 text-sm">
               <div className="grid grid-cols-2 gap-4">
                 <div>
@@ -229,12 +257,14 @@ export function MedicalSummary({
               <div>
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-lg font-semibold">Clinic & doctor details</h2>
-                  <button 
-                    onClick={() => onEdit('clinic-doctor')}
-                    className="text-sm text-gray-500 hover:text-gray-700"
-                  >
-                    Edit
-                  </button>
+                  {canEditSection('clinic-doctor') && (
+                    <button 
+                      onClick={() => handleEdit('clinic-doctor')}
+                      className="text-sm text-gray-500 hover:text-gray-700"
+                    >
+                      Edit
+                    </button>
+                  )}
                 </div>
                 <div className="space-y-4">
                   <div>
@@ -328,6 +358,16 @@ export function MedicalSummary({
             </div>
           </Card>
         </div>
+      </div>
+      <div className="flex justify-end gap-4">
+        {canSubmitReport && (
+          <Button
+            onClick={onSubmit}
+            disabled={!declarationChecked}
+          >
+            Submit report
+          </Button>
+        )}
       </div>
     </div>
   )
