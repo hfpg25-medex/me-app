@@ -15,7 +15,7 @@ export function middleware(request: NextRequest) {
   // Handle /login route separately
   if (pathname === '/login') {
     if (authStatus) {
-      return NextResponse.redirect(new URL('/home', request.url))
+      return NextResponse.redirect(new URL('/dashboard', request.url))
     }
     return NextResponse.next()
   }
@@ -23,7 +23,7 @@ export function middleware(request: NextRequest) {
   // Handle other public routes
   if (publicRoutes.includes(pathname)) {
     if (authStatus && pathname === '/') {
-      return NextResponse.redirect(new URL('/home', request.url))
+      return NextResponse.redirect(new URL('/dashboard', request.url))
     }
     return NextResponse.next()
   }

@@ -31,10 +31,10 @@ export function NavBar({ userName, userUen }: NavBarProps) {
             />
           </Link>
           <nav className="flex items-center space-x-4">
-            <Link href="/" className="text-white font-semibold no-underline hover:text-gray-400 transition-colors">
-              Home
+            <Link href="/dashboard" className="text-white font-semibold no-underline hover:text-gray-400 transition-colors">
+              Dashboard
             </Link>
-            <Link href="/medical-exams" className="text-white font-semibold no-underline hover:text-gray-400 transition-colors">
+            <Link href="/medical-exam/select" className="text-white font-semibold no-underline hover:text-gray-400 transition-colors">
               Medical Exams
             </Link>
           </nav>
