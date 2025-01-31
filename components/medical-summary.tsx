@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button"
 import { StepIndicator } from "@/components/ui/step-indicator"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "./ui/label"
-
+import { useAuth } from "@/lib/context/auth-context"
 
 interface SummaryProps {
     clinicDetails: {
@@ -70,6 +70,8 @@ export function MedicalSummary({
       
     const [declarationChecked, setDeclarationChecked] = useState(false)
     const { canEditSection, canSubmitReport } = usePermissions()
+    const { user } = useAuth()
+    const isNurse = user?.role === 'nurse'
 
     useEffect(() => {
       window.scrollTo(0, 0); // Scroll to the top of the page
@@ -157,7 +159,7 @@ export function MedicalSummary({
             </div>
           </Card>
 
-          {/* Medical Examination Section */}
+          {/* Clinical Examination Section */}
           <Card className="p-4">
             <SectionHeader title="Clinical examination" onEdit={canEditSection('clinical-examination') ? () => handleEdit('clinical-examination') : undefined} />
             <div className="space-y-3 text-sm">
@@ -231,33 +233,76 @@ export function MedicalSummary({
               </div>
             </div>
           </Card>
-          <Card className="bg-blue-50 p-4 text-sm">
-            <SectionHeader title="Declaration" />
-              <p className="mb-4">Please read and acknowledge the following:</p>
-              <ul className="list-disc pl-5 space-y-2 mb-4">
-                <li>I am authorised by the clinic to submit the results and make the declarations in this form on its behalf.</li>
-                <li>By submitting this form, I understand that the information given will be submitted to the Controller or an authorised officer who may act on the information given by me. I further declare that the information provided by me is true to the best of my knowledge and belief.</li>
-              </ul>
-              <div className="flex items-center space-x-2">
-                <Checkbox 
-                  id="declaration" 
-                  checked={declarationChecked}
-                  onCheckedChange={(checked) => setDeclarationChecked(checked as boolean)}
-                />
-                <Label htmlFor="declaration">I declare that all of the above is true.</Label>
-              </div>
-              {canSubmitReport && (
-                <div className="mt-6">
-                  <Button
-                    onClick={onSubmit}
-                    disabled={!declarationChecked}
-                    className="bg-orange-500 hover:bg-orange-600 text-white"
-                  >
-                    Submit Report
-                  </Button>
+          <Card className="p-4">
+            <SectionHeader title="Tests" onEdit={canEditSection('tests') ? () => handleEdit('tests') : undefined} />
+            <div className="space-y-3 text-sm">                          
+              <div>
+                <div className="text-gray-500">Radiological</div>
+                <div className={tests.radiological.result === 'abnormal' ? 'text-red-600' : ''}>
+                  {tests.radiological.result === 'abnormal' ? 'Abnormal' : 'Normal'}
                 </div>
-              )}
+                {tests.radiological.details && <p>{tests.radiological.details}</p>}
+              </div>
+              <div>
+                <div className="text-gray-500">Syphilis Screen</div>
+                <div className={tests.syphilis === 'positive' ? 'text-red-600' : ''}>
+                  {tests.syphilis === 'positive' ? 'Positive' : 'Negative'}
+                </div>
+              </div>
+              <div>
+                <div className="text-gray-500">Blood film for Malaria</div>
+                <div className={tests.malaria === 'positive' ? 'text-red-600' : ''}>
+                  {tests.malaria === 'positive' ? 'Positive' : 'Negative'}
+                </div>
+              </div>
+              <div>
+                <div className="text-gray-500">HIV screen</div>
+                <div className={tests.hiv === 'positive' ? 'text-red-600' : ''}>
+                  {tests.hiv === 'positive' ? 'Positive' : 'Negative'}
+                </div>
+              </div>
+              <div>
+                <div className="text-gray-500">HbA1c or Glucose</div>
+                <div className={tests.hba1c === 'abnormal' ? 'text-red-600' : ''}>
+                  {tests.hba1c === 'abnormal' ? 'Abnormal' : 'Normal'}
+                </div>
+              </div>
+              <div>
+                <div className="text-gray-500">Blood lipids</div>
+                <div className={tests.lipids === 'abnormal' ? 'text-red-600' : ''}>
+                  {tests.lipids === 'abnormal' ? 'Abnormal' : 'Normal'}
+                </div>
+              </div>
+            </div>
           </Card>
+          {!isNurse && (
+            <Card className="bg-blue-50 p-4 text-sm">
+              <SectionHeader title="Declaration" />
+                <p className="mb-4">Please read and acknowledge the following:</p>
+                <p className="mb-4">I certify that I have examined the above named person and declare that:</p>
+                <ul className="list-decimal pl-4 mb-4">
+                  <li>The information provided in this report is accurate to the best of my knowledge</li>
+                  <li>I understand that any false declaration may result in legal actions against me</li>
+                </ul>
+                <div className="flex items-center space-x-2">
+                  <Checkbox 
+                    id="declaration" 
+                    checked={declarationChecked}
+                    onCheckedChange={(checked) => setDeclarationChecked(checked as boolean)}
+                  />
+                  <Label htmlFor="declaration">I declare that all of the above is true.</Label>
+                </div>
+            </Card>
+          )}
+          <div className="flex justify-end mt-4">
+            <Button 
+              type="button" 
+              onClick={onSubmit}
+              disabled={!declarationChecked}
+            >
+              {isNurse ? 'Submit for review' : 'Submit report'}
+            </Button>
+          </div>
         </div>
 
         <div className="space-y-6">
