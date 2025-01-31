@@ -1,6 +1,6 @@
 export const examTitles = {
-  'fme': 'Full Medical Exam for Foreign Workers (MOM)',
-  'fmw': 'Six-monthly Medical Exam for Female Migrant Workers (MOM)',
-  'mdw': 'Six-monthly Medical Exam for Migrant Domestic Workers (MOM)',
-  'pr': 'Medical Exam for PR Application (ICA)',
+  'fme': 'Full Medical Examination for Foreign Worker (MOM)',
+  'fmw': 'Six-monthly Medical Examination for Female Migrant Worker (MOM)',
+  'mdw': 'Six-monthly Medical Examination for Migrant Domestic Worker (MOM)',
+  'pr': 'Medical Examination for PR Application (ICA)',
 }
