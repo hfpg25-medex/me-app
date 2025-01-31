@@ -308,6 +308,8 @@ export default function MDWExamPage() {
                     visitDateTouched={visitDateTouched}
                     isPendingMe={isPendingMe}
                     nextStep='examination-details' 
+                    requireVisitDate={true}
+                    defaultToday={false}
                   />
                 </AccordionItem>
                 <AccordionItem value="examination-details" className={!isExaminationEnabled ? "opacity-50 pointer-events-none" : ""}>

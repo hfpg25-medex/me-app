@@ -241,7 +241,9 @@ export default function MWExamPage() {
                     finTouched={finTouched}
                     visitDateTouched={visitDateTouched}
                     isPendingMe={isPendingMe}
-                    nextStep='examination-details'                  
+                    nextStep='examination-details'
+                    requireVisitDate={true}
+                    defaultToday={false}               
                   />
                 </AccordionItem>
                 <AccordionItem value="examination-details" className={!isExaminationEnabled ? "opacity-50 pointer-events-none" : ""}>

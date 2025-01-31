@@ -49,8 +49,6 @@ const mockApiCall = async (fin: string) => {
   return null
 }
 
-const requireVisitDate = true
-
 
 export default function WPExamPage() {
   const [step, setStep] = useState<StepType>(STEPS.SUBMISSION);
@@ -305,7 +303,8 @@ export default function WPExamPage() {
                     visitDateTouched={visitDateTouched}
                     isPendingMe={isPendingMe}
                     nextStep='medical-history'
-                    requireVisitDate={requireVisitDate}
+                    requireVisitDate={true}
+                    defaultToday={true}
                   />
                 </AccordionItem>
                 <AccordionItem value="medical-history" className={!isMedicalHistoryEnabled ? "opacity-50" : ""}>

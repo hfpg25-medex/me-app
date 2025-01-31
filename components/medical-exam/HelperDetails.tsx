@@ -18,6 +18,7 @@ interface HelperDetailsProps {
   isPendingMe: boolean
   nextStep: "examination-details" | "medical-history"
   requireVisitDate?: boolean
+  defaultToday?: boolean
 }
 
 
@@ -31,7 +32,8 @@ export function HelperDetails({
   // visitDateTouched,
   isPendingMe,
   nextStep,
-  requireVisitDate=true
+  requireVisitDate=true,
+  defaultToday = false
 }: HelperDetailsProps) {
   const { register, setValue, formState: { errors }, watch, trigger }  = useFormContext<FormDataMW | FormDataMDW >()
 
@@ -72,7 +74,7 @@ export function HelperDetails({
             </div>
             {requireVisitDate &&<Datepicker
               label="Date person visits the clinic"
-              date={watchedValues.helperDetails.visitDate || new Date()}
+              date={watchedValues.helperDetails.visitDate || (defaultToday? new Date(): undefined)}
               onSelect={(date) => {                
                 setValue('helperDetails.visitDate', date as Date);
                 setVisitDateTouched(true);
