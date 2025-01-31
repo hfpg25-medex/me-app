@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Accordion, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { cn } from "@/lib/utils"
 import { Summary } from "@/components/Summary"
 import { FinChangeModal } from "@/components/FinChangeModal"
 import { formSchemaMDW, FormDataMDW } from "@/lib/schemas"
@@ -279,7 +278,7 @@ export default function MDWExamPage() {
               {
                 number: 2,
                 label: "Summary",
-                // @ts-expect-error
+                // @ts-expect-error to fix STEPS.SUMMARY error
                 isActive: step === STEPS.SUMMARY,
                 isEnabled: isSummaryActive
               }

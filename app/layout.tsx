@@ -2,7 +2,6 @@
 
 import './globals.css'
 import { DefaultFooter } from '@/components/sgds/Footer'
-import { useRouter } from 'next/navigation'
 import '@govtechsg/sgds-masthead/dist/sgds-masthead/sgds-masthead.css';
 import {SgdsMasthead} from "@govtechsg/sgds-masthead-react"
 import { UserProvider } from '@/lib/context/user-context'

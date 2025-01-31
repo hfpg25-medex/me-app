@@ -273,7 +273,7 @@ export default function WPExamPage() {
               {
                 number: 2,
                 label: "Summary",
-                // @ts-expect-error
+                // @ts-expect-error to fix STEPS.SUMMARY error
                 isActive: step === STEPS.SUMMARY,
                 isEnabled: isSummaryActive
               }

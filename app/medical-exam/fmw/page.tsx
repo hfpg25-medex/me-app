@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Accordion, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { cn } from "@/lib/utils"
 import { Summary } from "@/components/SummaryMW"
 import { FinChangeModal } from "@/components/FinChangeModal"
 import { formSchemaMW, FormDataMW } from "@/lib/schemas"
@@ -222,7 +221,7 @@ export default function MWExamPage() {
               {
                 number: 2,
                 label: "Summary",
-                //@ts-expect-error
+                // @ts-expect-error to fix STEPS.SUMMARY error
                 isActive: step === STEPS.SUMMARY,
                 isEnabled: isSummaryActive
               }

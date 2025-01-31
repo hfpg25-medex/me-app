@@ -79,7 +79,7 @@ export function ClinicalExamination({ isSummaryActive, handleContinue }: Clinica
             </div>
             <div>
               <Label htmlFor="height">Height</Label>
-              <div className="relative max-w-[240px]">
+              <div className="relative max-w-[216px]">
               <Input
                 id="height"
                 type="number"
