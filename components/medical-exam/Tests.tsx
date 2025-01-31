@@ -6,6 +6,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@/components/ui/label"
 import { AccordionContent } from "@/components/ui/accordion"
 import { FormDataWP } from "@/lib/schemas"
+import { cn } from "@/lib/utils"
 
 
 interface TestsProps {
@@ -33,8 +34,14 @@ export function Tests({ isSummaryActive, handleContinue }: TestsProps) {
                     onCheckedChange={(checked) => {
                       setValue('tests.radiological.result', checked? 'abnormal': 'normal')
                     }}
+                    className={cn(
+                      "border-2",
+                      watchedValues.tests?.radiological?.result === 'abnormal'
+                        ? " border-red-600 data-[state=checked]:bg-red-600 text-primary-foreground hover:bg-red-400 hover:text-primary-foreground" 
+                        : "border-primary"
+                    )}
                   />
-                  <span className="text-sm text-gray-500 mr-[49px]">Abnormal</span>
+                  <span className={cn("text-sm mr-[49px]", watchedValues.tests?.radiological?.result === 'abnormal' ? "text-red-500" : "text-gray-500")}>Abnormal</span>
                 </div>
               </div>
             </div>
@@ -63,8 +70,14 @@ export function Tests({ isSummaryActive, handleContinue }: TestsProps) {
                   onCheckedChange={(checked) => {
                     setValue('tests.syphilis', checked? 'positive': 'negative')
                   }}
+                  className={cn(
+                    "border-2",
+                    watchedValues.tests?.syphilis === 'positive'
+                      ? " border-red-600 data-[state=checked]:bg-red-600 text-primary-foreground hover:bg-red-400 hover:text-primary-foreground" 
+                      : "border-primary"
+                  )}
                 />
-                <span className="text-sm text-gray-500">Positive/Reactive</span>
+                <span className={cn("text-sm text-gray-500", watchedValues.tests?.syphilis === 'positive' ? "text-red-500" : "text-gray-500")}>Positive/Reactive</span>
               </div>
 
               <Label htmlFor="malaria">Blood film for Malaria</Label>
@@ -76,8 +89,14 @@ export function Tests({ isSummaryActive, handleContinue }: TestsProps) {
                   onCheckedChange={(checked) => {
                     setValue('tests.malaria', checked? 'positive': 'negative')
                   }}
+                  className={cn(
+                    "border-2",
+                    watchedValues.tests?.malaria === 'positive'
+                      ? " border-red-600 data-[state=checked]:bg-red-600 text-primary-foreground hover:bg-red-400 hover:text-primary-foreground" 
+                      : "border-primary"
+                  )}
                 />
-                <span className="text-sm text-gray-500">Positive/Reactive</span>
+                <span className={cn("text-sm text-gray-500", watchedValues.tests?.malaria === 'positive' ? "text-red-500" : "text-gray-500")}>Positive/Reactive</span>
               </div>
 
               <Label htmlFor="hiv">HIV screen</Label>
@@ -89,9 +108,15 @@ export function Tests({ isSummaryActive, handleContinue }: TestsProps) {
                   onCheckedChange={(checked) => {
                     setValue('tests.hiv', checked? 'positive': 'negative')
                   }}
+                  className={cn(
+                    "border-2",
+                    watchedValues.tests?.hiv === 'positive'
+                      ? " border-red-600 data-[state=checked]:bg-red-600 text-primary-foreground hover:bg-red-400 hover:text-primary-foreground" 
+                      : "border-primary"
+                  )}
                 />
-                <span className="text-sm text-gray-500">Positive/Reactive</span>
-              </div>
+                <span className={cn("text-sm text-gray-500", watchedValues.tests?.hiv === 'positive' ? "text-red-500" : "text-gray-500")}>Positive/Reactive</span>
+                </div>
 
               <Label htmlFor="hba1c">HbA1c or Glucose (for age 40 and above, or
                 with risk factors)</Label>
@@ -103,9 +128,15 @@ export function Tests({ isSummaryActive, handleContinue }: TestsProps) {
                   onCheckedChange={(checked) => {
                     setValue('tests.hba1c', checked? 'abnormal': 'normal')
                   }}
+                  className={cn(
+                    "border-2",
+                    watchedValues.tests?.hba1c === 'abnormal'
+                      ? " border-red-600 data-[state=checked]:bg-red-600 text-primary-foreground hover:bg-red-400 hover:text-primary-foreground" 
+                      : "border-primary"
+                  )}
                 />
-                <span className="text-sm text-gray-500">Abnormal</span>
-              </div>
+                  <span className={cn("text-sm mr-[49px]", watchedValues.tests?.hba1c === 'abnormal' ? "text-red-500" : "text-gray-500")}>Abnormal</span>
+                  </div>
 
               <Label htmlFor="lipids">Blood lipids (for age 40 and above, or with risk factors)</Label>
               <div className="flex items-center gap-2">
@@ -116,9 +147,15 @@ export function Tests({ isSummaryActive, handleContinue }: TestsProps) {
                   onCheckedChange={(checked) => {
                     setValue('tests.lipids', checked? 'abnormal': 'normal')
                   }}
+                  className={cn(
+                    "border-2",
+                    watchedValues.tests?.lipids === 'abnormal'
+                      ? " border-red-600 data-[state=checked]:bg-red-600 text-primary-foreground hover:bg-red-400 hover:text-primary-foreground" 
+                      : "border-primary"
+                  )}
                 />
-                <span className="text-sm text-gray-500">Abnormal</span>
-              </div>
+                  <span className={cn("text-sm mr-[49px]", watchedValues.tests?.lipids === 'abnormal' ? "text-red-500" : "text-gray-500")}>Abnormal</span>
+                  </div>
             </div>
           </div>        
         </div>

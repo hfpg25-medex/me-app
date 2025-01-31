@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label"
 import { AccordionContent } from "@/components/ui/accordion"
 import { FormDataWP } from "@/lib/schemas"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
+import { cn } from "@/lib/utils"
 
 
 interface ClinicalExaminationProps {
@@ -187,6 +188,7 @@ export function ClinicalExamination({ isSummaryActive, handleContinue }: Clinica
 
           <div className="mt-6">
             {/* <div className="grid grid-cols-[1fr,auto] gap-x-8 gap-y-4"> */}
+            <p className="text-sm text-muted-foreground mb-2">Indicate <b>abnormal</b> or <b>positive/reactive</b> test results:</p>
             <div className="grid grid-cols-[210px,1fr] gap-x-8 gap-y-4 mt-4">
               <Label htmlFor="urineAlbumin">Urine Albumin</Label>
               <div className="flex items-center gap-2">
@@ -197,8 +199,14 @@ export function ClinicalExamination({ isSummaryActive, handleContinue }: Clinica
                   onCheckedChange={(checked) => {
                     setValue('clinicalExamination.urineAlbumin', checked? 'abnormal': 'normal')
                   }}
+                  className={cn(
+                    "border-2",
+                    watchedValues.clinicalExamination?.urineAlbumin === 'abnormal'
+                      ? " border-red-600 data-[state=checked]:bg-red-600 text-primary-foreground hover:bg-red-400 hover:text-primary-foreground" 
+                      : "border-primary"
+                  )}
                 />
-                <span className="text-sm text-gray-500">Abnormal</span>
+                <span className={cn("text-sm", watchedValues.clinicalExamination?.urineAlbumin === 'abnormal' ? "text-red-500" : "text-gray-500")}>Abnormal</span>
               </div>
 
               <Label htmlFor="urineGlucose">Urine Glucose</Label>
@@ -210,8 +218,14 @@ export function ClinicalExamination({ isSummaryActive, handleContinue }: Clinica
                   onCheckedChange={(checked) => {
                     setValue('clinicalExamination.urineGlucose', checked? 'abnormal': 'normal')
                   }}
+                  className={cn(
+                    "border-2",
+                    watchedValues.clinicalExamination?.urineGlucose === 'abnormal'
+                      ? " border-red-600 data-[state=checked]:bg-red-600 text-primary-foreground hover:bg-red-400 hover:text-primary-foreground" 
+                      : "border-primary"
+                  )}
                 />
-                <span className="text-sm text-gray-500">Abnormal</span>
+                <span className={cn("text-sm", watchedValues.clinicalExamination?.urineGlucose === 'abnormal' ? "text-red-500" : "text-gray-500")}>Abnormal</span>
               </div>
 
               <Label htmlFor="pregnancyTest">Pregnancy Test</Label>
@@ -223,8 +237,14 @@ export function ClinicalExamination({ isSummaryActive, handleContinue }: Clinica
                   onCheckedChange={(checked) => {
                     setValue('clinicalExamination.pregnancyTest', checked? 'positive': 'negative')
                   }}
+                  className={cn(
+                    "border-2",
+                    watchedValues.clinicalExamination?.pregnancyTest === 'positive'
+                      ? " border-red-600 data-[state=checked]:bg-red-600 text-primary-foreground hover:bg-red-400 hover:text-primary-foreground" 
+                      : "border-primary"
+                  )}
                 />
-                <span className="text-sm text-gray-500">Positive</span>
+                <span className={cn("text-sm", watchedValues.clinicalExamination?.pregnancyTest === 'positive' ? "text-red-500" : "text-gray-500")}>Positive/Reactive</span>
               </div>
 
               <Label htmlFor="colorVision">Color Vision</Label>
@@ -236,8 +256,14 @@ export function ClinicalExamination({ isSummaryActive, handleContinue }: Clinica
                   onCheckedChange={(checked) => {
                     setValue('clinicalExamination.colorVision', checked? 'abnormal': 'normal')
                   }}
+                  className={cn(
+                    "border-2",
+                    watchedValues.clinicalExamination?.colorVision === 'abnormal'
+                      ? " border-red-600 data-[state=checked]:bg-red-600 text-primary-foreground hover:bg-red-400 hover:text-primary-foreground" 
+                      : "border-primary"
+                  )}
                 />
-                <span className="text-sm text-gray-500">Abnormal</span>
+                <span className={cn("text-sm", watchedValues.clinicalExamination?.colorVision === 'abnormal' ? "text-red-500" : "text-gray-500")}>Abnormal</span>
               </div>
 
               <Label htmlFor="hearing">Hearing</Label>
@@ -249,8 +275,14 @@ export function ClinicalExamination({ isSummaryActive, handleContinue }: Clinica
                   onCheckedChange={(checked) => {
                     setValue('clinicalExamination.hearing', checked? 'abnormal': 'normal')
                   }}
+                  className={cn(
+                    "border-2",
+                    watchedValues.clinicalExamination?.hearing === 'abnormal'
+                      ? " border-red-600 data-[state=checked]:bg-red-600 text-primary-foreground hover:bg-red-400 hover:text-primary-foreground" 
+                      : "border-primary"
+                  )}
                 />
-                <span className="text-sm text-gray-500">Abnormal</span>
+                <span className={cn("text-sm", watchedValues.clinicalExamination?.hearing === 'abnormal' ? "text-red-500" : "text-gray-500")}>Abnormal</span>
               </div>
             </div>
           </div>        

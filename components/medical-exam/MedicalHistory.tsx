@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { AccordionContent } from "../ui/accordion"
 import { useFormContext } from "react-hook-form"
 import { FormDataWP } from "@/lib/schemas"
+import { cn } from "@/lib/utils"
 
 
 
@@ -144,7 +145,17 @@ function HistoryItemComponent({
   return (
     <div className="space-y-1">
       <div className="flex items-start space-x-2">
-        <Checkbox id={`checkbox-${item.condition}`} checked={item.hasCondition} onCheckedChange={onToggle} />
+        <Checkbox 
+          id={`checkbox-${item.condition}`} 
+          checked={item.hasCondition} 
+          onCheckedChange={onToggle} 
+          className={cn(
+            "border-2",
+            item.hasCondition
+              ? " border-red-600 data-[state=checked]:bg-red-600 text-primary-foreground hover:bg-red-400 hover:text-primary-foreground" 
+              : "border-primary"
+          )}
+          />
         <div className="grid gap-1.5 leading-none">
           <Label
             htmlFor={`checkbox-${item.condition}`}
@@ -152,7 +163,7 @@ function HistoryItemComponent({
           >
             {item.condition}
           </Label>
-          <span className="text-sm text-muted-foreground">{item.hasCondition ? "Yes" : "No"}</span>
+          <span className={cn("text-sm text-muted-foreground", item.hasCondition ? "text-red-600" : "")}>{item.hasCondition ? "Yes" : "No"}</span>
         </div>
       </div>
       {item.hasCondition && (

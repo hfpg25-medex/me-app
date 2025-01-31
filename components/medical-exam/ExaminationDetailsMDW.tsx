@@ -143,15 +143,15 @@ export function ExaminationDetails({
                   className={cn(
                     "border-2",
                     watchedValues.examinationDetails.positiveTests.includes(test) 
-                      ? "border-orange-500 bg-orange-500 text-primary-foreground hover:bg-orange-500 hover:text-primary-foreground" 
-                      : "border-primary"
+                    ? " border-red-600 data-[state=checked]:bg-red-600 text-primary-foreground hover:bg-red-400 hover:text-primary-foreground" 
+                    : "border-primary"
                   )}
                 />
                 <Label
                   htmlFor={test}
                   className={cn(
                     "text-sm font-medium",
-                    watchedValues.examinationDetails.positiveTests.includes(test) ? "text-orange-500" : ""
+                    watchedValues.examinationDetails.positiveTests.includes(test) ? "text-red-600" : ""
                   )}
                 >
                   Positive/Reactive
@@ -189,7 +189,7 @@ export function ExaminationDetails({
                     className={cn(
                       "border-2",
                       watchedValues.examinationDetails.suspiciousInjuries 
-                        ? "border-orange-500 bg-orange-500 text-primary-foreground hover:bg-orange-500 hover:text-primary-foreground" 
+                      ? " border-red-600 data-[state=checked]:bg-red-600 text-primary-foreground hover:bg-red-400 hover:text-primary-foreground" 
                         : "border-primary"
                     )}
                   />
@@ -197,7 +197,7 @@ export function ExaminationDetails({
                     htmlFor="suspicious-injuries"
                     className={cn(
                       "text-sm font-medium",
-                      watchedValues.examinationDetails.suspiciousInjuries ? "text-orange-500" : ""
+                      watchedValues.examinationDetails.suspiciousInjuries ? "text-red-600" : ""
                     )}
                   >
                     Yes
@@ -205,7 +205,7 @@ export function ExaminationDetails({
                 </div>
               </div>
               {watchedValues.examinationDetails.suspiciousInjuries && (
-                <p className="text-orange-500 text-sm mt-1 flex items-center">
+                <p className="text-red-600 text-sm mt-1 flex items-center">
                   <WarningIcon className="w-4 h-4 mr-1" />
                   Provide your assessment in the remarks section.
                 </p>
@@ -315,7 +315,7 @@ export function ExaminationDetails({
                   maxLength={500}
                 />
                 <p className="text-sm text-muted-foreground">
-                  {500 - (watchedValues.examinationDetails.remarks?.length || 0)} characters left
+                  {501 - (watchedValues.examinationDetails.remarks?.length || 0)} characters left
                 </p>
               </>
             )}
