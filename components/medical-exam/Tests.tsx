@@ -21,6 +21,8 @@ export function Tests({ isSummaryActive, handleContinue }: TestsProps) {
   return (
     <AccordionContent>
       <div className="space-y-6">
+      <p className="text-sm text-muted-foreground mb-2">Indicate <b>abnormal</b> or <b>positive/reactive</b> test results:</p>
+
         <div>
           <div>
             <div className="grid grid-cols-[1fr,auto] gap-x-8 gap-y-4">

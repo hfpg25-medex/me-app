@@ -31,7 +31,7 @@ export default function HomePage() {
               <CardDescription>
                 Submit a new medical examination record
               </CardDescription>
-              <Button asChild className="mt-2 w-full">
+              <Button asChild className="mt-2 w-full hover:text-white">
                 <Link href="/medical-exam/select">Start New Exam</Link>
               </Button>
             </CardHeader>
@@ -47,7 +47,7 @@ export default function HomePage() {
               <CardDescription>
                 Manage your clinic and doctor information
               </CardDescription>
-              <Button asChild className="mt-2 w-full">
+              <Button asChild className="mt-2 w-full hover:text-white">
                 <Link href="/clinic-doctor-info">Update Details</Link>
               </Button>
             </CardHeader>
@@ -63,7 +63,7 @@ export default function HomePage() {
               <CardDescription>
                 Modify existing medical examination records
               </CardDescription>
-              <Button asChild className="mt-2 w-full">
+              <Button asChild className="mt-2 w-full hover:text-white">
                 <Link href="/records/edit">Update Records</Link>
               </Button>
             </CardHeader>
@@ -79,7 +79,7 @@ export default function HomePage() {
               <CardDescription>
                 Access past medical examination records
               </CardDescription>
-              <Button asChild className="mt-2 w-full">
+              <Button asChild className="mt-2 w-full hover:text-white">
                 <Link href="/records/history">View History</Link>
               </Button>
             </CardHeader>

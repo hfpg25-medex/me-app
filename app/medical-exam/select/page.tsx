@@ -82,7 +82,7 @@ export default function SelectExamPage() {
               <CardDescription>{exam.description}</CardDescription>
             </CardHeader>
             <CardContent>
-              <Button asChild className="w-full">
+              <Button asChild className="w-full hover:text-white">
                 <Link href={exam.href}>Start Submission</Link>
               </Button>
             </CardContent>
