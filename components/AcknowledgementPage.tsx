@@ -33,18 +33,18 @@ function generateReferenceNumber(): string {
 const referenceNumber = generateReferenceNumber();
 
   return (
-      <div className="mx-auto p-6 max-w-[760px] gap-2">
-        <Card>
+      <div className="mx-auto p-6 max-w-[760px]">
+        <Card className="mb-4 shadow-md hover:shadow-lg transition-shadow">
         <CardContent>
-          <div className="flex items-center mb-4 mt-6">
-            <CheckCircle className="h-5 w-5 text-green-500" />
+          <div className="flex items-center mb-2 mt-6">
+            <CheckCircle className="h-6 w-6 text-green-500 mr-2" />
             <div className="text-xl font-semibold align-middle">
               Medical examination results submitted successfully
             </div>
           </div>
 
-          <div className="p-6 rounded-md mb-3">
-            <dl className="grid grid-cols-[200px_1fr] gap-y-3">
+          <div className="p-4 rounded-md text-sm">
+            <dl className="grid grid-cols-[200px_1fr] gap-y-1">
               <dt className="text-gray-600">FIN of person</dt>
               <dd>{finNumber}</dd>
               
@@ -59,7 +59,7 @@ const referenceNumber = generateReferenceNumber();
             </dl>
           </div>
 
-          <div className="flex items-center gap-2 mb-4 pl-6">
+          <div className="flex items-center gap-2 mb-2 pl-6">
           <Download className="h-4 w-4 text-blue-600 mr-1" />
             <Link
               href="/download-pdf"
@@ -77,7 +77,7 @@ const referenceNumber = generateReferenceNumber();
         {/* </div> */}
         </CardContent>
         </Card>
-        <Card>
+        <Card className="mb-4 shadow-md hover:shadow-lg transition-shadow ">
         <CardContent>
           <h2 className="text-xl font-semibold mb-4 mt-4">
             What do you want to do next?
