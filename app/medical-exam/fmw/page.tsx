@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Accordion, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { Summary } from "@/components/SummaryMW"
+import { Summary } from "@/components/Summary"
 import { FinChangeModal } from "@/components/FinChangeModal"
 import { formSchemaMW, FormDataMW } from "@/lib/schemas"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -188,6 +188,7 @@ export default function FMWExamPage() {
             })),
             remarks: watchedValues.examinationDetails.remarks
           }}
+          type="MW"
           onEdit={handleEdit}
           onSubmit={handleSubmit(onSubmit)}
         />

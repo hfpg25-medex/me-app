@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Accordion, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { Summary } from "@/components/SummaryPR"
+import { Summary } from "@/components/Summary"
 import { FinChangeModal } from "@/components/FinChangeModal"
 import { formSchemaMW, FormDataMW } from "@/lib/schemas"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -190,6 +190,7 @@ export default function PRExamPage() {
             })),
             remarks: watchedValues.examinationDetails.remarks
           }}
+          type="PR"
           onEdit={handleEdit}
           onSubmit={handleSubmit(onSubmit)}
         />

@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@/components/ui/label"
-import { Pencil } from 'lucide-react'
 import { format } from "date-fns"
 import { cn } from "@/lib/utils"
 import { StepIndicator } from './ui/step-indicator'
