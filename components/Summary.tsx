@@ -7,6 +7,9 @@ import { Label } from "@/components/ui/label"
 import { Pencil } from 'lucide-react'
 import { format } from "date-fns"
 import { cn } from "@/lib/utils"
+import { StepIndicator } from './ui/step-indicator'
+import { Card } from './ui/card'
+import { SectionHeader } from './ui/section-header'
 
 interface SummaryProps {
   type: 'MDW' | 'MW' | 'PR'
@@ -49,7 +52,7 @@ const TITLES = {
 const HELPER_SECTION_TITLES = {
   MDW: "Helper details",
   MW: "Migrant worker details",
-  PR: "Applicant details"
+  PR: "Personal details"
 }
 
 export function Summary({
@@ -67,171 +70,140 @@ export function Summary({
   }, [])
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="container mx-auto p-6 space-y-6">
       <h1 className="text-2xl font-semibold mb-6">{TITLES[type]}</h1>
       
-      {/* Progress Indicator */}
-      <div className="flex items-center mb-8">
-        <div className="flex items-center text-primary">
-          <div className="w-8 h-8 rounded-full border-2 border-current flex items-center justify-center mr-2">1</div>
-          Submission
-        </div>
-        <div className="mx-2 w-10 h-0.5 bg-gray-300"></div>
-        <div className="flex items-center text-primary">
-          <div className="w-8 h-8 rounded-full border-2 border-current flex items-center justify-center mr-2">2</div>
-          Summary
-        </div>
-      </div>
+      <StepIndicator
+        className="mb-6"
+        steps={[
+          {
+            number: 1,
+            label: "Submission",
+            isActive: false,
+            isEnabled: true
+          },
+          {
+            number: 2,
+            label: "Summary",
+            isActive: true,
+            isEnabled: true
+          }
+        ]}
+      />
 
-      <div className="space-y-8">
-        {/* Clinic Details Section */}
-        <section className="border rounded-lg p-6">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-semibold">Clinic and doctor details</h2>
-            <Button 
-              variant="ghost" 
-              onClick={() => onEdit('clinic-doctor')}
-              className="text-orange-500 hover:text-orange-600 hover:bg-orange-50"
-            >
-              <Pencil className="h-4 w-4 mr-2" />Edit
-            </Button>
-          </div>
-          <div className="grid grid-cols-2">
-            {/* Clinic Details Content */}
-            {Object.entries({
-              'Healthcare Institution (HCI) code': clinicDetails.hciCode,
-              'Clinic contact number': clinicDetails.contactNumber,
-              'Medical Registration (MCR) number': clinicDetails.mcrNumber,
-              'Doctor\'s name': clinicDetails.doctor
-            }).map(([label, value]) => (
-              <div key={label}>
-                <div className="text-sm text-gray-600">{label}</div>
-                <p className="text-sm font-semibold">{value}</p>
+<div className="grid gap-6 md:grid-cols-[2fr,1fr]">
+  <div className="space-y-6">
+          {/* Personal Details Section */}
+          <Card className="p-4">
+            <SectionHeader 
+              title={HELPER_SECTION_TITLES[type]}
+              onEdit={() => onEdit('helper-details')} 
+            />
+            <div className="grid gap-3 text-md">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <div className="text-gray-500 text-sm">FIN</div>
+                  <div>{helperDetails.fin}</div>
+                </div>
+                <div>
+                  <div className="text-gray-500 text-sm">Name</div>
+                  <div>{helperDetails.name}</div>
+                </div>
               </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Helper/Worker Details Section */}
-        <section className="border rounded-lg p-6">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-semibold">{HELPER_SECTION_TITLES[type]}</h2>
-            <Button 
-              variant="ghost" 
-              onClick={() => onEdit('helper-details')}
-              className="text-orange-500 hover:text-orange-600 hover:bg-orange-50"
-            >
-              <Pencil className="h-4 w-4 mr-2" />Edit
-            </Button>
-          </div>
-          <div className="grid grid-cols-2">
-            <div>
-              <div className="text-sm text-gray-600">FIN</div>
-              <p className="text-sm font-semibold">{helperDetails.fin}</p>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <div className="text-gray-500 text-sm">Date of visit</div>
+                  <div>{helperDetails.visitDate ? format(helperDetails.visitDate, 'dd MMM yyyy') : '-'}</div>
+                </div>
+                {/* <div>
+                  <div className="text-gray-500">Medical type</div>
+                  <div>{TITLES[type]}</div>
+                </div> */}
+              </div>
             </div>
-            <div>
-              <div className="text-sm text-gray-600">Name</div>
-              <p className="text-sm font-semibold">{helperDetails.name}</p>
-            </div>
-            <div>
-              <div className="text-sm text-gray-600">Date visited clinic</div>
-              <p className="text-sm font-semibold">
-                {helperDetails.visitDate ? format(helperDetails.visitDate, 'dd MMM yyyy') : '-'}
-              </p>
-            </div>
-          </div>
-        </section>
+          </Card>
 
         {/* Examination Details Section */}
-        <section className="border rounded-lg p-6">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-semibold">Examination details</h2>
-            <Button 
-              variant="ghost" 
-              onClick={() => onEdit('examination-details')}
-              className="text-orange-500 hover:text-orange-600 hover:bg-orange-50"
-            >
-              <Pencil className="h-4 w-4 mr-2" />Edit
-            </Button>
-          </div>
-          <div className="space-y-4">
-            {/* Physical Measurements (MDW only) */}
-            {type === 'MDW' && (
-              <div className="grid grid-cols-2">
-                <div>
-                  <div className="text-sm text-gray-600">Weight</div>
-                  <p className="text-sm font-semibold">{examinationDetails.weight} kg</p>
-                </div>
-                <div>
-                  <div className="text-sm text-gray-600">Height</div>
-                  <p className="text-sm font-semibold">{examinationDetails.height} cm</p>
-                </div>
-                <div>
-                  <div className="text-sm text-gray-600">BMI</div>
-                  <p className="text-sm font-semibold">{examinationDetails.bmi}</p>
-                </div>
-              </div>
-            )}
-
-            {/* Test Results */}
-            {examinationDetails?.testResults?.length??0 > 0 ? (
-              <div className="space-y-2">
-                {examinationDetails && examinationDetails.testResults && examinationDetails.testResults.length>0 && examinationDetails.testResults.map((test) => (
-                  <div key={test.name}>
-                    <div className="text-sm text-gray-600">{test.name}</div>
-                    <p className={cn("text-sm font-semibold", 
-                      test.result === 'Positive/Reactive' && "text-orange-500")}>
-                      {test.result}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <p>No test results available.</p>
-            )}
-
-            {/* MDW-specific fields */}
-            {type === 'MDW' && (
-              <div className="space-y-2">
-                <div>
-                  <div className="text-sm text-gray-600">Signs of suspicious or unexplained injuries</div>
-                  <p className={cn("text-sm font-semibold",
-                    examinationDetails.suspiciousInjuries && "text-orange-500")}>
-                    {examinationDetails.suspiciousInjuries ? 'Yes' : 'No'}
-                  </p>
-                </div>
-
-                <div>
-                  <div className="text-sm text-gray-600">Unintentional weight loss</div>
-                  <p className={cn("text-sm font-semibold",
-                    examinationDetails.unintentionalWeightLoss && "text-orange-500")}>
-                    {examinationDetails.unintentionalWeightLoss ? 'Yes' : 'No'}
-                  </p>
-                </div>
-
-                {(examinationDetails.suspiciousInjuries || examinationDetails.unintentionalWeightLoss) && (
+        <Card className="p-4">
+        <SectionHeader title="Examination details" onEdit={() => onEdit('examination-details')} />
+          <div className="space-y-3 text-md">
+              {/* Physical Measurements (MDW only) */}
+              {type === 'MDW' && (
+                <div className="grid grid-cols-3 gap-4">
                   <div>
-                    <div className="text-sm text-gray-600">Has a police report been made?</div>
-                    <p className="text-sm font-semibold">
-                      {examinationDetails.policeReport === 'yes' ? 'Yes' : 'No'}
+                    <div className="text-sm text-gray-500">Weight</div>
+                    <div>{examinationDetails.weight} kg</div>
+                  </div>
+                  <div>
+                    <div className="text-sm text-gray-500">Height</div>
+                    <div>{examinationDetails.height} cm</div>
+                  </div>
+                  <div>
+                    <div className="text-sm text-gray-500">BMI</div>
+                    <div>{examinationDetails.bmi}</div>
+                  </div>
+                </div>
+              )}
+
+              {/* Test Results */}
+              {examinationDetails?.testResults?.length??0 > 0 ? (
+                <div className="space-y-2">
+                  {examinationDetails && examinationDetails.testResults && examinationDetails.testResults.length>0 && examinationDetails.testResults.map((test) => (
+                    <div key={test.name}>
+                      <div className="text-sm text-gray-500">{test.name}</div>
+                      <p className={cn("text-md", 
+                        test.result === 'Positive/Reactive' && "text-red-500")}>
+                        {test.result}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p>No test results available.</p>
+              )}
+
+              {/* MDW-specific fields */}
+              {type === 'MDW' && (
+                <div className="space-y-2">
+                  <div>
+                    <div className="text-sm text-gray-500">Signs of suspicious or unexplained injuries</div>
+                    <p className={cn("text-md",
+                      examinationDetails.suspiciousInjuries && "text-red-500")}>
+                      {examinationDetails.suspiciousInjuries ? 'Yes' : 'No'}
                     </p>
                   </div>
-                )}
-              </div>
-            )}
 
-            {/* Remarks */}
-            <div>
-              <div className="text-sm text-gray-600">Remarks</div>
-              <p className="whitespace-pre-wrap text-sm font-semibold">{examinationDetails.remarks || '-'}</p>
-            </div>
+                  <div>
+                    <div className="text-sm text-gray-500">Unintentional weight loss</div>
+                    <p className={cn("text-md",
+                      examinationDetails.unintentionalWeightLoss && "text-red-500")}>
+                      {examinationDetails.unintentionalWeightLoss ? 'Yes' : 'No'}
+                    </p>
+                  </div>
+
+                  {(examinationDetails.suspiciousInjuries || examinationDetails.unintentionalWeightLoss) && (
+                    <div>
+                      <div className="text-sm text-gray-500">Has a police report been made?</div>
+                      <p className="text-md">
+                        {examinationDetails.policeReport === 'yes' ? 'Yes' : 'No'}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Remarks */}
+              <div>
+                <div className="text-sm text-gray-500">Remarks</div>
+                <p className="whitespace-pre-wrap text-md">{examinationDetails.remarks || '-'}</p>
+              </div>
           </div>
-        </section>
+        </Card>
 
         {/* Declaration Section */}
-        <section className="border rounded-lg p-6 bg-blue-50">
-          <h2 className="text-lg font-semibold mb-4">Declaration</h2>
-          <p className="mb-4">Please read and acknowledge the following:</p>
+        <Card className="bg-blue-50 p-4 text-sm border-2 border-blue-100">
+        <SectionHeader title="Declaration" />
+        <p className="mb-4">Please read and acknowledge the following:</p>
           <ul className="list-disc pl-5 space-y-2 mb-4">
             <li>I am authorised by the clinic to submit the results and make the declarations in this form on its behalf.</li>
             <li>By submitting this form, I understand that the information given will be submitted to the Controller or an authorised officer who may act on the information given by me. I further declare that the information provided by me is true to the best of my knowledge and belief.</li>
@@ -244,12 +216,51 @@ export function Summary({
             />
             <Label htmlFor="declaration">I declare that all of the above is true.</Label>
           </div>
-        </section>
-
-        <Button onClick={onSubmit} disabled={!declarationChecked}>
+          </Card>
+          <div className="flex justify-start mt-4">
+            <Button onClick={onSubmit} disabled={!declarationChecked}>
           Submit
         </Button>
+        </div>
       </div>
-    </div>
-  )
-}
+
+    <div className="space-y-6">
+    <Card className="p-4">
+    <SectionHeader title="Clinic & doctor details" onEdit={() => onEdit('clinic-doctor')} />
+
+              {/* Clinic Details Section */}
+              <div>
+                <div className="space-y-4">
+                  <div>
+                    <div className="text-gray-500 text-sm">Clinic name</div>
+                    <div>{clinicDetails.clinic}</div>
+                  </div>
+                  <div>
+                    <div className="text-gray-500 text-sm">HCI code</div>
+                    <div>{clinicDetails.hciCode}</div>
+                  </div>
+                  <div>
+                    <div className="text-gray-500 text-sm">Contact number</div>
+                    <div>{clinicDetails.contactNumber}</div>
+                  </div>
+                </div>
+                <div className="space-y-4 mt-6">
+                  <div>
+                    <div className="text-gray-500 text-sm">Doctor name</div>
+                    <div className="flex items-center gap-2">
+                      <span>{clinicDetails.doctor}</span>
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-gray-500 text-sm">Medical Registration (MCR) no.</div>
+                    <div>{clinicDetails.mcrNumber}</div>
+                  </div>
+                </div>
+              </div>
+          </Card>
+          </div>
+          </div>
+          </div>
+          )
+          
+          }
