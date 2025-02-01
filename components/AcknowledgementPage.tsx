@@ -61,13 +61,13 @@ const router = useRouter();
             </dl>
           </div>
 
-          <div className="flex items-center gap-2 mb-2 pl-6">
+          <div className="flex items-center mb-2 pl-6">
           <Download className="h-4 w-4 text-blue-600 mr-1" />
             <Link
               href="/download-pdf"
               className="text-blue-600 no-underline hover:underline flex items-center gap-2"
             >
-              Download acknowledgement and summary (PDF, ~100KB)
+              Download acknowledgement and summary<span className="text-gray-500">(PDF, ~100KB)</span>
             </Link>
           </div>
 
