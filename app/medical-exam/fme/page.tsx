@@ -234,7 +234,7 @@ export default function WPExamPage() {
 
   if (step === STEPS.SUMMARY) {
     return (
-      <div className="container mx-auto p-6">
+      <div className="container mx-auto">
         <MedicalSummary
           clinicDetails={{
             clinic: selectedClinicDetails?.name || '',

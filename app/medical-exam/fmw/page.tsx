@@ -166,7 +166,7 @@ export default function FMWExamPage() {
 
   if (step === STEPS.SUMMARY) {
     return (
-      <div className="container mx-auto p-6">
+      <div className="container mx-auto">
         <Summary
           clinicDetails={{
             clinic: selectedClinicDetails?.name || '',

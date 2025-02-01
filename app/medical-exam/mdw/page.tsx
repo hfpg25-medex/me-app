@@ -201,7 +201,7 @@ export default function MDWExamPage() {
 
   if (step === 'summary') {
     return (
-      <div className="container mx-auto p-6">
+      <div className="container mx-auto">
         <Summary
           type="MDW"
           clinicDetails={{
