@@ -7,7 +7,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Textarea } from "@/components/ui/textarea"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { format } from "date-fns"
-import { FileWarningIcon as WarningIcon } from 'lucide-react'
+import { TriangleAlert as WarningIcon } from 'lucide-react'
 import { cn } from "@/lib/utils"
 import { useFormContext } from "react-hook-form"
 import { FormDataMDW } from "@/lib/schemas"
@@ -45,7 +45,7 @@ export function ExaminationDetails({
           <div className="space-y-4">
             <div>
               <Label htmlFor="weight">Weight (kg)</Label>
-              <div className="flex items-center">
+              <div className="flex items-center mt-1">
                 <Input
                   id="weight"
                   type="number"
@@ -53,17 +53,19 @@ export function ExaminationDetails({
                     valueAsNumber: true,
                     validate: (value) => !value || (value >= 15 && value <= 200) || "Weight must be between 15kg and 200kg"
                   })}
-                  onBlur={(e) => {
-                    const newWeight = e.target.value ? parseFloat(e.target.value) : null;
+                  onBlur={async (e) => {
+                    const newWeight = parseFloat(e.target.value);
                     setValue('examinationDetails.weight', newWeight);
                     setWeightTouched(true);
-                    trigger('examinationDetails.weight');
-                    if (lastRecordedWeight && newWeight && errors.examinationDetails?.weight) {
+                    const hasError = !(await trigger('examinationDetails.weight'));
+                    
+                    if (hasError) {
+                      setShowWeightWarning(false);
+                    } else if (lastRecordedWeight && newWeight) {
                       setShowWeightWarning(newWeight <= 0.9 * lastRecordedWeight);
                     } else {
                       setShowWeightWarning(false);
                     }
-                    
                   }}
                   onChange={()=>{
 
@@ -79,13 +81,13 @@ export function ExaminationDetails({
                 />
                 <span>kg</span>
               </div>
-              {weightTouched && watchedValues.examinationDetails.weight && errors.examinationDetails?.weight && (
-                <p className="text-red-500 text-sm mt-1">{errors.examinationDetails.weight.message}</p>
+              {errors.examinationDetails?.weight && (
+                <span className="text-red-500 text-sm mt-1">{errors.examinationDetails.weight.message}</span>
               )}
               {showWeightWarning && (
                 <div className="flex items-start space-x-2 p-3 bg-orange-100 border border-orange-300 rounded-md mt-2">
                   <WarningIcon className="w-5 h-5 text-orange-500 flex-shrink-0 mt-0.5" />
-                  <div className="text-sm text-orange-700">
+                  <div className="text-sm text-orange-500">
                     This helper has lost {'>'}=10% weight since the last examination. If her weight loss was unintentional or if its reason cannot be determined, please select {'Yes'} for weight loss under the Physical examination details.
                   </div>
                 </div>
@@ -96,7 +98,7 @@ export function ExaminationDetails({
             </div>
             <div>
               <Label htmlFor="height">Height (cm)</Label>
-              <div className="flex items-center">
+              <div className="flex items-center mt-1">
                 <Input
                   id="height"
                   type="number"
@@ -108,7 +110,7 @@ export function ExaminationDetails({
               </div>
               {/* {errors.examinationDetails?.height && <p className="text-red-500 text-sm mt-1">{errors.examinationDetails.height.message}</p>} */}
               {lastRecordedHeight && (
-                <p className="text-sm text-muted-foreground mt-1">Last recorded height: {lastRecordedHeight} cm (Date: {format(new Date(), 'dd/MM/yyyy')})</p>
+                <p className="text-sm text-muted-foreground mt-1">Last recorded height: {lastRecordedHeight} cm (Date: {format(new Date().setMonth(new Date().getMonth() - 6), 'dd/MM/yyyy')})</p>
               )}
             </div>
             {watchedValues.examinationDetails.bmi !== null && (
@@ -150,7 +152,7 @@ export function ExaminationDetails({
                 <Label
                   htmlFor={test}
                   className={cn(
-                    "text-sm font-medium",
+                    "text-sm",
                     watchedValues.examinationDetails.positiveTests.includes(test) ? "text-red-600" : ""
                   )}
                 >
@@ -196,7 +198,7 @@ export function ExaminationDetails({
                   <Label
                     htmlFor="suspicious-injuries"
                     className={cn(
-                      "text-sm font-medium",
+                      "text-sm",
                       watchedValues.examinationDetails.suspiciousInjuries ? "text-red-600" : ""
                     )}
                   >
@@ -205,7 +207,7 @@ export function ExaminationDetails({
                 </div>
               </div>
               {watchedValues.examinationDetails.suspiciousInjuries && (
-                <p className="text-red-600 text-sm mt-1 flex items-center">
+                <p className="text-orange-500 text-sm mt-1 flex items-center">
                   <WarningIcon className="w-4 h-4 mr-1" />
                   Provide your assessment in the remarks section.
                 </p>
@@ -232,15 +234,15 @@ export function ExaminationDetails({
                     className={cn(
                       "border-2",
                       watchedValues.examinationDetails.unintentionalWeightLoss 
-                        ? "border-orange-500 bg-orange-500 text-primary-foreground hover:bg-orange-500 hover:text-primary-foreground" 
+                      ? " border-red-600 data-[state=checked]:bg-red-600 text-primary-foreground hover:bg-red-400 hover:text-primary-foreground" 
                         : "border-primary"
                     )}
                   />
                   <Label
                     htmlFor="unintentional-weight-loss"
                     className={cn(
-                      "text-sm font-medium",
-                      watchedValues.examinationDetails.unintentionalWeightLoss ? "text-orange-500" : ""
+                      "text-sm ",
+                      watchedValues.examinationDetails.unintentionalWeightLoss ? "text-red-600" : ""
                     )}
                   >
                     Yes
@@ -294,9 +296,7 @@ export function ExaminationDetails({
                   }}
                   className={cn(
                     "border-2",
-                    watchedValues.examinationDetails.remarks !== '' 
-                      ? "border-orange-500 bg-orange-500 text-primary-foreground hover:bg-orange-500 hover:text-primary-foreground"
-                      : "border-primary"
+                    "border-primary"
                   )}
                 />
                 <Label htmlFor="something-to-report">
@@ -315,7 +315,7 @@ export function ExaminationDetails({
                   maxLength={500}
                 />
                 <p className="text-sm text-muted-foreground">
-                  {501 - (watchedValues.examinationDetails.remarks?.length || 0)} characters left
+                  {500 - (watchedValues.examinationDetails.remarks?.length || 0)} characters left
                 </p>
               </>
             )}
@@ -327,4 +327,3 @@ export function ExaminationDetails({
     </AccordionContent>
   )
 }
-
