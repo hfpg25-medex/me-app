@@ -3,6 +3,7 @@ import { Download, CheckCircle2 as CheckCircle } from 'lucide-react'
 import { Card, CardContent } from "@/components/ui/card"
 import { v4 as uuidv4 } from 'uuid';
 import { useEffect } from "react";
+import { useRouter } from 'next/navigation'
 
 interface SubmissionDetailsProps {
   finNumber: string
@@ -31,6 +32,7 @@ function generateReferenceNumber(): string {
 }
 
 const referenceNumber = generateReferenceNumber();
+const router = useRouter();
 
   return (
       <div className="mx-auto p-6 max-w-[760px]">
@@ -84,20 +86,12 @@ const referenceNumber = generateReferenceNumber();
           </h2>
           <ul className="space-y-2 list-disc">
             <li>
-              <Link
-                href="/new-submission/same"
-                className="text-blue-600 no-underline hover:underline"
+              <button
+                onClick={() => router.push(window.location.pathname)}
+                className="text-blue-600 no-underline hover:underline bg-transparent border-0 p-0 cursor-pointer"
               >
-                Start a new submission (same clinic and doctor details)
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/new-submission/different"
-                className="text-blue-600 no-underline hover:underline"
-              >
-                Start a new submission (different clinic and/or doctor details)
-              </Link>
+                Start a new submission (same medical exam type)
+              </button>
             </li>
             <li>
               <Link
@@ -109,7 +103,7 @@ const referenceNumber = generateReferenceNumber();
             </li>
             <li>
               <Link
-                href="/submission-history"
+                href="/records/history"
                 className="text-blue-600 no-underline hover:underline"
               >
                 View submission history
