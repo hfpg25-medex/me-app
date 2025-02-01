@@ -272,8 +272,8 @@ export default function WPExamPage() {
             syphilis: watchedValues.tests.syphilis,
             malaria: watchedValues.tests.malaria,
             hiv: watchedValues.tests.hiv,
-            hba1c: watchedValues.tests.hba1c,
-            lipids: watchedValues.tests.lipids,
+            hba1c: watchedValues.tests.hba1c || undefined,
+            lipids: watchedValues.tests.lipids || undefined,
           }}
           onEdit={handleEdit}
           onSubmit={handleSubmit(onSubmit)}
