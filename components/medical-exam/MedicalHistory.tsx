@@ -163,7 +163,7 @@ function HistoryItemComponent({
           >
             {item.condition}
           </Label>
-          <span className={cn("text-sm text-muted-foreground", item.hasCondition ? "text-red-600" : "")}>{item.hasCondition ? "Yes" : "No"}</span>
+          <span className={cn("text-sm text-muted-foreground", item.hasCondition ? "text-red-500" : "")}>{item.hasCondition ? "Yes" : "No"}</span>
         </div>
       </div>
       {item.hasCondition && (

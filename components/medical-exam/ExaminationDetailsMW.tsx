@@ -56,7 +56,7 @@ export function ExaminationDetails({
                   htmlFor={test}
                   className={cn(
                     "text-sm font-medium",
-                    watchedValues.examinationDetails.positiveTests.includes(test) ? "text-red-600" : ""
+                    watchedValues.examinationDetails.positiveTests.includes(test) ? "text-red-500" : ""
                   )}
                 >
                   Positive/Reactive

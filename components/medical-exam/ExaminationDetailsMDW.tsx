@@ -153,7 +153,7 @@ export function ExaminationDetails({
                   htmlFor={test}
                   className={cn(
                     "text-sm",
-                    watchedValues.examinationDetails.positiveTests.includes(test) ? "text-red-600" : ""
+                    watchedValues.examinationDetails.positiveTests.includes(test) ? "text-red-500" : ""
                   )}
                 >
                   Positive/Reactive
@@ -199,7 +199,7 @@ export function ExaminationDetails({
                     htmlFor="suspicious-injuries"
                     className={cn(
                       "text-sm",
-                      watchedValues.examinationDetails.suspiciousInjuries ? "text-red-600" : ""
+                      watchedValues.examinationDetails.suspiciousInjuries ? "text-red-500" : ""
                     )}
                   >
                     Yes
@@ -242,7 +242,7 @@ export function ExaminationDetails({
                     htmlFor="unintentional-weight-loss"
                     className={cn(
                       "text-sm ",
-                      watchedValues.examinationDetails.unintentionalWeightLoss ? "text-red-600" : ""
+                      watchedValues.examinationDetails.unintentionalWeightLoss ? "text-red-500" : ""
                     )}
                   >
                     Yes
