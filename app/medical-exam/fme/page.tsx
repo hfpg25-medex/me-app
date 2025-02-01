@@ -259,6 +259,7 @@ export default function WPExamPage() {
             waistCircumference: watchedValues.clinicalExamination.waistCircumference === "" ? 0 : Number(watchedValues.clinicalExamination.waistCircumference),
             systolicBP: watchedValues.clinicalExamination.systolicBP === "" ? 0 : Number(watchedValues.clinicalExamination.systolicBP),
             diastolicBP: watchedValues.clinicalExamination.diastolicBP === "" ? 0 : Number(watchedValues.clinicalExamination.diastolicBP),
+            rightEyeVision: watchedValues.clinicalExamination.rightEyeVision,
             leftEyeVision: watchedValues.clinicalExamination.leftEyeVision,
             urineAlbumin: watchedValues.clinicalExamination.urineAlbumin,
             urineGlucose: watchedValues.clinicalExamination.urineGlucose,

@@ -35,7 +35,7 @@ const mockApiCall = async (fin: string) => {
   await new Promise(resolve => setTimeout(resolve, 0))
   
   // Mock response
-  if (fin === 'F2770033X') {
+  if (fin === 'F1234567N') {
     return { 
       name: 'H** LI**', 
       testTypes: ['Pregnancy', 'Syphilis test', 'HIV', 'Chest X-ray to screen for TB']
