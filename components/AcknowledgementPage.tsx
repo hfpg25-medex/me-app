@@ -1,6 +1,5 @@
 import Link from "next/link"
-import { Download, CheckCircle2 as CheckCircle } from 'lucide-react'
-import { Card, CardContent } from "@/components/ui/card"
+import { Download, Check } from 'lucide-react'
 import { v4 as uuidv4 } from 'uuid';
 import { useEffect } from "react";
 import { useRouter } from 'next/navigation'
@@ -38,7 +37,9 @@ const router = useRouter();
       <div className="mx-auto p-6 max-w-[760px]">
         <div className="mb-4 p-4 border rounded-md shadow-md hover:shadow-lg transition-shadow">
           <div className="flex items-center">
-            <CheckCircle className="h-6 w-6 text-green-500 mr-2" />
+            <div className="h-6 w-6 rounded-full bg-green-500 flex items-center justify-center mr-2">
+              <Check className="h-4 w-4 text-white" />
+            </div>
             <div className="text-xl font-semibold align-middle">
               Medical examination results submitted successfully
             </div>
