@@ -65,10 +65,11 @@ const router = useRouter();
           <Download className="h-4 w-4 text-blue-600 mr-1" />
             <Link
               href="/download-pdf"
-              className="text-blue-600 no-underline hover:underline flex items-center gap-2"
+              className="text-blue-600 no-underline flex items-center gap-2"
             >
-              Download acknowledgement and summary<span className="text-gray-500">(PDF, ~100KB)</span>
+              Download acknowledgement and summary
             </Link>
+            <span className="text-gray-500">(PDF, ~100KB)</span>
           </div>
 
           {/* <p className="text-gray-600">
@@ -79,7 +80,7 @@ const router = useRouter();
         {/* </div> */}
         </CardContent>
         </Card>
-        <Card className="mb-4 shadow-md hover:shadow-lg transition-shadow ">
+        <Card className="shadow-md hover:shadow-lg transition-shadow ">
         <CardContent>
           <h2 className="text-xl font-semibold mb-4 mt-4">
             What do you want to do next?
@@ -88,7 +89,7 @@ const router = useRouter();
             <li>
               <button
                 onClick={() => router.push(window.location.pathname)}
-                className="text-blue-600 no-underline hover:underline bg-transparent border-0 p-0 cursor-pointer"
+                className="text-blue-600 no-underline bg-transparent border-0 p-0 cursor-pointer"
               >
                 Start a new submission (same medical exam type)
               </button>
@@ -96,7 +97,7 @@ const router = useRouter();
             <li>
               <Link
                 href="/medical-exam/select"
-                className="text-blue-600 no-underline hover:underline"
+                className="text-blue-600 no-underline"
               >
                 Start a new submission (different medical exam type)
               </Link>
@@ -104,7 +105,7 @@ const router = useRouter();
             <li>
               <Link
                 href="/records/history"
-                className="text-blue-600 no-underline hover:underline"
+                className="text-blue-600 no-underline"
               >
                 View submission history
               </Link>
