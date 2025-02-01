@@ -13,6 +13,7 @@ import { HelperDetails } from "@/components/medical-exam/HelperDetails"
 import { ExaminationDetails } from "@/components/medical-exam/ExaminationDetailsPR"
 import { AcknowledgementPage } from '@/components/AcknowledgementPage'
 import { StepIndicator } from "@/components/ui/step-indicator"
+import { examTitles } from '@/constants/exam-titles'
 import { STEPS, StepType } from '@/constants/steps'
 
 const clinics = [
@@ -199,13 +200,9 @@ export default function PRExamPage() {
   }
 
   return (
-    <div className="w-full max-w-[760px] mx-auto mt-6 ">
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-xl font-bold">Medical Exam for Permanant Residency Application (ICA)</CardTitle>
-        </CardHeader>
-        <CardContent>
-        <StepIndicator 
+    <div className="w-full max-w-[760px] mx-auto my-6 ">
+      <h1 className="text-2xl font-bold mb-6">{examTitles.pr}</h1>
+      <StepIndicator 
             className="mb-6"
             steps={[
               {
@@ -222,8 +219,8 @@ export default function PRExamPage() {
                 isEnabled: isSummaryActive
               }
             ]}
-          />
-
+        />
+      <div className="border border-gray-300 px-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
           <FormProvider {...methods}>
             <form onSubmit={handleSubmit(onSubmit)}>
               <Accordion type="single" value={expandedAccordion} onValueChange={setExpandedAccordion} collapsible>
@@ -280,8 +277,7 @@ export default function PRExamPage() {
               </Accordion>
             </form>
           </FormProvider>
-        </CardContent>
-      </Card>
+</div>
       <FinChangeModal
         isOpen={isFinChangeModalOpen}
         onClose={() => setIsFinChangeModalOpen(false)}

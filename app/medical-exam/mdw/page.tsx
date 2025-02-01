@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Accordion, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Summary } from "@/components/Summary"
 import { FinChangeModal } from "@/components/FinChangeModal"
@@ -13,6 +12,7 @@ import { HelperDetails } from "@/components/medical-exam/HelperDetails"
 import { ExaminationDetails } from "@/components/medical-exam/ExaminationDetailsMDW"
 import { AcknowledgementPage } from '@/components/AcknowledgementPage'
 import { STEPS, StepType } from '@/constants/steps'
+import { examTitles } from '@/constants/exam-titles'
 import { StepIndicator } from '@/components/ui/step-indicator'
 
 const clinics = [
@@ -239,7 +239,7 @@ export default function MDWExamPage() {
 
   return (
     <div className="w-full max-w-[760px] mx-auto my-6 ">
-      <h1 className="text-2xl font-bold mb-6">Six-monthly Medical Exam for Migrant Domestic Workers (MOM)</h1>
+      <h1 className="text-2xl font-bold mb-6">{examTitles.mdw}</h1>
       <StepIndicator 
             className="mb-6"
             steps={[

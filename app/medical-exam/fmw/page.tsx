@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Accordion, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Summary } from "@/components/Summary"
 import { FinChangeModal } from "@/components/FinChangeModal"
@@ -13,6 +12,7 @@ import { HelperDetails } from "@/components/medical-exam/HelperDetails"
 import { ExaminationDetails } from "@/components/medical-exam/ExaminationDetailsMW"
 import { AcknowledgementPage } from '@/components/AcknowledgementPage'
 import { StepIndicator } from "@/components/ui/step-indicator"
+import { examTitles } from '@/constants/exam-titles'
 import { STEPS, StepType } from '@/constants/steps'
 
 const clinics = [
@@ -197,13 +197,9 @@ export default function FMWExamPage() {
   }
 
   return (
-    <div className="w-full max-w-[760px] mx-auto mt-6 ">
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-xl font-bold">Six-monthly Medical Exam for Female Migrant Workers (MOM)</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <StepIndicator
+    <div className="w-full max-w-[760px] mx-auto my-6 ">
+      <h1 className="text-2xl font-bold mb-6">{examTitles.fmw}</h1>
+      <StepIndicator 
             className="mb-6"
             steps={[
               {
@@ -220,8 +216,8 @@ export default function FMWExamPage() {
                 isEnabled: isSummaryActive
               }
             ]}
-          />
-
+        />
+      <div className="border border-gray-300 px-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
           <FormProvider {...methods}>
             <form onSubmit={handleSubmit(onSubmit)}>
               <Accordion type="single" value={expandedAccordion} onValueChange={setExpandedAccordion} collapsible>
@@ -278,8 +274,7 @@ export default function FMWExamPage() {
               </Accordion>
             </form>
           </FormProvider>
-        </CardContent>
-      </Card>
+</div>
       <FinChangeModal
         isOpen={isFinChangeModalOpen}
         onClose={() => setIsFinChangeModalOpen(false)}
