@@ -5,7 +5,8 @@ import { AccordionContent } from "@/components/ui/accordion"
 import { useFormContext } from "react-hook-form"
 import { FormDataMW,FormDataMDW  } from "@/lib/schemas"
 import { Datepicker } from "@/components/ui/datepicker"
-import React from "react"
+import { FinChangeModal } from "@/components/FinChangeModal"
+import React, { useState } from "react"
 
 interface HelperDetailsProps {
   isSummaryActive: boolean
@@ -36,9 +37,29 @@ export function HelperDetails({
   defaultToday = false
 }: HelperDetailsProps) {
   const { register, setValue, formState: { errors }, watch, trigger }  = useFormContext<FormDataMW | FormDataMDW >()
+  const [isFinChangeModalOpen, setIsFinChangeModalOpen] = useState(false)
+  const [pendingFinValue, setPendingFinValue] = useState<string>("")
 
   const watchedValues = watch()
 
+  const handleFinBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const newValue = e.target.value
+    if (watchedValues.helperDetails.helperName && newValue !== watchedValues.helperDetails.fin) {
+      setPendingFinValue(newValue)
+      setIsFinChangeModalOpen(true)
+    } else {
+      handleFinChange(newValue)
+      setFinTouched(true)
+      trigger('helperDetails.fin')
+    }
+  }
+
+  const handleFinChangeConfirm = () => {
+    handleFinChange(pendingFinValue)
+    setFinTouched(true)
+    trigger('helperDetails.fin')
+    setIsFinChangeModalOpen(false)
+  }
 
   return (
     <AccordionContent>
@@ -48,12 +69,7 @@ export function HelperDetails({
           <Input className="w-[200px] mt-1"
             id="fin"
             {...register('helperDetails.fin')}
-            onBlur={(e) => {
-              handleFinChange(e.target.value);
-              setFinTouched(true);
-              trigger('helperDetails.fin')
-         }
-            }
+            onBlur={handleFinBlur}
             onChange={() => {}}
           />
           {finTouched && errors.helperDetails?.fin && (
@@ -103,8 +119,14 @@ export function HelperDetails({
       >
         {isSummaryActive ? 'Continue to Summary' : 'Continue'}
       </Button>
+      {isFinChangeModalOpen && (
+        <FinChangeModal
+          isOpen={isFinChangeModalOpen}
+          onConfirm={handleFinChangeConfirm}
+          onClose={() => setIsFinChangeModalOpen(false)}
+        />
+      )}
       </div>
     </AccordionContent>
   )
 }
-
