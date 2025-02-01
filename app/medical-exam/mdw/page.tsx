@@ -238,16 +238,9 @@ export default function MDWExamPage() {
   }
 
   return (
-    <div className="w-full max-w-[760px] mx-auto mt-6 ">
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-xl font-bold">Six-monthly Medical Exam for Migrant Domestic Workers (MOM)</CardTitle>
-          {/* <CardDescription>
-            Required medical examination for migrant domestic workers
-          </CardDescription> */}
-        </CardHeader>
-        <CardContent>
-        <StepIndicator 
+    <div className="w-full max-w-[760px] mx-auto my-6 ">
+      <h1 className="text-2xl font-bold mb-6">Six-monthly Medical Exam for Migrant Domestic Workers (MOM)</h1>
+      <StepIndicator 
             className="mb-6"
             steps={[
               {
@@ -265,6 +258,8 @@ export default function MDWExamPage() {
               }
             ]}
         />
+      <div className="border border-gray-300 px-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+
           <FormProvider {...methods}>
             <form onSubmit={handleSubmit(onSubmit)}>
               <Accordion type="single" value={expandedAccordion} onValueChange={setExpandedAccordion} collapsible>
@@ -326,8 +321,7 @@ export default function MDWExamPage() {
               </Accordion>
             </form>
           </FormProvider>
-        </CardContent>
-      </Card>
+      </div>
       <FinChangeModal
         isOpen={isFinChangeModalOpen}
         onClose={() => setIsFinChangeModalOpen(false)}

@@ -107,8 +107,6 @@ export default function WPExamPage() {
   
   const watchedValues = watch()
 
-
-
   const handleFinChange = async (value: string) => {
     if (isSummaryActive && value !== watchedValues.helperDetails.fin) {
       setTempFin(value);
@@ -283,13 +281,9 @@ export default function WPExamPage() {
   }
 
   return (
-    <div className="w-full max-w-[760px] mx-auto mt-6 ">
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-xl font-bold">{examTitles.fme}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <StepIndicator 
+    <div className="w-full max-w-[760px] mx-auto my-6 ">
+      <h1 className="text-2xl font-bold mb-6">{examTitles.fme}</h1>
+      <StepIndicator 
             className="mb-6"
             steps={[
               {
@@ -306,11 +300,9 @@ export default function WPExamPage() {
                 isEnabled: isSummaryActive
               }
             ]}
-          />
+        />
+      <div className="border border-gray-300 px-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
           <FormProvider {...methods}>
-            {/* <form onSubmit={
-              handleSubmit(onSubmit)
-              }> */}
               <Accordion type="single" value={expandedAccordion} onValueChange={setExpandedAccordion} collapsible>
                 <AccordionItem value="clinic-doctor">
                   <AccordionTrigger 
@@ -383,10 +375,8 @@ export default function WPExamPage() {
                   />
                 </AccordionItem>
               </Accordion>
-            {/* </form> */}
           </FormProvider>
-        </CardContent>
-      </Card>
+          </div>
       <FinChangeModal
         isOpen={isFinChangeModalOpen}
         onClose={() => setIsFinChangeModalOpen(false)}
