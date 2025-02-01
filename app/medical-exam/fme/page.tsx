@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Accordion, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { FinChangeModal } from "@/components/FinChangeModal"
@@ -64,6 +64,13 @@ export default function WPExamPage() {
   const [visitDateTouched, setVisitDateTouched] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false); // New state to track submission
   const [isPendingMe, setIsPendingMe] = useState (false)
+  const [isCompletedStates, setIsCompletedStates] = useState({
+    helperDetails: false,
+    clinicDoctor: false,
+    medicalHistory: false,
+    clinicalExamination: false,
+    tests: false
+  });
 
   const methods = useForm<FormDataWP>({
     resolver: zodResolver(formSchemaWP),
@@ -96,9 +103,43 @@ export default function WPExamPage() {
     },
   })
 
-  const { setValue, watch, trigger, handleSubmit } = methods
-  const watchedValues = watch()
+  const { register, watch, handleSubmit, formState: { errors }, trigger, setValue } = methods
   
+  const watchedValues = watch()
+
+  // const validateField = async (fieldName: keyof typeof isCompletedStates) => {
+  //   try {
+  //     console.log(isCompletedStates)
+  //     const result = await trigger(fieldName);
+  //     setIsCompletedStates((prev) => ({
+  //       ...prev,
+  //       [fieldName]: result,
+  //     }));
+  //   } catch (error) {
+  //     console.error(`Error validating ${fieldName}:`, error);
+  //     setIsCompletedStates((prev) => ({
+  //       ...prev,
+  //       [fieldName]: false, // Set to false in case of error
+  //     }));
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   const checkTestsCompletion = async () => {
+  //     const result = await trigger('tests');
+  //     setIsTestsCompleted(result);
+  //   };
+  //   checkTestsCompletion();
+  // }, [trigger]);
+
+  // useEffect(() => {
+  //   validateField('helperDetails');
+  //   validateField('clinicDoctor');
+  //   validateField('medicalHistory');
+  //   validateField('clinicalExamination');
+  //   validateField('tests');
+  // }, []);
+
 
   const handleFinChange = async (value: string) => {
     if (isSummaryActive && value !== watchedValues.helperDetails.fin) {
@@ -140,6 +181,10 @@ export default function WPExamPage() {
         if (isValid) {
           setIsHelperDetailsEnabled(true)
           setExpandedAccordion('helper-details')
+          setIsCompletedStates((prev) => ({
+            ...prev,
+            clinicDoctor: isValid,
+          }))
         } 
         break
       case 'medical-history':
@@ -148,6 +193,10 @@ export default function WPExamPage() {
         if (isValid) {
           setIsMedicalHistoryEnabled(true)
           setExpandedAccordion('medical-history')
+          setIsCompletedStates((prev) => ({
+            ...prev,
+            helperDetails: isValid,
+          }))
         }
         break
       case 'clinical-examination':
@@ -157,6 +206,10 @@ export default function WPExamPage() {
         if (isValid) {
           setIsClinicalExaminationEnabled(true)
           setExpandedAccordion('clinical-examination')
+          setIsCompletedStates((prev) => ({
+            ...prev,
+            medicalHistory: isValid,
+          }))
         }
         break
       case 'tests':
@@ -168,6 +221,10 @@ export default function WPExamPage() {
             setIsTestsEnabled(true)
             setExpandedAccordion('tests')
             console.log("isTestsEnabled",isTestsEnabled)
+            setIsCompletedStates((prev) => ({
+              ...prev,
+              clinicalExamination: isValid,
+            }))
           }
         break
       case 'summary':
@@ -175,6 +232,10 @@ export default function WPExamPage() {
         console.log(watchedValues)
 
         if (isValid) {
+          setIsCompletedStates((prev) => ({
+            ...prev,
+            tests: isValid,
+          }))
           setIsSummaryActive(true)
           setStep(STEPS.SUMMARY)
         }
@@ -283,7 +344,11 @@ export default function WPExamPage() {
               }> */}
               <Accordion type="single" value={expandedAccordion} onValueChange={setExpandedAccordion} collapsible>
                 <AccordionItem value="clinic-doctor">
-                  <AccordionTrigger className="text-lg font-bold">Clinic and doctor details</AccordionTrigger>
+                  <AccordionTrigger 
+                    isCompleted={isCompletedStates.clinicDoctor}
+                    >
+                    Clinic & Doctor Details
+                  </AccordionTrigger>
                   <ClinicDoctorDetails 
                     isSummaryActive={isSummaryActive} 
                     handleContinue={handleContinue}
@@ -291,14 +356,19 @@ export default function WPExamPage() {
                     doctors={doctors}
                   />
                 </AccordionItem>
-                <AccordionItem value="helper-details" className={!isHelperDetailsEnabled ? "opacity-50" : ""}>
-                  <AccordionTrigger className="text-lg font-bold" disabled={!isHelperDetailsEnabled}>Foreign worker details</AccordionTrigger>
+                <AccordionItem value="helper-details">
+                  <AccordionTrigger 
+                    isCompleted={isCompletedStates.helperDetails}
+                    isDisabled={!isHelperDetailsEnabled}
+                  >
+                    Helper Details
+                  </AccordionTrigger>
                   <HelperDetails 
-                    isSummaryActive={isSummaryActive}
                     handleContinue={handleContinue}
                     handleFinChange={handleFinChange}
                     setFinTouched={setFinTouched}
                     setVisitDateTouched={setVisitDateTouched}
+                    isSummaryActive={isSummaryActive}
                     finTouched={finTouched}
                     visitDateTouched={visitDateTouched}
                     isPendingMe={isPendingMe}
@@ -307,26 +377,41 @@ export default function WPExamPage() {
                     defaultToday={true}
                   />
                 </AccordionItem>
-                <AccordionItem value="medical-history" className={!isMedicalHistoryEnabled ? "opacity-50" : ""}>
-                  <AccordionTrigger className="text-lg font-bold" disabled={!isMedicalHistoryEnabled}>Medical history</AccordionTrigger>
+                <AccordionItem value="medical-history">
+                  <AccordionTrigger 
+                    isCompleted={isCompletedStates.medicalHistory}
+                    isDisabled={!isMedicalHistoryEnabled}
+                  >
+                    Medical History
+                  </AccordionTrigger>
                   <MedicalHistory
-                  isSummaryActive={isSummaryActive}
-                  handleContinue={handleContinue}
+                    isSummaryActive={isSummaryActive}
+                    handleContinue={handleContinue}
                   />
                 </AccordionItem>
-                <AccordionItem value="clinical-examination" className={!isClinicalExaminationEnabled ? "opacity-50" : ""}>
-                  <AccordionTrigger className="text-lg font-bold" disabled={!isClinicalExaminationEnabled}>Clinical examination</AccordionTrigger>
-                <ClinicalExamination
-                  isSummaryActive={isSummaryActive}
-                  handleContinue={handleContinue}
-                 />
+                <AccordionItem value="clinical-examination">
+                  <AccordionTrigger 
+                    isCompleted={isCompletedStates.clinicalExamination}
+                    isDisabled={!isClinicalExaminationEnabled}
+                  >
+                    Clinical Examination
+                  </AccordionTrigger>
+                  <ClinicalExamination
+                    isSummaryActive={isSummaryActive}
+                    handleContinue={handleContinue}
+                  />
                 </AccordionItem>
-                <AccordionItem value="tests" className={!isClinicalExaminationEnabled ? "opacity-50" : ""}>
-                  <AccordionTrigger className="text-lg font-bold" disabled={!isTestsEnabled}>Tests</AccordionTrigger>
-                <Tests
-                  isSummaryActive={isSummaryActive}
-                  handleContinue={handleContinue}
-                 />
+                <AccordionItem value="tests">
+                  <AccordionTrigger 
+                    isCompleted={isCompletedStates.tests}
+                    isDisabled={!isTestsEnabled}
+                  >
+                    Tests
+                  </AccordionTrigger>
+                  <Tests
+                    isSummaryActive={isSummaryActive}
+                    handleContinue={handleContinue}
+                  />
                 </AccordionItem>
               </Accordion>
             {/* </form> */}
