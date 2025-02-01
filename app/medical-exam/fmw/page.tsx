@@ -17,7 +17,7 @@ import { useAuth } from "@/lib/context/auth-context"
 import { STEPS, StepType } from '@/constants/steps'
 
 const clinics = [
-  { id: '1', name: 'Healthline Medical Clinic (Bukit Batok)', hciCode: '2M12345', contactNumber: '+65 69991234' },
+  { id: '1', name: 'ABC Medical Clinic (Bukit Batok)', hciCode: '2M12345', contactNumber: '+65 69991234' },
   // { id: '2', name: 'Healthline 24Hr Clinic (Jurong East)', hciCode: '2M54321', contactNumber: '+65 69995678' },
 ]
 
@@ -45,7 +45,7 @@ const mockApiCall = async (fin: string) => {
   return null
 }
 
-export default function MWExamPage() {
+export default function FMWExamPage() {
   const [step, setStep] = useState<StepType>(STEPS.SUBMISSION)
   const [expandedAccordion, setExpandedAccordion] = useState<string | undefined>("clinic-doctor")
   const [isHelperDetailsEnabled, setIsHelperDetailsEnabled] = useState(false)
@@ -56,9 +56,13 @@ export default function MWExamPage() {
   const [testTypes, setTestTypes] = useState<string[]>([])
   const [finTouched, setFinTouched] = useState(false);
   const [visitDateTouched, setVisitDateTouched] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false); // New state to track submission
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const [isPendingMe, setIsPendingMe] = useState (false)
-  const { user } = useAuth()
+
+  // Add completion state for each section
+  const [isClinicDoctorCompleted, setIsClinicDoctorCompleted] = useState(false)
+  const [isHelperDetailsCompleted, setIsHelperDetailsCompleted] = useState(false)
+  const [isExaminationCompleted, setIsExaminationCompleted] = useState(false)
 
   const methods = useForm<FormDataMW>({
     resolver: zodResolver(formSchemaMW),
@@ -74,16 +78,6 @@ export default function MWExamPage() {
 
   const { setValue, watch, trigger, handleSubmit } = methods
   const watchedValues = watch()
-
-  useEffect(() => {
-    // Set default doctor when user is a doctor
-    if (user?.role === 'doctor' && user.mcr) {
-      const doctorId = doctors.find(d => d.mcrNumber === user.mcr)?.id
-      if (doctorId) {
-        setValue('clinicDoctor.doctor', doctorId)
-      }
-    }
-  }, [user, doctors, setValue])
 
   const handleFinChange = async (value: string) => {
     if (isSummaryActive && value !== watchedValues.helperDetails.fin) {
@@ -122,24 +116,24 @@ export default function MWExamPage() {
     switch (nextStep) {
       case 'helper-details':
         isValid = await trigger('clinicDoctor')
-        console.log('isValid1=', isValid)
         if (isValid) {
           setIsHelperDetailsEnabled(true)
+          setIsClinicDoctorCompleted(true)
           setExpandedAccordion('helper-details')
-        } 
+        }
         break
       case 'examination-details':
         isValid = await trigger('helperDetails')
-        console.log('isValid2=', isValid)
         if (isValid) {
           setIsExaminationEnabled(true)
+          setIsHelperDetailsCompleted(true)
           setExpandedAccordion('examination-details')
         }
         break
       case 'summary':
         isValid = await trigger('examinationDetails')
-        isValid = true //temp
         if (isValid) {
+          setIsExaminationCompleted(true)
           setIsSummaryActive(true)
           setStep(STEPS.SUMMARY)
         }
@@ -232,7 +226,12 @@ export default function MWExamPage() {
             <form onSubmit={handleSubmit(onSubmit)}>
               <Accordion type="single" value={expandedAccordion} onValueChange={setExpandedAccordion} collapsible>
                 <AccordionItem value="clinic-doctor">
-                  <AccordionTrigger className="text-lg font-bold">Clinic and doctor details</AccordionTrigger>
+                  <AccordionTrigger 
+                    className="text-lg font-bold"
+                    isCompleted={isClinicDoctorCompleted}
+                  >
+                    Clinic and doctor details
+                  </AccordionTrigger>
                   <ClinicDoctorDetails 
                     isSummaryActive={isSummaryActive} 
                     handleContinue={handleContinue}
@@ -241,7 +240,13 @@ export default function MWExamPage() {
                   />
                 </AccordionItem>
                 <AccordionItem value="helper-details" className={!isHelperDetailsEnabled ? "opacity-50" : ""}>
-                  <AccordionTrigger className="text-lg font-bold" disabled={!isHelperDetailsEnabled}>Migrant worker details</AccordionTrigger>
+                  <AccordionTrigger 
+                    className="text-lg font-bold" 
+                    disabled={!isHelperDetailsEnabled}
+                    isCompleted={isHelperDetailsCompleted}
+                  >
+                    Migrant worker details
+                  </AccordionTrigger>
                   <HelperDetails 
                     isSummaryActive={isSummaryActive}
                     handleContinue={handleContinue}
@@ -257,7 +262,13 @@ export default function MWExamPage() {
                   />
                 </AccordionItem>
                 <AccordionItem value="examination-details" className={!isExaminationEnabled ? "opacity-50 pointer-events-none" : ""}>
-                  <AccordionTrigger className="text-lg font-bold" disabled={!isExaminationEnabled}>Examination details</AccordionTrigger>
+                  <AccordionTrigger 
+                    className="text-lg font-bold" 
+                    disabled={!isExaminationEnabled}
+                    isCompleted={isExaminationCompleted}
+                  >
+                    Examination details
+                  </AccordionTrigger>
                   <ExaminationDetails 
                     isSummaryActive={isSummaryActive}
                     handleContinue={handleContinue}

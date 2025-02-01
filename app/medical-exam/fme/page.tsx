@@ -108,6 +108,7 @@ export default function WPExamPage() {
   const watchedValues = watch()
 
 
+
   const handleFinChange = async (value: string) => {
     if (isSummaryActive && value !== watchedValues.helperDetails.fin) {
       setTempFin(value);
@@ -328,7 +329,7 @@ export default function WPExamPage() {
                     isCompleted={isCompletedStates.helperDetails}
                     isDisabled={!isHelperDetailsEnabled}
                   >
-                    Helper Details
+                    Person Details
                   </AccordionTrigger>
                   <HelperDetails 
                     handleContinue={handleContinue}

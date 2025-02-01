@@ -16,7 +16,7 @@ import { STEPS, StepType } from '@/constants/steps'
 import { StepIndicator } from '@/components/ui/step-indicator'
 
 const clinics = [
-  { id: '1', name: 'Healthline Medical Clinic (Bukit Batok)', hciCode: '2M12345', contactNumber: '+65 69991234' },
+  { id: '1', name: 'ABC Medical Clinic (Bukit Batok)', hciCode: '2M12345', contactNumber: '+65 69991234' },
   // { id: '2', name: 'Healthline 24Hr Clinic (Jurong East)', hciCode: '2M54321', contactNumber: '+65 69995678' },
   // { id: '3', name: 'Clinic C', hciCode: '21M0182', contactNumber: '+65 6999 9012' },
 ]
@@ -68,6 +68,11 @@ export default function MDWExamPage() {
   const [weightTouched, setWeightTouched] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false); // New state to track submission
   const [isPendingMe, setIsPendingMe] = useState (true)
+
+  // Add completion state for each section
+  const [isClinicDoctorCompleted, setIsClinicDoctorCompleted] = useState(false)
+  const [isHelperDetailsCompleted, setIsHelperDetailsCompleted] = useState(false)
+  const [isExaminationCompleted, setIsExaminationCompleted] = useState(false)
 
   const methods = useForm<FormDataMDW>({
     resolver: zodResolver(formSchemaMDW),
@@ -140,55 +145,31 @@ export default function MDWExamPage() {
   }
 
   const handleContinue = async (nextStep: string) => {
-    console.log('nextStep=', nextStep)
     let isValid = false
 
     switch (nextStep) {
       case 'helper-details':
         isValid = await trigger('clinicDoctor')
-        console.log('isValid=', isValid)
         if (isValid) {
           setIsHelperDetailsEnabled(true)
+          setIsClinicDoctorCompleted(true)
           setExpandedAccordion('helper-details')
-        } 
+        }
         break
       case 'examination-details':
-        console.log('examination-details2')
         isValid = await trigger('helperDetails')
         if (isValid) {
-          // if (isSummaryActive) {
-          //   setStep('summary')
-          // } else {
-          //   setIsExaminationEnabled(true)
-          //   setExpandedAccordion('examination-details')
-          // }
           setIsExaminationEnabled(true)
+          setIsHelperDetailsCompleted(true)
           setExpandedAccordion('examination-details')
         }
         break
-      // case 'examination-details':
-      //   setWeightTouched(true);
-      //   // isValid = await trigger(['examinationDetails.weight', 'examinationDetails'])
-      //   isValid = await trigger('examinationDetails')
-
-      //   if (isValid) {
-      //     setIsSummaryActive(true)
-      //     setStep('summary')
-      //   }
-      //   break
       case 'summary':
-        console.log('summary2')
-        // console.log('summary')
-        // setIsSummaryActive(true)
-        // setStep('summary')
-        // isValid = await trigger(['clinicDoctor', 'helperDetails', 'examinationDetails'])
-        // isValid = await trigger('examinationDetails')
-        isValid = await trigger(['examinationDetails.weight', 'examinationDetails'])
-
-
+        isValid = await trigger('examinationDetails')
         if (isValid) {
+          setIsExaminationCompleted(true)
           setIsSummaryActive(true)
-          setStep('summary')
+          setStep(STEPS.SUMMARY)
         }
         break
     }
@@ -288,7 +269,12 @@ export default function MDWExamPage() {
             <form onSubmit={handleSubmit(onSubmit)}>
               <Accordion type="single" value={expandedAccordion} onValueChange={setExpandedAccordion} collapsible>
                 <AccordionItem value="clinic-doctor">
-                  <AccordionTrigger className="text-lg font-bold">Clinic and doctor details</AccordionTrigger>
+                  <AccordionTrigger 
+                    className="text-lg font-bold"
+                    isCompleted={isClinicDoctorCompleted}
+                  >
+                    Clinic and doctor details
+                  </AccordionTrigger>
                   <ClinicDoctorDetails 
                     isSummaryActive={isSummaryActive} 
                     handleContinue={handleContinue}
@@ -297,7 +283,13 @@ export default function MDWExamPage() {
                   />
                 </AccordionItem>
                 <AccordionItem value="helper-details" className={!isHelperDetailsEnabled ? "opacity-50" : ""}>
-                  <AccordionTrigger className="text-lg font-bold" disabled={!isHelperDetailsEnabled}>Helper details</AccordionTrigger>
+                  <AccordionTrigger 
+                    className="text-lg font-bold" 
+                    disabled={!isHelperDetailsEnabled}
+                    isCompleted={isHelperDetailsCompleted}
+                  >
+                    Helper details
+                  </AccordionTrigger>
                   <HelperDetails 
                     isSummaryActive={isSummaryActive}
                     handleContinue={handleContinue}
@@ -313,7 +305,13 @@ export default function MDWExamPage() {
                   />
                 </AccordionItem>
                 <AccordionItem value="examination-details" className={!isExaminationEnabled ? "opacity-50 pointer-events-none" : ""}>
-                  <AccordionTrigger className="text-lg font-bold" disabled={!isExaminationEnabled}>Examination details</AccordionTrigger>
+                  <AccordionTrigger 
+                    className="text-lg font-bold" 
+                    disabled={!isExaminationEnabled}
+                    isCompleted={isExaminationCompleted}
+                  >
+                    Examination details
+                  </AccordionTrigger>
                   <ExaminationDetails 
                     isSummaryActive={isSummaryActive}
                     handleContinue={handleContinue}
