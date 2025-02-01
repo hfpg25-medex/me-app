@@ -36,9 +36,8 @@ const router = useRouter();
 
   return (
       <div className="mx-auto p-6 max-w-[760px]">
-        <Card className="mb-4 shadow-md hover:shadow-lg transition-shadow">
-        <CardContent>
-          <div className="flex items-center mb-2 mt-6">
+        <div className="mb-4 p-4 border rounded-md shadow-md hover:shadow-lg transition-shadow">
+          <div className="flex items-center">
             <CheckCircle className="h-6 w-6 text-green-500 mr-2" />
             <div className="text-xl font-semibold align-middle">
               Medical examination results submitted successfully
@@ -61,7 +60,7 @@ const router = useRouter();
             </dl>
           </div>
 
-          <div className="flex items-center mb-2 pl-6">
+          <div className="flex items-center pl-6">
           <Download className="h-4 w-4 text-blue-600 mr-1" />
             <Link
               href="/download-pdf"
@@ -78,14 +77,12 @@ const router = useRouter();
           </p> */}
         {/* </div> */}
         {/* </div> */}
-        </CardContent>
-        </Card>
-        <Card className="shadow-md hover:shadow-lg transition-shadow ">
-        <CardContent>
-          <h2 className="text-xl font-semibold mb-4 mt-4">
+        </div>
+        <div className="border rounded-md shadow-md hover:shadow-lg transition-shadow">
+          <h2 className="text-xl font-semibold pl-6 mb-4 mt-4">
             What do you want to do next?
           </h2>
-          <ul className="space-y-2 list-disc">
+          <ul className="space-y-2 list-disc ml-4">
             <li>
               <button
                 onClick={() => router.push(window.location.pathname)}
@@ -111,8 +108,7 @@ const router = useRouter();
               </Link>
             </li>
           </ul>
-        </CardContent>
-        </Card>
+        </div>
       </div>
   )
 }
