@@ -93,7 +93,7 @@ export function Summary({
 <div className="grid gap-6 md:grid-cols-[2fr,1fr]">
   <div className="space-y-6">
           {/* Personal Details Section */}
-          <Card className="p-4">
+          <Card className="p-4 shadow-md hover:shadow-lg transition-shadow rounded-md">
             <SectionHeader 
               title={HELPER_SECTION_TITLES[type]}
               onEdit={() => onEdit('helper-details')} 
@@ -123,7 +123,7 @@ export function Summary({
           </Card>
 
         {/* Examination Details Section */}
-        <Card className="p-4">
+        <Card className="p-4 shadow-md hover:shadow-lg transition-shadow rounded-md">
         <SectionHeader title="Examination details" onEdit={() => onEdit('examination-details')} />
           <div className="space-y-3 text-md">
               {/* Physical Measurements (MDW only) */}
@@ -200,7 +200,7 @@ export function Summary({
         </Card>
 
         {/* Declaration Section */}
-        <Card className="bg-blue-50 p-4 text-sm border-2 border-blue-100">
+        <Card className="bg-blue-50 p-4 text-sm border-2 border-blue-100 shadow-md hover:shadow-lg transition-shadow rounded-md">
         <SectionHeader title="Declaration" />
         <p className="mb-4">Please read and acknowledge the following:</p>
           <ul className="list-disc pl-5 space-y-2 mb-4">
@@ -224,7 +224,7 @@ export function Summary({
       </div>
 
     <div className="space-y-6">
-    <Card className="p-4">
+    <Card className="p-4 shadow-md hover:shadow-lg transition-shadow rounded-md">
     <SectionHeader title="Clinic & doctor details" onEdit={() => onEdit('clinic-doctor')} />
 
               {/* Clinic Details Section */}

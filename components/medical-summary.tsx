@@ -108,7 +108,7 @@ export function MedicalSummary({
       <div className="grid gap-6 md:grid-cols-[2fr,1fr]">
         <div className="space-y-6">
           {/* Personal Details Section */}
-          <Card className="p-4">
+          <Card className="p-4 shadow-md hover:shadow-lg transition-shadow rounded-md">
             <SectionHeader 
               title="Personal details" 
               onEdit={canEditSection('helper-details') ? () => handleEdit('helper-details') : undefined} 
@@ -138,7 +138,7 @@ export function MedicalSummary({
           </Card>
 
           {/* Medical History Section */}
-          <Card className="p-4">
+          <Card className="p-4 shadow-md hover:shadow-lg transition-shadow rounded-md">
             <SectionHeader title="Medical history" onEdit={() => handleEdit('medical-history')} />
             <div className="space-y-3 text-md">
               {medicalHistory.map((item) => (
@@ -160,7 +160,7 @@ export function MedicalSummary({
           </Card>
 
           {/* Clinical Examination Section */}
-          <Card className="p-4">
+          <Card className="p-4 shadow-md hover:shadow-lg transition-shadow rounded-md">
             <SectionHeader title="Clinical examination" onEdit={canEditSection('clinical-examination') ? () => handleEdit('clinical-examination') : undefined} />
             <div className="space-y-3 text-md">
               <div className="grid grid-cols-2 gap-4">
@@ -233,7 +233,7 @@ export function MedicalSummary({
               </div>
             </div>
           </Card>
-          <Card className="p-4">
+          <Card className="p-4 shadow-md hover:shadow-lg transition-shadow rounded-md">
             <SectionHeader title="Tests" onEdit={canEditSection('tests') ? () => handleEdit('tests') : undefined} />
             <div className="space-y-3 text-md">                          
               <div>
@@ -276,7 +276,7 @@ export function MedicalSummary({
             </div>
           </Card>
           {!isNurse && (
-            <Card className="bg-blue-50 p-4 text-sm">
+            <Card className="bg-blue-50 p-4 text-sm shadow-md hover:shadow-lg transition-shadow rounded-md border-2 border-blue-100">
               <SectionHeader title="Declaration" />
                 <p className="mb-0">Please read and acknowledge the following:</p>
                 <ul className="list-disc pl-4 mb-4">
@@ -306,7 +306,7 @@ export function MedicalSummary({
 
         <div className="space-y-6">
           {/* Lab Tests Section */}
-          <Card className="p-6">
+          <Card className="p-4 shadow-md hover:shadow-lg transition-shadow rounded-md">
             <div className="space-y-6">
               <div>
                 <StatusBadge status="pending">Pending</StatusBadge>
@@ -386,7 +386,7 @@ export function MedicalSummary({
           </Card>
 
           {/* Lab Tests Table */}
-          <Card className="p-6">
+          <Card className="p-4 shadow-md hover:shadow-lg transition-shadow rounded-md">
             <SectionHeader title="Lab tests & specialist referrals" onEdit={() => {}} />
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
