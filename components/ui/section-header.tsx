@@ -1,3 +1,5 @@
+import { Pencil } from "lucide-react"
+
 interface SectionHeaderProps {
     title: string
     onEdit?: () => void
@@ -8,9 +10,12 @@ interface SectionHeaderProps {
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-lg font-semibold">{title}</h2>
         {onEdit && (
-          <button onClick={onEdit} className="text-sm text-gray-500 hover:text-gray-700">
+          <div className="flex items-center">
+          <Pencil className="h-3 w-3 text-blue-600 mr-1" />
+          <button onClick={onEdit} className="text-sm text-blue-600 hover:text-blue-900">
             Edit
           </button>
+          </div>
         )}
       </div>
     )
