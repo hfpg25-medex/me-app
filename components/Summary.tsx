@@ -43,9 +43,9 @@ interface SummaryProps {
 }
 
 const TITLES = {
-  MDW: "Six-monthly Medical Exam for Migrant Domestic Workers (MOM)",
-  MW: "Six-monthly Medical Exam for Female Migrant Workers (MOM)",
-  PR: "Medical Exam for Permanent Residency Application (ICA)"
+  MDW: "Six-monthly Medical Examination for Migrant Domestic Worker (MOM)",
+  MW: "Six-monthly Medical Examination for Female Migrant Worker (MOM)",
+  PR: "Medical Examination for PR Application (ICA)"
 }
 
 const HELPER_SECTION_TITLES = {
