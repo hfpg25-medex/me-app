@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Accordion, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { FinChangeModal } from "@/components/FinChangeModal"
@@ -103,42 +103,9 @@ export default function WPExamPage() {
     },
   })
 
-  const { register, watch, handleSubmit, formState: { errors }, trigger, setValue } = methods
+  const { watch, handleSubmit, formState: { errors }, trigger, setValue } = methods
   
   const watchedValues = watch()
-
-  // const validateField = async (fieldName: keyof typeof isCompletedStates) => {
-  //   try {
-  //     console.log(isCompletedStates)
-  //     const result = await trigger(fieldName);
-  //     setIsCompletedStates((prev) => ({
-  //       ...prev,
-  //       [fieldName]: result,
-  //     }));
-  //   } catch (error) {
-  //     console.error(`Error validating ${fieldName}:`, error);
-  //     setIsCompletedStates((prev) => ({
-  //       ...prev,
-  //       [fieldName]: false, // Set to false in case of error
-  //     }));
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   const checkTestsCompletion = async () => {
-  //     const result = await trigger('tests');
-  //     setIsTestsCompleted(result);
-  //   };
-  //   checkTestsCompletion();
-  // }, [trigger]);
-
-  // useEffect(() => {
-  //   validateField('helperDetails');
-  //   validateField('clinicDoctor');
-  //   validateField('medicalHistory');
-  //   validateField('clinicalExamination');
-  //   validateField('tests');
-  // }, []);
 
 
   const handleFinChange = async (value: string) => {

@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils"
 
 const Accordion = AccordionPrimitive.Root
 
+
 const AccordionItem = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Item>
@@ -28,44 +29,44 @@ interface AccordionTriggerProps extends React.ComponentPropsWithoutRef<typeof Ac
 const AccordionTrigger = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Trigger>,
   AccordionTriggerProps
->(({ className, children, isCompleted, isDisabled, ...props }, ref) => (
-  <AccordionPrimitive.Header className="flex">
-    <AccordionPrimitive.Trigger
-      ref={ref}
-      className={cn(
-        "flex flex-1 items-center justify-between py-4 font-medium transition-all hover:underline text-left [&[data-state=open]>svg.chevron]:rotate-180",
-        isDisabled && "opacity-50 cursor-not-allowed hover:no-underline",
-        className
-      )}
-      {...props}
-    >
-      <div className="flex items-center gap-4">
-        <ChevronDown className="chevron h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200" />
-        <span className="text-lg">{children}</span>
-      </div>
-      <div 
+>(({ className, children, isCompleted, isDisabled, ...props }, ref) => {
+  return (
+    <AccordionPrimitive.Header className="flex">
+      <AccordionPrimitive.Trigger
+        ref={ref}
         className={cn(
-          "w-4 h-4 rounded-full border-2 flex items-center justify-center transition-colors",
-          isCompleted && "bg-green-500 border-green-500",
-          !isCompleted && !isDisabled && props["data-state"] === "open" && "border-primary",
-          !isCompleted && !isDisabled && props["data-state"] !== "open" && "border-gray-600",
-          isDisabled && "border-gray-300"
+          "flex flex-1 items-center justify-between py-4 font-medium transition-all hover:underline text-left [&[data-state=open]>svg.chevron]:rotate-180 group",
+          isDisabled && "opacity-50 cursor-not-allowed hover:no-underline",
+          className
         )}
+        {...props}
       >
-        {isCompleted ? (
-          <Check className="h-2.5 w-2.5 text-white" />
-        ) : (
-          <span className={cn(
-            "w-1 h-1 rounded-full",
-            !isDisabled && props["data-state"] === "open" && "bg-primary",
-            !isDisabled && props["data-state"] !== "open" && "bg-gray-600",
-            isDisabled && "bg-gray-300"
-          )} />
-        )}
-      </div>
-    </AccordionPrimitive.Trigger>
-  </AccordionPrimitive.Header>
-))
+        <div className="flex items-center gap-4">
+          <ChevronDown className="chevron h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200" />
+          <span className="text-lg">{children}</span>
+        </div>
+        <div 
+          className={cn(
+            "rounded-full border-2 flex items-center justify-center transition-colors",
+            isCompleted && !isDisabled && "group-data-[state=open]:mr-1 group-data-[state=open]:bg-blue-500 group-data-[state=open]:border-blue-500 group-data-[state=closed]:w-4 group-data-[state=closed]:h-4 group-data-[state=open]:w-2 group-data-[state=open]:h-2 group-date-[state=open]:text-primary group-data-[state=closed]:bg-green-500 group-data-[state=closed]:border-green-500",
+            !isCompleted && !isDisabled && "w-2 h-2 border-gray-500 bg-gray-500 group-data-[state=open]:bg-blue-500 group-data-[state=open]:border-blue-500 mr-1",
+            isDisabled && "border-gray-300 bg-gray-300 w-2 h-2 mr-1 ",
+          )}
+        >
+          {isCompleted ? (
+            <Check className=" group-data-[state=open]:text-blue-500 group-data-[state=closed]:text-white" />
+          ) : (
+            <span
+              className={cn(
+                "rounded-full",
+              )}
+            />
+          )}
+        </div>
+      </AccordionPrimitive.Trigger>
+    </AccordionPrimitive.Header>
+  );
+})
 AccordionTrigger.displayName = AccordionPrimitive.Trigger.displayName
 
 const AccordionContent = React.forwardRef<
