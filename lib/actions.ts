@@ -1,6 +1,6 @@
 'use server'
 
-import { contactFormSchema, clinicSchema, doctorSchema } from '@/lib/schema'
+import { contactFormSchema, clinicSchema, doctorSchema } from '@/lib/validations/clinicDoctorSchemas'
 import { z } from 'zod'
 
 export async function contactFormAction(
