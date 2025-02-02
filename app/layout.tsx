@@ -1,56 +1,58 @@
-'use client'
+"use client";
 
-import './globals.css'
-import { DefaultFooter } from '@/components/sgds/Footer'
-import '@govtechsg/sgds-masthead/dist/sgds-masthead/sgds-masthead.css';
-import {SgdsMasthead} from "@govtechsg/sgds-masthead-react"
-import { UserProvider } from '@/lib/context/user-context'
-import { AuthProvider, useAuth } from '@/lib/context/auth-context'
-import { Geist } from 'next/font/google'
-import { NavBar } from '@/components/ui/navbar'
+import { DefaultFooter } from "@/components/sgds/Footer";
+import { NavBar } from "@/components/ui/navbar";
+import { AuthProvider, useAuth } from "@/lib/context/auth-context";
+import { UserProvider } from "@/lib/context/user-context";
+import { SgdsMasthead } from "@govtechsg/sgds-masthead-react";
+import "@govtechsg/sgds-masthead/dist/sgds-masthead/sgds-masthead.css";
+import { Inter } from "next/font/google";
+import "./globals.css";
 
-const geist = Geist({
-  subsets: ['latin'],
-  variable: '--font-geist',
-})
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+});
 
 function MainLayout({ children }: { children: React.ReactNode }) {
-  const { user} = useAuth()
+  const { user } = useAuth();
 
   return (
     <div className="min-h-screen flex flex-col">
-      <SgdsMasthead placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />
+      <SgdsMasthead
+        placeholder={undefined}
+        onPointerEnterCapture={undefined}
+        onPointerLeaveCapture={undefined}
+      />
       {user && <NavBar userName={user.name} userUen={user.uen} />}
       <UserProvider initialUser={user}>
         <main>{children}</main>
       </UserProvider>
     </div>
-  )
+  );
 }
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html lang="en">
       <head>
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-        <link
+        {/* <link
           href="https://cdn.jsdelivr.net/npm/@govtechsg/sgds@2.3.6/css/sgds.css"
           rel="stylesheet"
           type="text/css"
-        />
+        /> */}
       </head>
-      <body className={`${geist.variable} font-sans antialiased`}>
+      <body className={`${inter.variable} font-sans antialiased`}>
         <AuthProvider>
-          <MainLayout>
-            {children}
-          </MainLayout>
+          <MainLayout>{children}</MainLayout>
           <DefaultFooter />
         </AuthProvider>
       </body>
     </html>
-  )
+  );
 }
