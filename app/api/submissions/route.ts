@@ -5,12 +5,17 @@ import { authOptions } from '@/lib/auth'
 import { submissionSchema } from '@/lib/validations/submission'
 import { APIError, handleAPIError } from '@/lib/exceptions'
 import { ZodError } from 'zod'
+import { logInfo, logError, logWarning } from '@/lib/logger'
 
 export async function POST(request: Request) {
   try {
     // Check authentication
     const session = await getServerSession(authOptions)
     if (!session?.user?.id) {
+      logWarning('Unauthorized access attempt', {
+        action: 'submission_create',
+        path: request.url
+      })
       throw new APIError('Unauthorized', 401, 'UNAUTHORIZED')
     }
 
@@ -18,12 +23,23 @@ export async function POST(request: Request) {
     const body = await request.json()
     const validatedData = submissionSchema.parse(body)
     
+    logInfo('Received submission request', {
+      userId: session.user.id,
+      examType: validatedData.type,
+      action: 'submission_create'
+    })
+    
     // Check if clinic exists if clinicId is provided
     if (validatedData.data.clinicId) {
       const clinic = await prisma.clinic.findUnique({
         where: { id: validatedData.data.clinicId }
       })
       if (!clinic) {
+        logWarning('Clinic not found', {
+          userId: session.user.id,
+          clinicId: validatedData.data.clinicId,
+          action: 'submission_create'
+        })
         throw new APIError('Clinic not found', 404, 'CLINIC_NOT_FOUND')
       }
     }
@@ -34,6 +50,11 @@ export async function POST(request: Request) {
         where: { id: validatedData.data.doctorId }
       })
       if (!doctor) {
+        logWarning('Doctor not found', {
+          userId: session.user.id,
+          doctorId: validatedData.data.doctorId,
+          action: 'submission_create'
+        })
         throw new APIError('Doctor not found', 404, 'DOCTOR_NOT_FOUND')
       }
     }
@@ -64,9 +85,21 @@ export async function POST(request: Request) {
             userId: session.user.id // Extra safety check
           }
         })
+        logInfo('Deleted draft submission', {
+          userId: session.user.id,
+          draftId: validatedData.draftId,
+          action: 'submission_create'
+        })
       }
 
       return newSubmission
+    })
+
+    logInfo('Submission created successfully', {
+      userId: session.user.id,
+      submissionId: submission.submissionId,
+      examType: validatedData.type,
+      action: 'submission_create'
     })
 
     return NextResponse.json({ 
@@ -77,6 +110,10 @@ export async function POST(request: Request) {
   } catch (error) {
     // Handle Zod validation errors
     if (error instanceof ZodError) {
+      logWarning('Validation error in submission', {
+        errors: error.errors,
+        action: 'submission_create'
+      })
       return NextResponse.json({
         success: false,
         code: 'VALIDATION_ERROR',
@@ -84,6 +121,12 @@ export async function POST(request: Request) {
         errors: error.errors
       }, { status: 400 })
     }
+
+    // Log the error
+    logError(error, {
+      action: 'submission_create',
+      component: 'submission_api'
+    })
 
     // Handle other API errors
     return handleAPIError(error)
