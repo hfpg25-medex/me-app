@@ -61,3 +61,20 @@ model DraftSubmission {
   @@index([userId])
   @@index([examType])
 }
+
+model Submission {
+  id              String   @id @default(cuid())
+  userId          String   // ID of the user who submitted the form
+  examType        String   // Type of medical exam (e.g., 'FME', 'MDW', etc.)
+  formData        Json     // The actual form data stored as JSON
+  status          String   @default("completed") // Status of the submission
+  submissionId    String   @unique // Public-facing submission ID
+  clinicId        String?  // Optional reference to the clinic
+  doctorId        String?  // Optional reference to the doctor
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([userId])
+  @@index([examType])
+  @@index([submissionId])
+}
