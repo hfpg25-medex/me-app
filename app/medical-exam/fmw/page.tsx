@@ -14,6 +14,7 @@ import { AcknowledgementPage } from '@/components/AcknowledgementPage'
 import { StepIndicator } from "@/components/ui/step-indicator"
 import { examTitles } from '@/constants/exam-titles'
 import { STEPS, StepType } from '@/constants/steps'
+import { toast } from 'sonner'
 
 const clinics = [
   { id: '1', name: 'ABC Medical Clinic (Bukit Batok)', hciCode: '2M12345', contactNumber: '+65 69991234' },
@@ -57,6 +58,8 @@ export default function FMWExamPage() {
   const [visitDateTouched, setVisitDateTouched] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isPendingMe, setIsPendingMe] = useState (false)
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submissionId, setSubmissionId] = useState('');
 
   // Add completion state for each section
   const [isClinicDoctorCompleted, setIsClinicDoctorCompleted] = useState(false)
@@ -145,9 +148,47 @@ export default function FMWExamPage() {
     setExpandedAccordion(section)
   }
 
-  const onSubmit = (data: FormDataMW) => {
-    console.log("Form submitted!", data)
-    setIsSubmitted(true);
+  const onSubmit = async (data: FormDataMW) => {
+    try {
+      // Show loading state
+      setIsSubmitting(true)
+
+      // Prepare the submission data
+      const submission = {
+        type: 'FMW',
+        data,
+        createdAt: new Date().toISOString(),
+        status: 'completed'
+      }
+
+      // Call the API endpoint
+      const response = await fetch('/api/submissions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(submission),
+      })
+
+      const result = await response.json()
+
+      if (!result.success) {
+        throw new Error(result.message || 'Failed to save submission')
+      }
+
+      // Show success message
+      toast.success('Form submitted successfully')
+
+      // Update submission ID and move to acknowledgment page
+      setSubmissionId(result.submissionId)
+      setIsSubmitted(true);
+    } catch (error) {
+      // Show error message
+      toast.error('Failed to submit form. Please try again.')
+      console.error('Submission error:', error)
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   if (isSubmitted) {
@@ -155,7 +196,7 @@ export default function FMWExamPage() {
       <AcknowledgementPage 
         finNumber={watchedValues.helperDetails.fin}
         helperName={watchedValues.helperDetails.helperName}
-        referenceNumber="6ME2108120002" // Replace with actual reference number if available
+        referenceNumber={submissionId} // Replace with actual reference number if available
         submissionDateTime={new Date().toLocaleString()} // Current date and time for submission
       />
     );

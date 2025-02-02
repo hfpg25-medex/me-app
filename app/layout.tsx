@@ -8,11 +8,15 @@ import { UserProvider } from '@/lib/context/user-context'
 import { AuthProvider, useAuth } from '@/lib/context/auth-context'
 import { Geist } from 'next/font/google'
 import { NavBar } from '@/components/ui/navbar'
+import { Inter } from 'next/font/google'
+import { Toaster } from 'sonner'
 
 const geist = Geist({
   subsets: ['latin'],
   variable: '--font-geist',
 })
+
+const inter = Inter({ subsets: ['latin'] })
 
 function MainLayout({ children }: { children: React.ReactNode }) {
   const { user} = useAuth()
@@ -43,12 +47,13 @@ export default function RootLayout({
           type="text/css"
         />
       </head>
-      <body className={`${geist.variable} font-sans antialiased`}>
+      <body className={`${geist.variable} font-sans antialiased ${inter.className}`}>
         <AuthProvider>
           <MainLayout>
             {children}
           </MainLayout>
           <DefaultFooter />
+          <Toaster richColors position="top-right" />
         </AuthProvider>
       </body>
     </html>
