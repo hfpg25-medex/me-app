@@ -6,15 +6,15 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent } from '@/components/ui/card'
-import { Plus, Trash2, Building2, Pencil } from 'lucide-react'
-import { clinicAction } from '@/lib/actions'
+import { Plus, Trash2, Building2, Pencil, Loader2 } from 'lucide-react'
+import { updateClinic, getClinicList } from '@/lib/actions/clinic'
 import { clinicSchema } from '@/lib/validations/clinicDoctorSchemas'
 import { useToast } from '@/hooks/use-toast'
 
 interface Clinic {
   id: string
   name: string
-  hcCode: string
+  hci: string
   contactNumber: string
   address: string
 }
@@ -28,12 +28,30 @@ export function ClinicList() {
   const [editingId, setEditingId] = React.useState<string | null>(null)
   const [validationErrors, setValidationErrors] = React.useState<Record<string, ValidationErrors>>({})
   const { toast } = useToast()
+  const [isLoading, setIsLoading] = React.useState<string | null>(null)
+
+  React.useEffect(() => {
+    const loadClinics = async () => {
+      const result = await getClinicList()
+      if (result.success && result.data) {
+        setClinics(result.data)
+      } else {
+        setClinics([])  
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: result.error || "Failed to load clinics"
+        })
+      }
+    }
+    loadClinics()
+  }, [toast])
 
   const addClinic = () => {
     const newClinic: Clinic = {
       id: Math.random().toString(36).substr(2, 9),
       name: '',
-      hcCode: '',
+      hci: '',
       contactNumber: '',
       address: '',
     }
@@ -70,51 +88,42 @@ export function ClinicList() {
   }
 
   const handleSubmit = async (clinic: Clinic) => {
-    console.log(clinic)
-    if (!validateClinic(clinic)) {
-      return
-    }
-
     try {
-      const validatedData = clinicSchema.parse(clinic)
-      console.log(validatedData)
-      
-      const formData = new FormData()
-      Object.entries(validatedData).forEach(([key, value]) => {
-        formData.append(key, value)
+      setIsLoading(clinic.id)
+      const result = await updateClinic(clinic.id, {
+        name: clinic.name,
+        hci: clinic.hci,
+        contactNumber: clinic.contactNumber,
+        address: clinic.address,
       })
 
-      const result = await clinicAction(null, formData)
-      
       if (result.success) {
+        setEditingId(null)
         toast({
           title: "Success",
-          description: "Clinic information saved successfully",
+          description: "Clinic information updated successfully."
         })
-        setEditingId(null)
-      } else if (result.errors) {
+        // Update the local state with the updated clinic
+        setClinics(prevClinics =>
+          prevClinics.map(c =>
+            c.id === clinic.id ? { ...c, ...result.data } : c
+          )
+        )
+      } else {
         toast({
-          title: "Error",
-          description: "Please check the form for errors",
           variant: "destructive",
+          title: "Error",
+          description: result.error
         })
       }
     } catch (error) {
-      if (error instanceof z.ZodError) {
-        const errorMessages = error.errors.map(err => `${err.path}: ${err.message}`).join('\n')
-        console.log(errorMessages)
-        toast({
-          title: "Validation Error",
-          description: errorMessages,
-          variant: "destructive",
-        })
-      } else {
-        toast({
-          title: "Error",
-          description: "An unexpected error occurred",
-          variant: "destructive",
-        })
-      }
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Something went wrong. Please try again."
+      })
+    } finally {
+      setIsLoading(null)
     }
   }
 
@@ -148,8 +157,13 @@ export function ClinicList() {
                   variant="outline"
                   size="sm"
                   onClick={() => handleSubmit(clinic)}
+                  disabled={isLoading === clinic.id}
                 >
-                  Save
+                  {isLoading === clinic.id ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    "Save"
+                  )}
                 </Button>
               ) : (
                 <Button
@@ -200,21 +214,21 @@ export function ClinicList() {
               </div>
 
               <div className="grid gap-2">
-                <Label htmlFor={`hcCode-${clinic.id}`}>HC Code</Label>
+                <Label htmlFor={`hci-${clinic.id}`}>HCI Code</Label>
                 <Input
-                  id={`hcCode-${clinic.id}`}
-                  value={clinic.hcCode}
+                  id={`hci-${clinic.id}`}
+                  value={clinic.hci}
                   onChange={(e) =>
                     setClinics(
                       clinics.map((c) =>
-                        c.id === clinic.id ? { ...c, hcCode: e.target.value } : c
+                        c.id === clinic.id ? { ...c, hci: e.target.value } : c
                       )
                     )
                   }
                   disabled={editingId !== clinic.id}
                 />
-                {getFieldError(clinic.id, 'hcCode') && (
-                  <p className="text-sm text-red-500">{getFieldError(clinic.id, 'hcCode')}</p>
+                {getFieldError(clinic.id, 'hci') && (
+                  <p className="text-sm text-red-500">{getFieldError(clinic.id, 'hci')}</p>
                 )}
               </div>
 
