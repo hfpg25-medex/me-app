@@ -33,6 +33,7 @@ export function ClinicList() {
   React.useEffect(() => {
     const loadClinics = async () => {
       const result = await getClinicList()
+      console.log("result", result)
       if (result.success && result.data) {
         setClinics(result.data)
       } else {
@@ -89,6 +90,42 @@ export function ClinicList() {
 
   const handleSubmit = async (clinic: Clinic) => {
     try {
+      // Clear previous validation errors for this clinic
+      setValidationErrors(prev => {
+        const newErrors = { ...prev }
+        delete newErrors[clinic.id]
+        return newErrors
+      })
+
+      // Validate before sending to server
+      try {
+        clinicSchema.parse({
+          name: clinic.name,
+          hci: clinic.hci,
+          contactNumber: clinic.contactNumber,
+          address: clinic.address,
+        })
+      } catch (e) {
+        if (e instanceof z.ZodError) {
+          const errors = e.errors.reduce((acc: { [key: string]: string[] }, curr) => {
+            const field = curr.path[0] as string
+            if (!acc[field]) acc[field] = []
+            acc[field].push(curr.message)
+            return acc
+          }, {})
+          setValidationErrors(prev => ({
+            ...prev,
+            [clinic.id]: errors
+          }))
+          toast({
+            variant: "destructive",
+            title: "Validation Error",
+            description: "Please check the form for errors"
+          })
+          return
+        }
+      }
+
       setIsLoading(clinic.id)
       const result = await updateClinic(clinic.id, {
         name: clinic.name,
@@ -103,13 +140,19 @@ export function ClinicList() {
           title: "Success",
           description: "Clinic information updated successfully."
         })
-        // Update the local state with the updated clinic
         setClinics(prevClinics =>
           prevClinics.map(c =>
             c.id === clinic.id ? { ...c, ...result.data } : c
           )
         )
       } else {
+        // Handle server-side validation errors
+        if (result.validationErrors) {
+          setValidationErrors(prev => ({
+            ...prev,
+            [clinic.id]: result.validationErrors as unknown as ValidationErrors
+          }))
+        }
         toast({
           variant: "destructive",
           title: "Error",
@@ -117,18 +160,21 @@ export function ClinicList() {
         })
       }
     } catch (error) {
+      console.error('Error updating clinic:', error)
       toast({
         variant: "destructive",
         title: "Error",
-        description: "Something went wrong. Please try again."
+        description: "An unexpected error occurred"
       })
     } finally {
       setIsLoading(null)
     }
   }
 
-  const getFieldError = (clinicId: string, fieldName: string) => {
-    return validationErrors[clinicId]?.[fieldName]?.[0] || ''
+  const getFieldError = (clinicId: string, field: string) => {
+    if (!validationErrors[clinicId]) return null
+    const errors = validationErrors[clinicId][field]
+    return errors ? errors[0] : null
   }
 
   return (
