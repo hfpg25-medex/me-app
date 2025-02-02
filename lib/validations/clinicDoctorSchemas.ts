@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 export const clinicSchema = z.object({
-  hcCode: z
+  hci: z
     .string()
     .regex(/^[a-zA-Z0-9]{7}$/, { message: 'You must enter a valid HCI Code' }),
   contactNumber: z
