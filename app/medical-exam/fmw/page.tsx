@@ -73,7 +73,9 @@ export default function FMWExamPage() {
   const [visitDateTouched, setVisitDateTouched] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isPendingMe, setIsPendingMe] = useState(false);
+  /* eslint-disable @typescript-eslint/no-unused-vars */
   const [isSubmitting, setIsSubmitting] = useState(false);
+  /* eslint-disable @typescript-eslint/no-unused-vars */
   const [submissionId, setSubmissionId] = useState("");
 
   //To remove
