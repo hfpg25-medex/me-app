@@ -75,7 +75,7 @@ export default function WPExamPage() {
     resolver: zodResolver(formSchemaWP),
     defaultValues: {
       clinicDoctor: { clinic: '', doctor: '' },
-      helperDetails: { fin: '', helperName: '', visitDate: new Date() },
+      helperDetails: { fin: '', helperName: '', visitDate: undefined },
       medicalHistory:  [],
       clinicalExamination: {
         weight: 0,
@@ -335,7 +335,7 @@ export default function WPExamPage() {
                     isPendingMe={isPendingMe}
                     nextStep='medical-history'
                     requireVisitDate={true}
-                    defaultToday={true}
+                    defaultToday={false}
                   />
                 </AccordionItem>
                 <AccordionItem value="medical-history">
