@@ -421,7 +421,10 @@ export function ClinicalExamination({
           </div>
         </div>
       </div>
-      <Button className="mt-4" onClick={() => handleContinue("tests")}>
+      <Button
+        className="mt-4"
+        onClick={() => handleContinue(isSummaryActive ? "summary" : "tests")}
+      >
         {isSummaryActive ? "Continue to Summary" : "Continue"}
       </Button>
     </AccordionContent>
