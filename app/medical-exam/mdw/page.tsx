@@ -82,7 +82,7 @@ export default function MDWExamPage() {
       examinationDetails: {
         weight: '', // Changed from 0 to an empty string
         height: 0,
-        bmi: null,
+        bmi: 0,
         positiveTests: [],
         suspiciousInjuries: false,
         unintentionalWeightLoss: false,
@@ -102,7 +102,7 @@ export default function MDWExamPage() {
       const calculatedBmi = weightInKg / (heightInM * heightInM)
       setValue('examinationDetails.bmi', parseFloat(calculatedBmi.toFixed(1)))
     } else {
-      setValue('examinationDetails.bmi', null)
+      setValue('examinationDetails.bmi', 0)
     }
   }, [watchedValues.examinationDetails.weight, watchedValues.examinationDetails.height, setValue])
 

@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+// import { getServerSession } from 'next-auth'
+// import { authOptions } from '@/lib/auth'
 import { submissionSchema } from '@/lib/validations/submission'
 import { APIError, handleAPIError } from '@/lib/exceptions'
 import { ZodError } from 'zod'
@@ -10,21 +10,27 @@ import { logInfo, logError, logWarning } from '@/lib/logger'
 export async function POST(request: Request) {
   try {
     // Check authentication
-    const session = await getServerSession(authOptions)
-    if (!session?.user?.id) {
-      logWarning('Unauthorized access attempt', {
-        action: 'submission_create',
-        path: request.url
-      })
-      throw new APIError('Unauthorized', 401, 'UNAUTHORIZED')
-    }
+    // const session = await getServerSession(authOptions)
+    // if (!session?.user?.id) {
+    //   logWarning('Unauthorized access attempt', {
+    //     action: 'submission_create',
+    //     path: request.url
+    //   })
+    //   throw new APIError('Unauthorized', 401, 'UNAUTHORIZED')
+    // }
 
     // Parse and validate request body
     const body = await request.json()
     const validatedData = submissionSchema.parse(body)
     
+    // logInfo('Received submission request', {
+    //   userId: session.user.id,
+    //   examType: validatedData.type,
+    //   action: 'submission_create'
+    // })
+
     logInfo('Received submission request', {
-      userId: session.user.id,
+      // userId: user.id,
       examType: validatedData.type,
       action: 'submission_create'
     })
@@ -36,7 +42,7 @@ export async function POST(request: Request) {
       })
       if (!clinic) {
         logWarning('Clinic not found', {
-          userId: session.user.id,
+          // userId: session.user.id,
           clinicId: validatedData.data.clinicId,
           action: 'submission_create'
         })
@@ -51,7 +57,7 @@ export async function POST(request: Request) {
       })
       if (!doctor) {
         logWarning('Doctor not found', {
-          userId: session.user.id,
+          // userId: session.user.id,
           doctorId: validatedData.data.doctorId,
           action: 'submission_create'
         })
@@ -67,7 +73,8 @@ export async function POST(request: Request) {
       // Create the submission
       const newSubmission = await tx.submission.create({
         data: {
-          userId: session.user.id,
+          // userId: session.user.id,
+          userId: '',
           examType: validatedData.type,
           formData: validatedData.data,
           submissionId,
@@ -82,11 +89,11 @@ export async function POST(request: Request) {
         await tx.draftSubmission.deleteMany({
           where: { 
             id: validatedData.draftId,
-            userId: session.user.id // Extra safety check
+            // userId: session.user.id // Extra safety check
           }
         })
         logInfo('Deleted draft submission', {
-          userId: session.user.id,
+          // userId: session.user.id,
           draftId: validatedData.draftId,
           action: 'submission_create'
         })
@@ -96,7 +103,7 @@ export async function POST(request: Request) {
     })
 
     logInfo('Submission created successfully', {
-      userId: session.user.id,
+      // userId: session.user.id,
       submissionId: submission.submissionId,
       examType: validatedData.type,
       action: 'submission_create'

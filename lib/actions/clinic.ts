@@ -49,6 +49,7 @@ export async function getClinicList() {
     })
     return { success: true, data: clinics }
   } catch (error) {
+    console.error('Error fetching clinics:', error)
     return { success: false, error: 'Failed to fetch clinics.' }
   }
 }

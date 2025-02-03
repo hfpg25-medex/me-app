@@ -61,32 +61,32 @@ export function ClinicList() {
     setValidationErrors({...validationErrors, [newClinic.id]: {}})
   }
 
-  const validateClinic = (clinic: Clinic) => {
-    try {
-      clinicSchema.parse(clinic)
-      setValidationErrors({
-        ...validationErrors,
-        [clinic.id]: {}
-      })
-      return true
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        const errors: ValidationErrors = {}
-        error.errors.forEach((err) => {
-          const path = err.path[0] as string
-          if (!errors[path]) {
-            errors[path] = []
-          }
-          errors[path].push(err.message)
-        })
-        setValidationErrors({
-          ...validationErrors,
-          [clinic.id]: errors
-        })
-      }
-      return false
-    }
-  }
+  // const validateClinic = (clinic: Clinic) => {
+  //   try {
+  //     clinicSchema.parse(clinic)
+  //     setValidationErrors({
+  //       ...validationErrors,
+  //       [clinic.id]: {}
+  //     })
+  //     return true
+  //   } catch (error) {
+  //     if (error instanceof z.ZodError) {
+  //       const errors: ValidationErrors = {}
+  //       error.errors.forEach((err) => {
+  //         const path = err.path[0] as string
+  //         if (!errors[path]) {
+  //           errors[path] = []
+  //         }
+  //         errors[path].push(err.message)
+  //       })
+  //       setValidationErrors({
+  //         ...validationErrors,
+  //         [clinic.id]: errors
+  //       })
+  //     }
+  //     return false
+  //   }
+  // }
 
   const handleSubmit = async (clinic: Clinic) => {
     try {

@@ -57,31 +57,31 @@ export function DoctorList() {
     setValidationErrors({...validationErrors, [newDoctor.id]: {}})
   }
 
-  const validateDoctor = (doctor: Doctor) => {
-    try {
-      doctorSchema.parse(doctor)
-      setValidationErrors({
-        ...validationErrors,
-        [doctor.id]: {}
-      })
-      return true
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        const errors: ValidationErrors = {}
-        error.errors.forEach((err) => {
-          const path = err.path[0] as string
-          if (!errors[path]) {
-            errors[path] = []
-          }
-          errors[path].push(err.message)
-        })
-        setValidationErrors({
-          ...validationErrors,
-          [doctor.id]: errors
-        })
-      }
-    }
-  }
+  // const validateDoctor = (doctor: Doctor) => {
+  //   try {
+  //     doctorSchema.parse(doctor)
+  //     setValidationErrors({
+  //       ...validationErrors,
+  //       [doctor.id]: {}
+  //     })
+  //     return true
+  //   } catch (error) {
+  //     if (error instanceof z.ZodError) {
+  //       const errors: ValidationErrors = {}
+  //       error.errors.forEach((err) => {
+  //         const path = err.path[0] as string
+  //         if (!errors[path]) {
+  //           errors[path] = []
+  //         }
+  //         errors[path].push(err.message)
+  //       })
+  //       setValidationErrors({
+  //         ...validationErrors,
+  //         [doctor.id]: errors
+  //       })
+  //     }
+  //   }
+  // }
 
   // const removeDoctor = (id: string) => {
   //   setDoctors(doctors.filter(doctor => doctor.id !== id))

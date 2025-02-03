@@ -61,6 +61,9 @@ export default function FMWExamPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submissionId, setSubmissionId] = useState('');
 
+  //To remove
+  console.log(isSubmitting)
+
   // Add completion state for each section
   const [isClinicDoctorCompleted, setIsClinicDoctorCompleted] = useState(false)
   const [isHelperDetailsCompleted, setIsHelperDetailsCompleted] = useState(false)

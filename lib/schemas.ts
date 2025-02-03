@@ -62,7 +62,7 @@ export const examinationDetailsMDWSchema = z.object({
     z.null()
   ]),
   height: z.number().min(90, "Height must be at least 90cm").max(250, "Height must be at most 250cm"),
-  bmi: z.number().nullable(),
+  bmi: z.number(),
   positiveTests: z.array(z.string()),
   suspiciousInjuries: z.boolean(),
   unintentionalWeightLoss: z.boolean(),
@@ -71,19 +71,20 @@ export const examinationDetailsMDWSchema = z.object({
 });
 
 export const clinicalExaminationSchema = z.object({
-  weight: z.union([
-    z.string().refine((val) => val === '', { message: "Weight is required" }),
-    z.number().min(15, "Please input a valid weight").max(200, "Please input a valid weight")
-  ]),
-  height: z.number().min(90, "Height must be at least 90cm").max(250, "Height must be at most 250cm"),
-  bmi: z.number().nullable(),
-  waistCircumference: z.number().min(0, "Waist circumference must be a positive number"),
+  // weight: z.union([
+  //   z.string().refine((val) => val === '', { message: "Weight is required" }),
+  //   z.number().min(15, "Please input a valid weight").max(200, "Please input a valid weight")
+  // ]),
+  weight: z.number().min(15, "Please input a valid weight").max(200, "Please input a valid weight"),
+  height: z.number().min(90, "Please input a valid height").max(250, "Please input a valid height"),
+  bmi: z.number(),
+  waistCircumference: z.number().min(0, "Please input a valid waist circumference"),
   // positiveTests: z.array(z.string()),
-  systolicBP: z.number().min(0, "Systolic BP must be a positive number"),
-  diastolicBP: z.number().min(0, "Diastolic BP must be a positive number"),
+  systolicBP: z.number().min(0, "Please input a valid systolic BP"),
+  diastolicBP: z.number().min(0, "Please input a valid diastolic BP"),
   // rightEyeVision: z.string().min(1, "Right eye vision is required"),
-  rightEyeVision: z.string(),
-  leftEyeVision: z.string(),
+  rightEyeVision: z.string({required_error: "Right eye vision is required"}),
+  leftEyeVision: z.string({required_error: "Left eye vision is required"}),
   urineAlbumin: z.string().default("normal"),
   urineGlucose: z.string().default("normal"),
   pregnancyTest: z.string().default("negative"),

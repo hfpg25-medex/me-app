@@ -24,7 +24,7 @@ interface SummaryProps {
     helperDetails: {
       fin: string
       name: string
-      visitDate: Date | null
+      visitDate: Date
     }
     medicalHistory: Array<{
       condition: string
@@ -72,6 +72,9 @@ export function MedicalSummary({
     const { canEditSection, canSubmitReport } = usePermissions()
     const { user } = useAuth()
     const isNurse = user?.role === 'nurse'
+
+    //to remove
+    console.log(canSubmitReport)
 
     useEffect(() => {
       window.scrollTo(0, 0); // Scroll to the top of the page

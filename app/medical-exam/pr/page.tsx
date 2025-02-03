@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Accordion, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Summary } from "@/components/Summary"
 import { FinChangeModal } from "@/components/FinChangeModal"
