@@ -17,7 +17,7 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <main className="max-w-[1376px] mx-auto px-8 sm:px-12 md:px-16 lg:px-8 w-full">
+      <main className="max-w-[1376px] mx-auto px-8 sm:px-12 md:px-16 lg:px-8 w-full pt-8 pb-16">
         <div className="mb-8">
           <h1 className="text-4xl font-bold tracking-tight mb-2">
             Hello, {user?.name}!
