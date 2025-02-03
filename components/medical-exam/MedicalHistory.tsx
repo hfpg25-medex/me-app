@@ -162,43 +162,42 @@ function HistoryItemComponent({
   onDetailsChange: (details: string) => void;
 }) {
   return (
-    <div className="space-y-1">
-      <div className="flex items-start space-x-2">
-        <Checkbox
-          id={`checkbox-${item.condition}`}
-          checked={item.hasCondition}
-          onCheckedChange={onToggle}
-          className={cn(
-            "border-2",
-            item.hasCondition
-              ? " border-red-600 data-[state=checked]:bg-red-600 text-primary-foreground hover:bg-red-400 hover:text-primary-foreground"
-              : "border-primary"
-          )}
-        />
-        <div className="grid gap-1.5 leading-none">
-          <Label
-            htmlFor={`checkbox-${item.condition}`}
-            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-          >
-            {item.condition}
-          </Label>
+    <div className="space-y-2">
+      <div className="grid grid-cols-[1fr,auto] gap-x-8 gap-y-4">
+        <Label htmlFor={`checkbox-${item.condition}`}>
+          {item.condition}
+        </Label>
+        <div className="flex items-center gap-2">
+          <Checkbox
+            id={`checkbox-${item.condition}`}
+            checked={item.hasCondition}
+            onCheckedChange={onToggle}
+            className={cn(
+              "border-2",
+              item.hasCondition
+                ? "border-red-600 data-[state=checked]:bg-red-600 text-primary-foreground hover:bg-red-400 hover:text-primary-foreground"
+                : "border-primary"
+            )}
+          />
           <span
             className={cn(
-              "text-sm text-muted-foreground",
-              item.hasCondition ? "text-red-500" : ""
+              "text-sm",
+              item.hasCondition ? "text-red-500" : "text-gray-500"
             )}
           >
-            {item.hasCondition ? "Yes" : "No"}
+            Yes
           </span>
         </div>
       </div>
       {item.hasCondition && (
-        <Textarea
-          placeholder={medicalHistoryItems[index].placeholder}
-          value={item.details}
-          onChange={(e) => onDetailsChange(e.target.value)}
-          className="mt-1"
-        />
+        <div className="mt-2 w-full">
+          <Textarea
+            value={item.details}
+            onChange={(e) => onDetailsChange(e.target.value)}
+            placeholder={medicalHistoryItems[index].placeholder}
+            className="w-full min-h-[100px]"
+          />
+        </div>
       )}
     </div>
   );
