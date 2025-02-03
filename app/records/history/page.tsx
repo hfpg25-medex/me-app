@@ -189,7 +189,7 @@ export default function ExaminationRecords() {
         <h1 className="text-2xl font-semibold">Examination Records</h1>
         <Button className="bg-black hover:bg-black/90">
           <Plus className="mr-2 h-4 w-4" />
-          New Clinical Exam
+          New Medical Examination
         </Button>
       </div>
 
