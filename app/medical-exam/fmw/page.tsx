@@ -152,46 +152,47 @@ export default function FMWExamPage() {
   }
 
   const onSubmit = async (data: FormDataMW) => {
-    try {
-      // Show loading state
-      setIsSubmitting(true)
+    setIsSubmitted(true);
+    // try {
+    //   // Show loading state
+    //   setIsSubmitting(true)
 
-      // Prepare the submission data
-      const submission = {
-        type: 'FMW',
-        data,
-        createdAt: new Date().toISOString(),
-        status: 'completed'
-      }
+    //   // Prepare the submission data
+    //   const submission = {
+    //     type: 'FMW',
+    //     data,
+    //     createdAt: new Date().toISOString(),
+    //     status: 'completed'
+    //   }
 
-      // Call the API endpoint
-      const response = await fetch('/api/submissions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(submission),
-      })
+    //   // Call the API endpoint
+    //   const response = await fetch('/api/submissions', {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify(submission),
+    //   })
 
-      const result = await response.json()
+    //   const result = await response.json()
 
-      if (!result.success) {
-        throw new Error(result.message || 'Failed to save submission')
-      }
+    //   if (!result.success) {
+    //     throw new Error(result.message || 'Failed to save submission')
+    //   }
 
-      // Show success message
-      toast.success('Form submitted successfully')
+    //   // Show success message
+    //   toast.success('Form submitted successfully')
 
-      // Update submission ID and move to acknowledgment page
-      setSubmissionId(result.submissionId)
-      setIsSubmitted(true);
-    } catch (error) {
-      // Show error message
-      toast.error('Failed to submit form. Please try again.')
-      console.error('Submission error:', error)
-    } finally {
-      setIsSubmitting(false)
-    }
+    //   // Update submission ID and move to acknowledgment page
+    //   setSubmissionId(result.submissionId)
+    //   setIsSubmitted(true);
+    // } catch (error) {
+    //   // Show error message
+    //   toast.error('Failed to submit form. Please try again.')
+    //   console.error('Submission error:', error)
+    // } finally {
+    //   setIsSubmitting(false)
+    // }
   }
 
   if (isSubmitted) {
