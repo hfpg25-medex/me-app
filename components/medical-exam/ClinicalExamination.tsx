@@ -138,19 +138,66 @@ export function ClinicalExamination({
 
           <div className="mt-4">
             <Label htmlFor="waistCircumference">Waist Circumference</Label>
-            <div className="relative max-w-[216px]">
-              <Input
-                id="waistCircumference"
-                type="number"
-                {...register("clinicalExamination.waistCircumference", {
-                  valueAsNumber: true,
-                })}
-                className="mr-2 mt-1 pr-12 w-[216px]"
-              />
-              <span className="absolute right-8 top-1/2 -translate-y-1/2 text-gray-500">
-                cm
-              </span>
+            <div className="flex items-start gap-2">
+              <div className="relative max-w-[216px]">
+                <Input
+                  id="waistCircumference"
+                  type="number"
+                  step="0.1"
+                  {...register("clinicalExamination.waistCircumference", {
+                    valueAsNumber: true,
+                    validate: (value, formValues) => {
+                      if (!value) return true;
+                      const unit =
+                        formValues.clinicalExamination?.waistUnit || "cm";
+                      const cmValue = unit === "inch" ? value * 2.54 : value;
+                      return (
+                        (cmValue >= 50 && cmValue <= 200) ||
+                        `Waist must be between ${
+                          unit === "cm" ? "50-200 cm" : "20-79 inches"
+                        }`
+                      );
+                    },
+                  })}
+                  className="mr-2 mt-1 w-[216px]"
+                />
+              </div>
+              <Select
+                defaultValue="cm"
+                onValueChange={(value) => {
+                  const currentValue = watch(
+                    "clinicalExamination.waistCircumference"
+                  );
+                  if (currentValue) {
+                    const newValue =
+                      value === "inch"
+                        ? Number((currentValue / 2.54).toFixed(1))
+                        : Number((currentValue * 2.54).toFixed(1));
+                    setValue(
+                      "clinicalExamination.waistCircumference",
+                      newValue
+                    );
+                  }
+                  setValue(
+                    "clinicalExamination.waistUnit",
+                    value as "cm" | "inch"
+                  );
+                }}
+              >
+                <SelectTrigger className="w-[80px] mt-1">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="cm">cm</SelectItem>
+                  <SelectItem value="inch">inch</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
+            {errors.clinicalExamination?.waistCircumference && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.clinicalExamination.waistCircumference.message}
+              </p>
+            )}
           </div>
 
           <div className="flex flex-start items-start gap-4 mt-4">

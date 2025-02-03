@@ -80,10 +80,6 @@ export const examinationDetailsMDWSchema = z.object({
 });
 
 export const clinicalExaminationSchema = z.object({
-  // weight: z.union([
-  //   z.string().refine((val) => val === '', { message: "Weight is required" }),
-  //   z.number().min(15, "Please input a valid weight").max(200, "Please input a valid weight")
-  // ]),
   weight: z
     .number()
     .min(15, "Please input a valid weight")
@@ -96,10 +92,9 @@ export const clinicalExaminationSchema = z.object({
   waistCircumference: z
     .number()
     .min(0, "Please input a valid waist circumference"),
-  // positiveTests: z.array(z.string()),
+  waistUnit: z.enum(["cm", "inch"]).default("cm"),
   systolicBP: z.number().min(0, "Please input a valid systolic BP"),
   diastolicBP: z.number().min(0, "Please input a valid diastolic BP"),
-  // rightEyeVision: z.string().min(1, "Right eye vision is required"),
   rightEyeVision: z.string({ required_error: "Right eye vision is required" }),
   leftEyeVision: z.string({ required_error: "Left eye vision is required" }),
   urineAlbumin: z.string().default("normal"),

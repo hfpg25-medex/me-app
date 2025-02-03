@@ -36,6 +36,7 @@ interface SummaryProps {
     height: number;
     bmi: number;
     waistCircumference: number;
+    waistUnit: string;
     systolicBP: number;
     diastolicBP: number;
     rightEyeVision: string;
@@ -222,7 +223,10 @@ export function MedicalSummary({
               </div>
               <div>
                 <div className="text-gray-500 text-sm">Waist Circumference</div>
-                <div>{clinicalExamination.waistCircumference} cm</div>
+                <div>
+                  {clinicalExamination.waistCircumference}{" "}
+                  {clinicalExamination.waistUnit}
+                </div>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>

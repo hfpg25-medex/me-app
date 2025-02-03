@@ -281,6 +281,7 @@ export default function WPExamPage() {
             bmi: watchedValues.clinicalExamination.bmi,
             waistCircumference:
               watchedValues.clinicalExamination.waistCircumference,
+            waistUnit: watchedValues.clinicalExamination.waistUnit,
             systolicBP: watchedValues.clinicalExamination.systolicBP,
             diastolicBP: watchedValues.clinicalExamination.diastolicBP,
             rightEyeVision: watchedValues.clinicalExamination.rightEyeVision,
