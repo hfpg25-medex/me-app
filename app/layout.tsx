@@ -7,6 +7,7 @@ import { UserProvider } from "@/lib/context/user-context";
 import { SgdsMasthead } from "@govtechsg/sgds-masthead-react";
 import "@govtechsg/sgds-masthead/dist/sgds-masthead/sgds-masthead.css";
 import { Inter } from "next/font/google";
+import { Toaster } from "sonner";
 import "./globals.css";
 
 const inter = Inter({
@@ -51,6 +52,7 @@ export default function RootLayout({
         <AuthProvider>
           <MainLayout>{children}</MainLayout>
           <DefaultFooter />
+          <Toaster richColors position="top-right" />
         </AuthProvider>
       </body>
     </html>

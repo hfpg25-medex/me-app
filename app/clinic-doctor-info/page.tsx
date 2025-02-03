@@ -3,10 +3,10 @@ import { DoctorList } from '@/components/clinic-doctor-info/doctor-list'
 
 export default function Page() {
   return (
-    <div className="min-h-svh p-4">
-      <div className="container mx-auto max-w-3xl">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold tracking-tight">Manage Details</h1>
+    <div className="min-h-svh p-4 max-w-[760px] mx-auto">
+      <div className="container  mx-auto">
+        <div className="mb-1">
+          <h1 className="text-2xl font-bold tracking-tight">Manage Details</h1>
           <p className="text-muted-foreground mt-2">
             Update your clinic and doctor information
           </p>

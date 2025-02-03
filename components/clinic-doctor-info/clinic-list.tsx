@@ -1,172 +1,325 @@
 'use client'
 
 import * as React from 'react'
+import { z } from 'zod'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent } from '@/components/ui/card'
-import { Plus, Trash2, Building2, Pencil } from 'lucide-react'
-import { clinicAction } from '@/lib/actions'
+import { Plus, Trash2, Building2, Pencil, Loader2 } from 'lucide-react'
+import { updateClinic, getClinicList } from '@/lib/actions/clinic'
+import { clinicSchema } from '@/lib/validations/clinicDoctorSchemas'
+import { useToast } from '@/hooks/use-toast'
 
 interface Clinic {
   id: string
   name: string
-  hcCode: string
+  hci: string
   contactNumber: string
   address: string
+}
+
+interface ValidationErrors {
+  [key: string]: string[]
 }
 
 export function ClinicList() {
   const [clinics, setClinics] = React.useState<Clinic[]>([])
   const [editingId, setEditingId] = React.useState<string | null>(null)
+  const [validationErrors, setValidationErrors] = React.useState<Record<string, ValidationErrors>>({})
+  const { toast } = useToast()
+  const [isLoading, setIsLoading] = React.useState<string | null>(null)
+
+  React.useEffect(() => {
+    const loadClinics = async () => {
+      const result = await getClinicList()
+      console.log("result", result)
+      if (result.success && result.data) {
+        setClinics(result.data)
+      } else {
+        setClinics([])  
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: result.error || "Failed to load clinics"
+        })
+      }
+    }
+    loadClinics()
+  }, [toast])
 
   const addClinic = () => {
     const newClinic: Clinic = {
       id: Math.random().toString(36).substr(2, 9),
       name: '',
-      hcCode: '',
+      hci: '',
       contactNumber: '',
       address: '',
     }
     setClinics([...clinics, newClinic])
     setEditingId(newClinic.id)
+    setValidationErrors({...validationErrors, [newClinic.id]: {}})
   }
 
-  const removeClinic = (id: string) => {
-    setClinics(clinics.filter(clinic => clinic.id !== id))
-    if (editingId === id) {
-      setEditingId(null)
-    }
-  }
+  // const validateClinic = (clinic: Clinic) => {
+  //   try {
+  //     clinicSchema.parse(clinic)
+  //     setValidationErrors({
+  //       ...validationErrors,
+  //       [clinic.id]: {}
+  //     })
+  //     return true
+  //   } catch (error) {
+  //     if (error instanceof z.ZodError) {
+  //       const errors: ValidationErrors = {}
+  //       error.errors.forEach((err) => {
+  //         const path = err.path[0] as string
+  //         if (!errors[path]) {
+  //           errors[path] = []
+  //         }
+  //         errors[path].push(err.message)
+  //       })
+  //       setValidationErrors({
+  //         ...validationErrors,
+  //         [clinic.id]: errors
+  //       })
+  //     }
+  //     return false
+  //   }
+  // }
 
-  const updateClinic = (id: string, field: keyof Clinic, value: string) => {
-    setClinics(
-      clinics.map(clinic =>
-        clinic.id === id ? { ...clinic, [field]: value } : clinic
-      )
-    )
-  }
-
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    for (const clinic of clinics) {
-      const formData = new FormData()
-      Object.entries(clinic).forEach(([key, value]) => {
-        if (key !== 'id') {
-          formData.append(key, value)
-        }
+  const handleSubmit = async (clinic: Clinic) => {
+    try {
+      // Clear previous validation errors for this clinic
+      setValidationErrors(prev => {
+        const newErrors = { ...prev }
+        delete newErrors[clinic.id]
+        return newErrors
       })
-      await clinicAction(null, formData)
+
+      // Validate before sending to server
+      try {
+        clinicSchema.parse({
+          name: clinic.name,
+          hci: clinic.hci,
+          contactNumber: clinic.contactNumber,
+          address: clinic.address,
+        })
+      } catch (e) {
+        if (e instanceof z.ZodError) {
+          const errors = e.errors.reduce((acc: { [key: string]: string[] }, curr) => {
+            const field = curr.path[0] as string
+            if (!acc[field]) acc[field] = []
+            acc[field].push(curr.message)
+            return acc
+          }, {})
+          setValidationErrors(prev => ({
+            ...prev,
+            [clinic.id]: errors
+          }))
+          toast({
+            variant: "destructive",
+            title: "Validation Error",
+            description: "Please check the form for errors"
+          })
+          return
+        }
+      }
+
+      setIsLoading(clinic.id)
+      const result = await updateClinic(clinic.id, {
+        name: clinic.name,
+        hci: clinic.hci,
+        contactNumber: clinic.contactNumber,
+        address: clinic.address,
+      })
+
+      if (result.success) {
+        setEditingId(null)
+        toast({
+          title: "Success",
+          description: "Clinic information updated successfully."
+        })
+        setClinics(prevClinics =>
+          prevClinics.map(c =>
+            c.id === clinic.id ? { ...c, ...result.data } : c
+          )
+        )
+      } else {
+        // Handle server-side validation errors
+        if (result.validationErrors) {
+          setValidationErrors(prev => ({
+            ...prev,
+            [clinic.id]: result.validationErrors as unknown as ValidationErrors
+          }))
+        }
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: result.error
+        })
+      }
+    } catch (error) {
+      console.error('Error updating clinic:', error)
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "An unexpected error occurred"
+      })
+    } finally {
+      setIsLoading(null)
     }
-    setEditingId(null)
+  }
+
+  const getFieldError = (clinicId: string, field: string) => {
+    if (!validationErrors[clinicId]) return null
+    const errors = validationErrors[clinicId][field]
+    return errors ? errors[0] : null
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={(e) => {
+      e.preventDefault()
+      clinics.forEach(clinic => handleSubmit(clinic))
+    }} className="space-y-4 max-w-[760px] mx-auto">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <Building2 className="h-5 w-5" />
-          <h3 className="text-lg font-medium">Clinics</h3>
+          <h2 className="text-lg font-semibold">Clinic Information</h2>
         </div>
-        <Button type="button" onClick={addClinic} variant="outline" size="sm">
-          <Plus className="mr-2 h-4 w-4" />
+        <Button type="button" onClick={addClinic} size="sm">
+          <Plus className="h-4 w-4 mr-2" />
           Add Clinic
         </Button>
       </div>
-      
-      {clinics.length === 0 ? (
-        <p className="text-sm text-muted-foreground">No clinics added yet. Click the button above to add a clinic.</p>
-      ) : (
-        <div className="space-y-4">
-          {clinics.map((clinic) => (
-            <Card key={clinic.id} className="w-2/3">
-              <CardContent className="pt-6">
-                {editingId === clinic.id ? (
-                  <div className="relative grid gap-4">
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="icon"
-                      className="absolute right-0 top-0"
-                      onClick={() => removeClinic(clinic.id)}
-                    >
-                      <Trash2 className="h-4 w-4 mb-6" />
-                    </Button>
-                    
-                    <div className="grid gap-2">
-                      <Label htmlFor={`clinic-name-${clinic.id}`}>Clinic Name</Label>
-                      <Input
-                        id={`clinic-name-${clinic.id}`}
-                        value={clinic.name}
-                        onChange={(e) => updateClinic(clinic.id, 'name', e.target.value)}
-                        placeholder="Enter clinic name"
-                      />
-                    </div>
 
-                    <div className="grid gap-2">
-                      <Label htmlFor={`hc-code-${clinic.id}`}>
-                        Healthcare Institution (HC) code
-                      </Label>
-                      <Input
-                        id={`hc-code-${clinic.id}`}
-                        value={clinic.hcCode}
-                        onChange={(e) => updateClinic(clinic.id, 'hcCode', e.target.value)}
-                        placeholder="1234567"
-                        maxLength={7}
-                      />
-                    </div>
+      {clinics.map((clinic) => (
+        <Card key={clinic.id} className="relative">
+          <CardContent className="pt-6">
+            <div className="absolute top-4 right-4 flex items-center space-x-2">
+              {editingId === clinic.id ? (
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleSubmit(clinic)}
+                  disabled={isLoading === clinic.id}
+                >
+                  {isLoading === clinic.id ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    "Save"
+                  )}
+                </Button>
+              ) : (
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setEditingId(clinic.id)}
+                  className="text-blue-600"
+                >
+                  <Pencil className="h-4 w-4" />
+                  Edit
+                </Button>
+              )}
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  setClinics(clinics.filter((c) => c.id !== clinic.id))
+                  const newValidationErrors = { ...validationErrors }
+                  delete newValidationErrors[clinic.id]
+                  setValidationErrors(newValidationErrors)
+                }}
+              >
+                <Trash2 className="h-4 w-4 mr-2" />
+                Remove
+              </Button>
+            </div>
 
-                    <div className="grid gap-2">
-                      <Label htmlFor={`contact-${clinic.id}`}>Contact Number</Label>
-                      <div className="flex">
-                        <span className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md">
-                          +65
-                        </span>
-                        <Input
-                          id={`contact-${clinic.id}`}
-                          value={clinic.contactNumber}
-                          onChange={(e) => updateClinic(clinic.id, 'contactNumber', e.target.value)}
-                          placeholder="91234567"
-                          maxLength={8}
-                          className="rounded-l-none"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="grid gap-2">
-                      <Label htmlFor={`address-${clinic.id}`}>Address</Label>
-                      <Input
-                        id={`address-${clinic.id}`}
-                        value={clinic.address}
-                        onChange={(e) => updateClinic(clinic.id, 'address', e.target.value)}
-                        placeholder="Enter clinic address"
-                      />
-                    </div>
-                  </div>
-                ) : (
-                  <div className="relative">
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="icon"
-                      className="absolute right-0 top-0"
-                      onClick={() => setEditingId(clinic.id)}
-                    >
-                      <Pencil className="h-4 w-4" />
-                    </Button>
-                    <h4 className="font-semibold">{clinic.name}</h4>
-                    <div className="text-sm text-muted-foreground mb-2">HC Code: {clinic.hcCode}</div>
-                    <div className="text-sm text-muted-foreground mb-2">Contact: +65 {clinic.contactNumber}</div>
-                    <div className="text-sm text-muted-foreground mb-2">{clinic.address}</div>
-                  </div>
+            <div className="grid gap-4 mt-4">
+              <div className="grid gap-2">
+                <Label htmlFor={`name-${clinic.id}`}>Clinic Name</Label>
+                <Input
+                  id={`name-${clinic.id}`}
+                  value={clinic.name}
+                  onChange={(e) =>
+                    setClinics(
+                      clinics.map((c) =>
+                        c.id === clinic.id ? { ...c, name: e.target.value } : c
+                      )
+                    )
+                  }
+                  disabled={editingId !== clinic.id}
+                />
+                {getFieldError(clinic.id, 'name') && (
+                  <p className="text-sm text-red-500">{getFieldError(clinic.id, 'name')}</p>
                 )}
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      )}
-      <Button type="submit">Save Clinics</Button>
+              </div>
+
+              <div className="grid gap-2">
+                <Label htmlFor={`hci-${clinic.id}`}>HCI Code</Label>
+                <Input
+                  id={`hci-${clinic.id}`}
+                  value={clinic.hci}
+                  onChange={(e) =>
+                    setClinics(
+                      clinics.map((c) =>
+                        c.id === clinic.id ? { ...c, hci: e.target.value } : c
+                      )
+                    )
+                  }
+                  disabled={editingId !== clinic.id}
+                />
+                {getFieldError(clinic.id, 'hci') && (
+                  <p className="text-sm text-red-500">{getFieldError(clinic.id, 'hci')}</p>
+                )}
+              </div>
+
+              <div className="grid gap-2">
+                <Label htmlFor={`contactNumber-${clinic.id}`}>Contact Number</Label>
+                <Input
+                  id={`contactNumber-${clinic.id}`}
+                  value={clinic.contactNumber}
+                  onChange={(e) =>
+                    setClinics(
+                      clinics.map((c) =>
+                        c.id === clinic.id ? { ...c, contactNumber: e.target.value } : c
+                      )
+                    )
+                  }
+                  disabled={editingId !== clinic.id}
+                />
+                {getFieldError(clinic.id, 'contactNumber') && (
+                  <p className="text-sm text-red-500">{getFieldError(clinic.id, 'contactNumber')}</p>
+                )}
+              </div>
+
+              <div className="grid gap-2">
+                <Label htmlFor={`address-${clinic.id}`}>Address</Label>
+                <Input
+                  id={`address-${clinic.id}`}
+                  value={clinic.address}
+                  onChange={(e) =>
+                    setClinics(
+                      clinics.map((c) =>
+                        c.id === clinic.id ? { ...c, address: e.target.value } : c
+                      )
+                    )
+                  }
+                  disabled={editingId !== clinic.id}
+                />
+                {getFieldError(clinic.id, 'address') && (
+                  <p className="text-sm text-red-500">{getFieldError(clinic.id, 'address')}</p>
+                )}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      ))}
+      {/* <Button type="submit">Save Clinics</Button> */}
     </form>
   )
 }
-

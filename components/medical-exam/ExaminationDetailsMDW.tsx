@@ -27,7 +27,7 @@ export function ExaminationDetails({
   isSummaryActive, 
   handleContinue, 
   setWeightTouched,
-  weightTouched,
+  // weightTouched,
   // showWeightWarning,
   lastRecordedWeight,
   lastRecordedHeight,

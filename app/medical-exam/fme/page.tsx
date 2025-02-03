@@ -80,6 +80,7 @@ export default function WPExamPage() {
       clinicalExamination: {
         weight: 0,
         height: 0,
+        bmi:0,
         waistCircumference: 0,
         systolicBP: 0,
         diastolicBP: 0,
@@ -102,7 +103,7 @@ export default function WPExamPage() {
     },
   })
 
-  const { watch, handleSubmit, formState: { errors }, trigger, setValue } = methods
+  const { watch, handleSubmit, trigger, setValue } = methods
   
   const watchedValues = watch()
 
@@ -246,16 +247,16 @@ export default function WPExamPage() {
           helperDetails={{
             fin: watchedValues.helperDetails.fin,
             name: watchedValues.helperDetails.helperName,
-            visitDate: watchedValues.helperDetails.visitDate || null
+            visitDate: watchedValues.helperDetails.visitDate
           }}
           medicalHistory={watchedValues.medicalHistory}
           clinicalExamination={{
-            weight: watchedValues.clinicalExamination.weight === "" ? 0 : Number(watchedValues.clinicalExamination.weight),
-            height: watchedValues.clinicalExamination.height === "" ? 0 : Number(watchedValues.clinicalExamination.height),
-            bmi: watchedValues.clinicalExamination.bmi === "" ? 0 : Number(watchedValues.clinicalExamination.bmi),
-            waistCircumference: watchedValues.clinicalExamination.waistCircumference === "" ? 0 : Number(watchedValues.clinicalExamination.waistCircumference),
-            systolicBP: watchedValues.clinicalExamination.systolicBP === "" ? 0 : Number(watchedValues.clinicalExamination.systolicBP),
-            diastolicBP: watchedValues.clinicalExamination.diastolicBP === "" ? 0 : Number(watchedValues.clinicalExamination.diastolicBP),
+            weight: watchedValues.clinicalExamination.weight,
+            height: watchedValues.clinicalExamination.height,
+            bmi: watchedValues.clinicalExamination.bmi,
+            waistCircumference: watchedValues.clinicalExamination.waistCircumference,
+            systolicBP: watchedValues.clinicalExamination.systolicBP,
+            diastolicBP: watchedValues.clinicalExamination.diastolicBP,
             rightEyeVision: watchedValues.clinicalExamination.rightEyeVision,
             leftEyeVision: watchedValues.clinicalExamination.leftEyeVision,
             urineAlbumin: watchedValues.clinicalExamination.urineAlbumin,
