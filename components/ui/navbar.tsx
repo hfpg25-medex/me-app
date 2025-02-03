@@ -3,7 +3,7 @@
 import Link from "next/link"
 import Image from "next/image"
 import { useState } from "react"
-import { User } from "lucide-react"
+import { User, LogOut } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu"
 import { useAuth } from '@/lib/context/auth-context'
@@ -11,9 +11,10 @@ import { useAuth } from '@/lib/context/auth-context'
 interface NavBarProps {
   userName: string
   userUen: string
+  corpPassId: string
 }
 
-export function NavBar({ userName, userUen }: NavBarProps) {
+export function NavBar({ userName, userUen, corpPassId }: NavBarProps) {
   const { logout } = useAuth()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
@@ -39,27 +40,31 @@ export function NavBar({ userName, userUen }: NavBarProps) {
             </Link>
           </nav>
         </div>
-        <DropdownMenu open={isMenuOpen} onOpenChange={setIsMenuOpen}>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="flex items-center space-x-2 text-white hover:text-gray-400 transition-colors hover:bg-transparent">
-              <User className="h-5 w-5" />
-              <span className="hidden md:inline">{userName}</span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-56">
-            <div className="px-2 py-1.5">
-              <p className="text-sm font-medium">{userName}</p>
-              <p className="text-xs text-muted-foreground">UEN: {userUen}</p>
-            </div>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem 
-              onClick={() => logout()} 
-              className="text-red-600 cursor-pointer focus:text-red-600 focus:bg-red-50"
-            >
-              Logout
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <div className="flex items-center space-x-2">
+          <DropdownMenu open={isMenuOpen} onOpenChange={setIsMenuOpen}>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="flex items-center space-x-2 text-white hover:text-gray-400 transition-colors hover:bg-transparent">
+                <User className="h-5 w-5" />
+                <span className="hidden md:inline">{userName}</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56">
+              <div className="px-2 py-1.5">
+                <p className="text-sm font-medium">{userName}</p>
+                <p className="text-xs text-muted-foreground">UEN: {userUen}</p>
+                <p className="text-xs text-muted-foreground">Corppass ID: {corpPassId}</p>
+              </div>           
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <Button 
+            variant="ghost" 
+            size="icon"
+            onClick={() => logout()}
+            className="text-white hover:text-gray-400 transition-colors hover:bg-transparent"
+          >
+            <LogOut className="h-5 w-5" />
+          </Button>
+        </div>
       </div>
     </div>
   )

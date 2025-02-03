@@ -24,7 +24,7 @@ function MainLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen flex flex-col">
       <SgdsMasthead placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />
-      {user && <NavBar userName={user.name} userUen={user.uen} />}
+      {user && <NavBar userName={user.name} userUen={user.uen} corpPassId={user.corpPassId} />}
       <UserProvider initialUser={user}>
         <main>{children}</main>
       </UserProvider>
