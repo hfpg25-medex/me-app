@@ -39,25 +39,30 @@ export function HelperDetails({
   const { register, setValue, formState: { errors }, watch, trigger }  = useFormContext<FormDataMW | FormDataMDW >()
   const [isFinChangeModalOpen, setIsFinChangeModalOpen] = useState(false)
   const [pendingFinValue, setPendingFinValue] = useState<string>("")
+  const [isValidating, setIsValidating] = useState(false)
 
   const watchedValues = watch()
 
-  const handleFinBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+  const handleFinBlur = async (e: React.FocusEvent<HTMLInputElement>) => {
     const newValue = e.target.value
     if (watchedValues.helperDetails.helperName && newValue !== watchedValues.helperDetails.fin) {
       setPendingFinValue(newValue)
       setIsFinChangeModalOpen(true)
     } else {
+      setIsValidating(true)
       handleFinChange(newValue)
       setFinTouched(true)
-      trigger('helperDetails.fin')
+      await trigger('helperDetails.fin')
+      setIsValidating(false)
     }
   }
 
-  const handleFinChangeConfirm = () => {
+  const handleFinChangeConfirm = async () => {
+    setIsValidating(true)
     handleFinChange(pendingFinValue)
     setFinTouched(true)
-    trigger('helperDetails.fin')
+    await trigger('helperDetails.fin')
+    setIsValidating(false)
     setIsFinChangeModalOpen(false)
   }
 
@@ -72,10 +77,10 @@ export function HelperDetails({
             onBlur={handleFinBlur}
             onChange={() => {}}
           />
-          {finTouched && errors.helperDetails?.fin && (
+          {finTouched && !isValidating && errors.helperDetails?.fin && (
             <p className="text-red-500 text-sm mt-1">Please enter a valid FIN</p>
           )}
-          {finTouched && !errors.helperDetails?.fin && !isPendingMe &&(
+          {finTouched && !isValidating && !errors.helperDetails?.fin && !isPendingMe &&(
             <p className="text-red-500 text-sm mt-1">The person does not have a pending medical examination.</p>
           )}
         </div>
