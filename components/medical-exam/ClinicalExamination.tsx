@@ -163,7 +163,7 @@ export function ClinicalExamination({
                 />
               </div>
               <Select
-                defaultValue="cm"
+                value={watch("clinicalExamination.waistUnit") || "cm"}
                 onValueChange={(value) => {
                   const currentValue = watch(
                     "clinicalExamination.waistCircumference"
@@ -240,7 +240,7 @@ export function ClinicalExamination({
               <Label htmlFor="rightEyeVision">Right Eye Vision</Label>
               <div className="w-[216px] mt-1">
                 <Select
-                  defaultValue="6/5"
+                  value={watch("clinicalExamination.rightEyeVision") || "6/5"}
                   onValueChange={(value) =>
                     setValue("clinicalExamination.rightEyeVision", value)
                   }
@@ -262,7 +262,7 @@ export function ClinicalExamination({
               <Label htmlFor="leftEyeVision">Left Eye Vision</Label>
               <div className="w-[216px] mt-1">
                 <Select
-                  defaultValue="6/5"
+                  value={watch("clinicalExamination.leftEyeVision") || "6/5"}
                   onValueChange={(value) =>
                     setValue("clinicalExamination.leftEyeVision", value)
                   }
