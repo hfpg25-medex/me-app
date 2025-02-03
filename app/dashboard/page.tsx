@@ -43,7 +43,7 @@ export default function HomePage() {
               <div className="mb-2 w-fit rounded-full bg-primary/10 p-2">
                 <Stethoscope className="h-6 w-6 text-primary" />
               </div>
-              <CardTitle className="text-xl">Clinic & Doctor Details</CardTitle>
+              <CardTitle className="text-xl">Clinic & Doctor</CardTitle>
               <CardDescription>
                 Manage your clinic and doctor information
               </CardDescription>
