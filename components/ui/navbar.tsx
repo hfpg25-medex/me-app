@@ -1,22 +1,26 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import Image from "next/image"
-import { useState } from "react"
-import { User, LogOut } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu"
-import { useAuth } from '@/lib/context/auth-context'
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useAuth } from "@/lib/context/auth-context";
+import { LogOut, User } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { useState } from "react";
 
 interface NavBarProps {
-  userName: string
-  userUen: string
-  corpPassId: string
+  userName: string;
+  userUen: string;
+  corpPassId: string;
 }
 
 export function NavBar({ userName, userUen, corpPassId }: NavBarProps) {
-  const { logout } = useAuth()
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const { logout } = useAuth();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
     <div className="bg-primary text-primary-foreground py-4">
@@ -32,10 +36,16 @@ export function NavBar({ userName, userUen, corpPassId }: NavBarProps) {
             />
           </Link>
           <nav className="flex items-center space-x-4">
-            <Link href="/dashboard" className="text-white font-semibold no-underline hover:text-gray-400 transition-colors">
+            <Link
+              href="/dashboard"
+              className="text-white font-semibold no-underline hover:text-gray-400 transition-colors"
+            >
               Dashboard
             </Link>
-            <Link href="/medical-exam/select" className="text-white font-semibold no-underline hover:text-gray-400 transition-colors">
+            <Link
+              href="/medical-exam/select"
+              className="text-white font-semibold no-underline hover:text-gray-400 transition-colors"
+            >
               Medical Exams
             </Link>
           </nav>
@@ -43,7 +53,10 @@ export function NavBar({ userName, userUen, corpPassId }: NavBarProps) {
         <div className="flex items-center space-x-2">
           <DropdownMenu open={isMenuOpen} onOpenChange={setIsMenuOpen}>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="flex items-center space-x-2 text-white hover:text-gray-400 transition-colors hover:bg-transparent">
+              <Button
+                variant="ghost"
+                className="flex items-center space-x-2 text-white hover:text-gray-400 transition-colors hover:bg-transparent"
+              >
                 <User className="h-5 w-5" />
                 <span className="hidden md:inline">{userName}</span>
               </Button>
@@ -52,12 +65,14 @@ export function NavBar({ userName, userUen, corpPassId }: NavBarProps) {
               <div className="px-2 py-1.5">
                 <p className="text-sm font-medium">{userName}</p>
                 <p className="text-xs text-muted-foreground">UEN: {userUen}</p>
-                <p className="text-xs text-muted-foreground">Corppass ID: {corpPassId}</p>
-              </div>           
+                <p className="text-xs text-muted-foreground">
+                  Corppass ID: {corpPassId}
+                </p>
+              </div>
             </DropdownMenuContent>
           </DropdownMenu>
-          <Button 
-            variant="ghost" 
+          <Button
+            variant="ghost"
             size="icon"
             onClick={() => logout()}
             className="text-white hover:text-gray-400 transition-colors hover:bg-transparent"
@@ -67,5 +82,5 @@ export function NavBar({ userName, userUen, corpPassId }: NavBarProps) {
         </div>
       </div>
     </div>
-  )
+  );
 }

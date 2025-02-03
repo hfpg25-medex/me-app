@@ -1,10 +1,10 @@
-'use client'
+"use client";
 
-import { Button } from '@/components/ui/button'
-import { useRouter } from 'next/navigation'
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 export default function LoginForm() {
-  const router = useRouter()
+  const router = useRouter();
 
   return (
     <div className="flex flex-col items-center space-y-6">
@@ -12,13 +12,14 @@ export default function LoginForm() {
         variant="outline"
         size="lg"
         className="w-full bg-red-600 hover:bg-red-700 text-white"
-        onClick={() => router.push('/login')}
+        onClick={() => router.push("/login")}
       >
         <span>Login with Singpass</span>
       </Button>
       <p className="text-center text-sm text-gray-600">
-        Use your Singpass account to securely access the Medical Examination Portal.
+        Use your Singpass account to securely access the Medical Examination
+        Portal.
       </p>
     </div>
-  )
+  );
 }

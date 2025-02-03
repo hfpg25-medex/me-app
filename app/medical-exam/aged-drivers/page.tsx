@@ -1,4 +1,10 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 export default function AgedDriversExamPage() {
   return (
@@ -17,6 +23,5 @@ export default function AgedDriversExamPage() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
-

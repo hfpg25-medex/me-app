@@ -1,20 +1,27 @@
-'use client'
+"use client";
 
-import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import Link from "next/link"
-import { ClipboardList, Stethoscope, FileEdit, History } from 'lucide-react'
-import { useAuth } from '@/lib/context/auth-context'
-import { ReviewSection } from "@/components/review-section"
+import { ReviewSection } from "@/components/review-section";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { useAuth } from "@/lib/context/auth-context";
+import { ClipboardList, FileEdit, History, Stethoscope } from "lucide-react";
+import Link from "next/link";
 
 export default function HomePage() {
-  const { user } = useAuth()
+  const { user } = useAuth();
 
   return (
     <div className="min-h-screen bg-gray-50">
       <main className="container mx-auto p-6">
         <div className="mb-4">
-          <h1 className="text-4xl font-bold tracking-tight mb-2 ">Hello, {user?.name}!</h1>
+          <h1 className="text-4xl font-bold tracking-tight mb-2 ">
+            Hello, {user?.name}!
+          </h1>
           <p className="text-xl text-muted-foreground">
             What would you like to do?
           </p>
@@ -86,8 +93,8 @@ export default function HomePage() {
           </Card>
         </div>
 
-        <ReviewSection/>
+        <ReviewSection />
       </main>
     </div>
-  )
+  );
 }

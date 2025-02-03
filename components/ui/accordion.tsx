@@ -1,13 +1,12 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import * as AccordionPrimitive from "@radix-ui/react-accordion"
-import { ChevronRight, Check } from "lucide-react"
+import * as AccordionPrimitive from "@radix-ui/react-accordion";
+import { Check, ChevronRight } from "lucide-react";
+import * as React from "react";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
-const Accordion = AccordionPrimitive.Root
-
+const Accordion = AccordionPrimitive.Root;
 
 const AccordionItem = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Item>,
@@ -18,12 +17,13 @@ const AccordionItem = React.forwardRef<
     className={cn("border-b", className)}
     {...props}
   />
-))
-AccordionItem.displayName = "AccordionItem"
+));
+AccordionItem.displayName = "AccordionItem";
 
-interface AccordionTriggerProps extends React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Trigger> {
-  isCompleted?: boolean
-  isDisabled?: boolean
+interface AccordionTriggerProps
+  extends React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Trigger> {
+  isCompleted?: boolean;
+  isDisabled?: boolean;
 }
 
 const AccordionTrigger = React.forwardRef<
@@ -45,29 +45,29 @@ const AccordionTrigger = React.forwardRef<
           <ChevronRight className="h-6 w-6 shrink-0 transition-transform duration-200 group-data-[state=open]:rotate-90 group-data-[state=closed]:rotate-0" />
           <span className="text-lg">{children}</span>
         </div>
-        <div 
+        <div
           className={cn(
             "rounded-full border-2 flex items-center justify-center transition-colors",
-            isCompleted && !isDisabled && "group-data-[state=open]:mr-1 group-data-[state=open]:bg-blue-500 group-data-[state=open]:border-blue-500 group-data-[state=closed]:w-4 group-data-[state=closed]:h-4 group-data-[state=open]:w-2 group-data-[state=open]:h-2 group-date-[state=open]:text-primary group-data-[state=closed]:bg-green-500 group-data-[state=closed]:border-green-500",
-            !isCompleted && !isDisabled && "w-2 h-2 border-gray-500 bg-gray-500 group-data-[state=open]:bg-blue-500 group-data-[state=open]:border-blue-500 mr-1",
-            isDisabled && "border-gray-300 bg-gray-300 w-2 h-2 mr-1 ",
+            isCompleted &&
+              !isDisabled &&
+              "group-data-[state=open]:mr-1 group-data-[state=open]:bg-blue-500 group-data-[state=open]:border-blue-500 group-data-[state=closed]:w-4 group-data-[state=closed]:h-4 group-data-[state=open]:w-2 group-data-[state=open]:h-2 group-date-[state=open]:text-primary group-data-[state=closed]:bg-green-500 group-data-[state=closed]:border-green-500",
+            !isCompleted &&
+              !isDisabled &&
+              "w-2 h-2 border-gray-500 bg-gray-500 group-data-[state=open]:bg-blue-500 group-data-[state=open]:border-blue-500 mr-1",
+            isDisabled && "border-gray-300 bg-gray-300 w-2 h-2 mr-1 "
           )}
         >
           {isCompleted ? (
             <Check className=" group-data-[state=open]:text-blue-500 group-data-[state=closed]:text-white" />
           ) : (
-            <span
-              className={cn(
-                "rounded-full",
-              )}
-            />
+            <span className={cn("rounded-full")} />
           )}
         </div>
       </AccordionPrimitive.Trigger>
     </AccordionPrimitive.Header>
   );
-})
-AccordionTrigger.displayName = AccordionPrimitive.Trigger.displayName
+});
+AccordionTrigger.displayName = AccordionPrimitive.Trigger.displayName;
 
 const AccordionContent = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Content>,
@@ -80,12 +80,7 @@ const AccordionContent = React.forwardRef<
   >
     <div className={cn("pb-4", className)}>{children}</div>
   </AccordionPrimitive.Content>
-))
-AccordionContent.displayName = AccordionPrimitive.Content.displayName
+));
+AccordionContent.displayName = AccordionPrimitive.Content.displayName;
 
-export {
-  Accordion,
-  AccordionItem,
-  AccordionTrigger,
-  AccordionContent,
-}
+export { Accordion, AccordionContent, AccordionItem, AccordionTrigger };

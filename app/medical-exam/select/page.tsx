@@ -1,50 +1,58 @@
-'use client'
+"use client";
 
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import Link from "next/link"
-import { ClipboardList } from 'lucide-react'
-import { useState } from 'react'
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { ClipboardList } from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
 
 export default function SelectExamPage() {
-  const [filter, setFilter] = useState('')
-  const [searchTerm, setSearchTerm] = useState('')
+  const [filter, setFilter] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
 
   const examTypes = [
     {
       title: "Six-monthly Medical Exam for Migrant Domestic Workers",
       description: "MOM",
-      href: "/medical-exam/mdw"
+      href: "/medical-exam/mdw",
     },
     {
       title: "Full Medical Exam for Foreign Workers",
       description: "MOM",
-      href: "/medical-exam/fme"
+      href: "/medical-exam/fme",
     },
     {
       title: "Six-monthly Medical Exam for Female Migrant Workers",
       description: "MOM",
-      href: "/medical-exam/fmw"
+      href: "/medical-exam/fmw",
     },
     {
       title: "Medical Exam for Aged Drivers 65 Years Old and Above",
       description: "SPF",
-      href: "/medical-exam/aged-drivers"
+      href: "/medical-exam/aged-drivers",
     },
     {
       title: "Medical Exam for Vocational Driving Licenses",
       description: "LTA",
-      href: "/medical-exam/vocational-drivers"
+      href: "/medical-exam/vocational-drivers",
     },
     {
       title: "Medical Exam for Permanant Residency Application",
       description: "ICA",
-      href: "/medical-exam/pr"
-    }
-  ].filter(exam => 
-    (filter === '' || exam.description === filter) && 
-    (searchTerm === '' || exam.title.toLowerCase().includes(searchTerm.toLowerCase()))
-  )
+      href: "/medical-exam/pr",
+    },
+  ].filter(
+    (exam) =>
+      (filter === "" || exam.description === filter) &&
+      (searchTerm === "" ||
+        exam.title.toLowerCase().includes(searchTerm.toLowerCase()))
+  );
 
   return (
     <div className="container mx-auto p-6">
@@ -57,7 +65,7 @@ export default function SelectExamPage() {
             onChange={(e) => setSearchTerm(e.target.value)}
             className="border rounded p-2 mr-2 w-64 h-10"
           />
-          <select 
+          <select
             onChange={(e) => setFilter(e.target.value)}
             className="border rounded p-2 mr-2 w-24 h-10"
             defaultValue=""
@@ -68,7 +76,7 @@ export default function SelectExamPage() {
             <option value="LTA">LTA</option>
             <option value="ICA">ICA</option>
           </select>
-          <Button onClick={() => setFilter('')}>Clear Filter</Button>
+          <Button onClick={() => setFilter("")}>Clear Filter</Button>
         </div>
       </div>
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -90,5 +98,5 @@ export default function SelectExamPage() {
         ))}
       </div>
     </div>
-  )
+  );
 }

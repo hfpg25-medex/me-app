@@ -1,41 +1,50 @@
-'use client'
+"use client";
 
-import './globals.css'
-import { DefaultFooter } from '@/components/sgds/Footer'
-import '@govtechsg/sgds-masthead/dist/sgds-masthead/sgds-masthead.css';
-import {SgdsMasthead} from "@govtechsg/sgds-masthead-react"
-import { UserProvider } from '@/lib/context/user-context'
-import { AuthProvider, useAuth } from '@/lib/context/auth-context'
-import { Geist } from 'next/font/google'
-import { NavBar } from '@/components/ui/navbar'
-import { Inter } from 'next/font/google'
-import { Toaster } from 'sonner'
+import { DefaultFooter } from "@/components/sgds/Footer";
+import { NavBar } from "@/components/ui/navbar";
+import { AuthProvider, useAuth } from "@/lib/context/auth-context";
+import { UserProvider } from "@/lib/context/user-context";
+import { SgdsMasthead } from "@govtechsg/sgds-masthead-react";
+import "@govtechsg/sgds-masthead/dist/sgds-masthead/sgds-masthead.css";
+import { Geist, Inter } from "next/font/google";
+import { Toaster } from "sonner";
+import "./globals.css";
 
 const geist = Geist({
-  subsets: ['latin'],
-  variable: '--font-geist',
-})
+  subsets: ["latin"],
+  variable: "--font-geist",
+});
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ["latin"] });
 
 function MainLayout({ children }: { children: React.ReactNode }) {
-  const { user} = useAuth()
+  const { user } = useAuth();
 
   return (
     <div className="min-h-screen flex flex-col">
-      <SgdsMasthead placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />
-      {user && <NavBar userName={user.name} userUen={user.uen} corpPassId={user.corpPassId} />}
+      <SgdsMasthead
+        placeholder={undefined}
+        onPointerEnterCapture={undefined}
+        onPointerLeaveCapture={undefined}
+      />
+      {user && (
+        <NavBar
+          userName={user.name}
+          userUen={user.uen}
+          corpPassId={user.corpPassId}
+        />
+      )}
       <UserProvider initialUser={user}>
         <main>{children}</main>
       </UserProvider>
     </div>
-  )
+  );
 }
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html lang="en">
@@ -47,15 +56,15 @@ export default function RootLayout({
           type="text/css"
         />
       </head>
-      <body className={`${geist.variable} font-sans antialiased ${inter.className}`}>
+      <body
+        className={`${geist.variable} font-sans antialiased ${inter.className}`}
+      >
         <AuthProvider>
-          <MainLayout>
-            {children}
-          </MainLayout>
+          <MainLayout>{children}</MainLayout>
           <DefaultFooter />
           <Toaster richColors position="top-right" />
         </AuthProvider>
       </body>
     </html>
-  )
+  );
 }

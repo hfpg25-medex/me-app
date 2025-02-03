@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -6,15 +6,19 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
+} from "@/components/ui/dialog";
 
 interface FinChangeModalProps {
-  isOpen: boolean
-  onClose: () => void
-  onConfirm: () => void
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
 }
 
-export function FinChangeModal({ isOpen, onClose, onConfirm }: FinChangeModalProps) {
+export function FinChangeModal({
+  isOpen,
+  onClose,
+  onConfirm,
+}: FinChangeModalProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[425px]">
@@ -25,11 +29,14 @@ export function FinChangeModal({ isOpen, onClose, onConfirm }: FinChangeModalPro
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <Button variant="secondary" onClick={onConfirm}>Yes</Button>
-          <Button variant="default" onClick={onClose}>No</Button>
+          <Button variant="secondary" onClick={onConfirm}>
+            Yes
+          </Button>
+          <Button variant="default" onClick={onClose}>
+            No
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
-

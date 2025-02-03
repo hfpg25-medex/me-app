@@ -1,6 +1,5 @@
-import { redirect } from 'next/navigation'
+import { redirect } from "next/navigation";
 
 export default function MedicalExamPage() {
-  redirect('/medical-exam/select')
+  redirect("/medical-exam/select");
 }
-

@@ -1,7 +1,6 @@
-import {Footer} from "@govtechsg/sgds-react";
+import { Footer } from "@govtechsg/sgds-react";
 
 export function DefaultFooter() {
-
   const today = new Date();
 
   const formattedDate = today.toLocaleDateString("en-GB", {
@@ -14,9 +13,7 @@ export function DefaultFooter() {
     <Footer>
       <Footer.Bottom>
         <Footer.Bottom.Links>
-          <a href="">
-            Report Vulnerability
-          </a>
+          <a href="">Report Vulnerability</a>
           <a href="">Privacy Statement</a>
           <a href="">Terms of use</a>
           <a href="">Contact us</a>
@@ -26,5 +23,5 @@ export function DefaultFooter() {
         </Footer.Bottom.Copyrights>
       </Footer.Bottom>
     </Footer>
-  )
+  );
 }

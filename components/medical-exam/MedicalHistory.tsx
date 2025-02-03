@@ -1,111 +1,123 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Label } from "@/components/ui/label"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Textarea } from "@/components/ui/textarea"
-import { AccordionContent } from "../ui/accordion"
-import { useFormContext } from "react-hook-form"
-import { FormDataWP } from "@/lib/schemas"
-import { cn } from "@/lib/utils"
-
-
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { FormDataWP } from "@/lib/schemas";
+import { cn } from "@/lib/utils";
+import { useState } from "react";
+import { useFormContext } from "react-hook-form";
+import { AccordionContent } from "../ui/accordion";
 
 const medicalHistoryItems = [
   {
     text: "Cardiovascular disease (e.g. ischemic heart disease)",
-    placeholder: "Include details of any heart conditions, treatments, and current status"
+    placeholder:
+      "Include details of any heart conditions, treatments, and current status",
   },
   {
     text: "Metabolic disease (diabetes, hypertension)",
-    placeholder: "Specify type of diabetes/hypertension, medications, and control status"
+    placeholder:
+      "Specify type of diabetes/hypertension, medications, and control status",
   },
   {
     text: "Respiratory disease (e.g. tuberculosis, asthma)",
-    placeholder: "Include respiratory condition details, frequency of symptoms, and treatments"
+    placeholder:
+      "Include respiratory condition details, frequency of symptoms, and treatments",
   },
   {
     text: "Gastrointestinal disease (e.g. peptic ulcer disease)",
-    placeholder: "Describe digestive conditions, symptoms, and current management"
+    placeholder:
+      "Describe digestive conditions, symptoms, and current management",
   },
   {
     text: "Neurological disease (e.g. epilepsy, stroke)",
-    placeholder: "Include details of neurological conditions, frequency of episodes if any"
+    placeholder:
+      "Include details of neurological conditions, frequency of episodes if any",
   },
   {
     text: "Mental health condition (e.g. depression)",
-    placeholder: "Describe mental health conditions, treatments, and current status"
+    placeholder:
+      "Describe mental health conditions, treatments, and current status",
   },
   {
     text: "Other medical condition",
-    placeholder: "Specify any other medical conditions and their details"
+    placeholder: "Specify any other medical conditions and their details",
   },
   {
     text: "Previous surgeries",
-    placeholder: "List surgeries with dates and any ongoing effects"
+    placeholder: "List surgeries with dates and any ongoing effects",
   },
   {
     text: "Long-term medications",
-    placeholder: "List medications that are taken daily for at least a months"
+    placeholder: "List medications that are taken daily for at least a months",
   },
   {
     text: "Smoking History (tobacco)",
-    placeholder: "Quantify in pack-years"
+    placeholder: "Quantify in pack-years",
   },
   {
     text: "Other lifestyle risk factors or significant family history",
-    placeholder: "Describe relevant lifestyle factors or family medical history"
+    placeholder:
+      "Describe relevant lifestyle factors or family medical history",
   },
   {
     text: "Previous infections of concern (e.g. COVID-19)",
-    placeholder: "Include date of infection"
-  }
-]
-
+    placeholder: "Include date of infection",
+  },
+];
 
 type HistoryItem = {
-  condition: string
-  hasCondition: boolean
-  details: string
-}
+  condition: string;
+  hasCondition: boolean;
+  details: string;
+};
 
 interface MedicalHistoryProps {
-  isSummaryActive: boolean
-  handleContinue: (nextStep: string) => void
+  isSummaryActive: boolean;
+  handleContinue: (nextStep: string) => void;
 }
 
-export function MedicalHistory({ 
-  isSummaryActive, 
-  handleContinue, 
+export function MedicalHistory({
+  isSummaryActive,
+  handleContinue,
 }: MedicalHistoryProps) {
-    const { setValue, formState: { errors } } = useFormContext<FormDataWP>()
-  
+  const {
+    setValue,
+    formState: { errors },
+  } = useFormContext<FormDataWP>();
+
   const [medicalHistory, setMedicalHistory] = useState<HistoryItem[]>(
-    medicalHistoryItems.map((item) => ({ condition: item.text, hasCondition: false, details: "" })),
-  )
+    medicalHistoryItems.map((item) => ({
+      condition: item.text,
+      hasCondition: false,
+      details: "",
+    }))
+  );
 
   const handleToggle = (index: number) => {
-    const updatedHistory = medicalHistory.map((item, i) => 
+    const updatedHistory = medicalHistory.map((item, i) =>
       i === index ? { ...item, hasCondition: !item.hasCondition } : item
     );
     setMedicalHistory(updatedHistory);
-    setValue('medicalHistory', updatedHistory);
-  }
-  
+    setValue("medicalHistory", updatedHistory);
+  };
+
   const handleDetailsChange = (index: number, details: string) => {
-    const updatedHistory = medicalHistory.map((item, i) => 
+    const updatedHistory = medicalHistory.map((item, i) =>
       i === index ? { ...item, details } : item
     );
     setMedicalHistory(updatedHistory);
-    setValue('medicalHistory', updatedHistory);
-  }
-  
+    setValue("medicalHistory", updatedHistory);
+  };
 
   return (
     <AccordionContent>
       <div className="w-full">
-        <p className="text-sm text-gray-500">Please provide information about worker&apos;s medical history.</p>
+        <p className="text-sm text-gray-500">
+          Please provide information about worker&apos;s medical history.
+        </p>
         <div className="space-y-6">
           {medicalHistory.map((item, index) => (
             <HistoryItemComponent
@@ -118,18 +130,25 @@ export function MedicalHistory({
           ))}
         </div>
         {errors.medicalHistory && (
-          <p className="text-sm text-red-500">{errors.medicalHistory.message}</p>
+          <p className="text-sm text-red-500">
+            {errors.medicalHistory.message}
+          </p>
         )}
-        <Button className="mt-4" onClick={() => {
-              setValue('medicalHistory', medicalHistory);
-              handleContinue(isSummaryActive ? 'summary' : 'clinical-examination')}}>
-          {isSummaryActive ? 'Continue to Summary' : 'Continue'}
+        <Button
+          className="mt-4"
+          onClick={() => {
+            setValue("medicalHistory", medicalHistory);
+            handleContinue(
+              isSummaryActive ? "summary" : "clinical-examination"
+            );
+          }}
+        >
+          {isSummaryActive ? "Continue to Summary" : "Continue"}
         </Button>
       </div>
     </AccordionContent>
-  )
+  );
 }
-
 
 function HistoryItemComponent({
   item,
@@ -137,25 +156,25 @@ function HistoryItemComponent({
   onToggle,
   onDetailsChange,
 }: {
-  item: HistoryItem
-  index: number
-  onToggle: () => void
-  onDetailsChange: (details: string) => void
+  item: HistoryItem;
+  index: number;
+  onToggle: () => void;
+  onDetailsChange: (details: string) => void;
 }) {
   return (
     <div className="space-y-1">
       <div className="flex items-start space-x-2">
-        <Checkbox 
-          id={`checkbox-${item.condition}`} 
-          checked={item.hasCondition} 
-          onCheckedChange={onToggle} 
+        <Checkbox
+          id={`checkbox-${item.condition}`}
+          checked={item.hasCondition}
+          onCheckedChange={onToggle}
           className={cn(
             "border-2",
             item.hasCondition
-              ? " border-red-600 data-[state=checked]:bg-red-600 text-primary-foreground hover:bg-red-400 hover:text-primary-foreground" 
+              ? " border-red-600 data-[state=checked]:bg-red-600 text-primary-foreground hover:bg-red-400 hover:text-primary-foreground"
               : "border-primary"
           )}
-          />
+        />
         <div className="grid gap-1.5 leading-none">
           <Label
             htmlFor={`checkbox-${item.condition}`}
@@ -163,7 +182,14 @@ function HistoryItemComponent({
           >
             {item.condition}
           </Label>
-          <span className={cn("text-sm text-muted-foreground", item.hasCondition ? "text-red-500" : "")}>{item.hasCondition ? "Yes" : "No"}</span>
+          <span
+            className={cn(
+              "text-sm text-muted-foreground",
+              item.hasCondition ? "text-red-500" : ""
+            )}
+          >
+            {item.hasCondition ? "Yes" : "No"}
+          </span>
         </div>
       </div>
       {item.hasCondition && (
@@ -175,6 +201,5 @@ function HistoryItemComponent({
         />
       )}
     </div>
-  )
+  );
 }
-
