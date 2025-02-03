@@ -17,7 +17,7 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <main className="max-w-[1376px] mx-auto px-8 sm:px-12 md:px-16 lg:px-8 w-full pt-4 sm:pt-6 md:pt-8 lg:pt-10 pb-8 sm:pb-12 md:pb-16 lg:pb-20">
+      <main className="max-w-[1376px] mx-auto px-8 sm:px-12 md:px-16 lg:px-8 w-full">
         <div className="mb-8">
           <h1 className="text-4xl font-bold tracking-tight mb-2">
             Hello, {user?.name}!
@@ -59,7 +59,7 @@ export default function HomePage() {
                   <Stethoscope className="h-6 w-6 text-primary" />
                 </div>
                 <CardTitle className="font-inter text-[20px] font-semibold leading-[28px] tracking-[-0.005em] text-left underline-offset-[from-font] decoration-skip-ink-none text-[#09090B]">
-                  Clinic & Doctor Details
+                  Clinic & Doctor
                 </CardTitle>
                 <CardDescription className="font-inter text-[14px] font-normal leading-[20px] text-left underline-offset-[from-font] decoration-skip-ink-none text-[#71717A]">
                   Manage your clinic and doctor information

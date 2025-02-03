@@ -7,6 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "setup-logs": "tsx scripts/setup-logs.ts",
+    "postinstall": "npm run setup-logs",
     "shadcn": "shadcn-ui"
   },
   "dependencies": {
