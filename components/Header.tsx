@@ -31,7 +31,7 @@ export default function Header() {
 
   return (
     <header className="bg-white shadow-sm sticky top-0 z-10">
-      <div className="container mx-auto px-4">
+      <div className="max-w-[1376px] mx-auto px-8 sm:px-12 md:px-16 lg:px-8 w-full pb-8 sm:pb-12 md:pb-16 lg:pb-20">
         <div className="flex items-center justify-between h-16">
           <Link href="/" className="flex items-center space-x-2">
             <Stethoscope className="h-8 w-8 text-blue-600" />

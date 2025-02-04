@@ -251,7 +251,7 @@ export default function PRExamPage() {
               <AccordionItem value="clinic-doctor">
                 <AccordionTrigger
                   className="text-lg font-bold"
-                  isCompleted={isClinicDoctorCompleted}
+                  data-completed={isClinicDoctorCompleted}
                 >
                   Clinic and doctor details
                 </AccordionTrigger>
@@ -269,7 +269,7 @@ export default function PRExamPage() {
                 <AccordionTrigger
                   className="text-lg font-bold"
                   disabled={!isHelperDetailsEnabled}
-                  isCompleted={isHelperDetailsCompleted}
+                  data-completed={isHelperDetailsCompleted}
                 >
                   Person details
                 </AccordionTrigger>
@@ -296,7 +296,7 @@ export default function PRExamPage() {
                 <AccordionTrigger
                   className="text-lg font-bold"
                   disabled={!isExaminationEnabled}
-                  isCompleted={isExaminationCompleted}
+                  data-completed={isExaminationCompleted}
                 >
                   Examination details
                 </AccordionTrigger>

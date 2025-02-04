@@ -17,9 +17,9 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <main className="container mx-auto p-6">
-        <div className="mb-4">
-          <h1 className="text-4xl font-bold tracking-tight mb-2 ">
+      <main className="max-w-[1376px] mx-auto px-8 sm:px-12 md:px-16 lg:px-8 w-full pt-8 pb-16">
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold tracking-tight mb-2">
             Hello, {user?.name}!
           </h1>
           <p className="text-xl text-muted-foreground">
@@ -27,68 +27,100 @@ export default function HomePage() {
           </p>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-          {/* New Medical Exam Card */}
-          <Card className="hover:shadow-lg transition-shadow">
-            <CardHeader>
-              <div className="mb-2 w-fit rounded-full bg-primary/10 p-2">
-                <ClipboardList className="h-6 w-6 text-primary" />
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 md:gap-6 xl:gap-8">
+          <Card className="w-full h-[248px] rounded-xl border border-border transition-shadow hover:shadow-lg">
+            <CardHeader className="h-full flex flex-col justify-between">
+              <div className="flex flex-col gap-3">
+                <div className="w-fit rounded-full bg-primary/10 p-2">
+                  <ClipboardList className="h-6 w-6 text-primary" />
+                </div>
+                <CardTitle className="font-inter text-[20px] font-semibold leading-[28px] tracking-[-0.005em] text-left underline-offset-[from-font] decoration-skip-ink-none text-[#09090B]">
+                  New Medical Exam
+                </CardTitle>
+                <CardDescription className="font-inter text-[14px] font-normal leading-[20px] text-left underline-offset-[from-font] decoration-skip-ink-none text-[#71717A]">
+                  Submit a new medical examination record
+                </CardDescription>
               </div>
-              <CardTitle className="text-xl">New Medical Exam</CardTitle>
-              <CardDescription>
-                Submit a new medical examination record
-              </CardDescription>
-              <Button asChild className="mt-2 w-full hover:text-white">
-                <Link href="/medical-exam/select">Start New Exam</Link>
-              </Button>
+              <div className="flex justify-start">
+                <Button
+                  asChild
+                  className="h-[36px] px-4 py-2 gap-2 shadow-[0px_1px_2px_0px_#0000000D] hover:text-white"
+                >
+                  <Link href="/medical-exam/select">Start New Exam</Link>
+                </Button>
+              </div>
             </CardHeader>
           </Card>
 
-          {/* Clinic & Doctor Details Card */}
-          <Card className="hover:shadow-lg transition-shadow">
-            <CardHeader>
-              <div className="mb-2 w-fit rounded-full bg-primary/10 p-2">
-                <Stethoscope className="h-6 w-6 text-primary" />
+          <Card className="w-full h-[248px] rounded-xl border border-border transition-shadow hover:shadow-lg">
+            <CardHeader className="h-full flex flex-col justify-between">
+              <div className="flex flex-col gap-3">
+                <div className="w-fit rounded-full bg-primary/10 p-2">
+                  <Stethoscope className="h-6 w-6 text-primary" />
+                </div>
+                <CardTitle className="font-inter text-[20px] font-semibold leading-[28px] tracking-[-0.005em] text-left underline-offset-[from-font] decoration-skip-ink-none text-[#09090B]">
+                  Clinic & Doctor
+                </CardTitle>
+                <CardDescription className="font-inter text-[14px] font-normal leading-[20px] text-left underline-offset-[from-font] decoration-skip-ink-none text-[#71717A]">
+                  Manage your clinic and doctor information
+                </CardDescription>
               </div>
-              <CardTitle className="text-xl">Clinic & Doctor</CardTitle>
-              <CardDescription>
-                Manage your clinic and doctor information
-              </CardDescription>
-              <Button asChild className="mt-2 w-full hover:text-white">
-                <Link href="/clinic-doctor-info">Update Details</Link>
-              </Button>
+              <div className="flex justify-start">
+                <Button
+                  asChild
+                  className="h-[36px] px-4 py-2 gap-2 shadow-[0px_1px_2px_0px_#0000000D] hover:text-white"
+                >
+                  <Link href="/clinic-doctor-info">Update Details</Link>
+                </Button>
+              </div>
             </CardHeader>
           </Card>
 
-          {/* Update Medical Records Card */}
-          <Card className="hover:shadow-lg transition-shadow">
-            <CardHeader>
-              <div className="mb-2 w-fit rounded-full bg-primary/10 p-2">
-                <FileEdit className="h-6 w-6 text-primary" />
+          <Card className="w-full h-[248px] rounded-xl border border-border transition-shadow hover:shadow-lg">
+            <CardHeader className="h-full flex flex-col justify-between">
+              <div className="flex flex-col gap-3">
+                <div className="w-fit rounded-full bg-primary/10 p-2">
+                  <FileEdit className="h-6 w-6 text-primary" />
+                </div>
+                <CardTitle className="font-inter text-[20px] font-semibold leading-[28px] tracking-[-0.005em] text-left underline-offset-[from-font] decoration-skip-ink-none text-[#09090B]">
+                  Update Records
+                </CardTitle>
+                <CardDescription className="font-inter text-[14px] font-normal leading-[20px] text-left underline-offset-[from-font] decoration-skip-ink-none text-[#71717A]">
+                  Modify existing medical examination records
+                </CardDescription>
               </div>
-              <CardTitle className="text-xl">Update Records</CardTitle>
-              <CardDescription>
-                Modify existing medical examination records
-              </CardDescription>
-              <Button asChild className="mt-2 w-full hover:text-white">
-                <Link href="/records/edit">Update Records</Link>
-              </Button>
+              <div className="flex justify-start">
+                <Button
+                  asChild
+                  className="h-[36px] px-4 py-2 gap-2 shadow-[0px_1px_2px_0px_#0000000D] hover:text-white"
+                >
+                  <Link href="/records/edit">Update Records</Link>
+                </Button>
+              </div>
             </CardHeader>
           </Card>
 
-          {/* View History Card */}
-          <Card className="hover:shadow-lg transition-shadow">
-            <CardHeader>
-              <div className="mb-2 w-fit rounded-full bg-primary/10 p-2">
-                <History className="h-6 w-6 text-primary" />
+          <Card className="w-full h-[248px] rounded-xl border border-border transition-shadow hover:shadow-lg">
+            <CardHeader className="h-full flex flex-col justify-between">
+              <div className="flex flex-col gap-3">
+                <div className="w-fit rounded-full bg-primary/10 p-2">
+                  <History className="h-6 w-6 text-primary" />
+                </div>
+                <CardTitle className="font-inter text-[20px] font-semibold leading-[28px] tracking-[-0.005em] text-left underline-offset-[from-font] decoration-skip-ink-none text-[#09090B]">
+                  View History
+                </CardTitle>
+                <CardDescription className="font-inter text-[14px] font-normal leading-[20px] text-left underline-offset-[from-font] decoration-skip-ink-none text-[#71717A]">
+                  Access past medical examination records
+                </CardDescription>
               </div>
-              <CardTitle className="text-xl">View History</CardTitle>
-              <CardDescription>
-                Access past medical examination records
-              </CardDescription>
-              <Button asChild className="mt-2 w-full hover:text-white">
-                <Link href="/records/history">View History</Link>
-              </Button>
+              <div className="flex justify-start">
+                <Button
+                  asChild
+                  className="h-[36px] px-4 py-2 gap-2 shadow-[0px_1px_2px_0px_#0000000D] hover:text-white"
+                >
+                  <Link href="/records/history">View History</Link>
+                </Button>
+              </div>
             </CardHeader>
           </Card>
         </div>
