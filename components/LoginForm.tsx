@@ -11,7 +11,7 @@ export default function LoginForm() {
       <Button
         variant="outline"
         size="lg"
-        className="w-full bg-red-600 hover:bg-red-700 text-white"
+        className="w-full bg-red-600 hover:bg-red-700 text-white hover:text-white"
         onClick={() => router.push("/login")}
       >
         <span>Login with Singpass</span>

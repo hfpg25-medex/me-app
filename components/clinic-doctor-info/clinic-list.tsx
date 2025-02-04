@@ -183,165 +183,170 @@ export function ClinicList() {
   };
 
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        clinics.forEach((clinic) => handleSubmit(clinic));
-      }}
-      className="space-y-4 max-w-[760px] mx-auto"
-    >
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-2">
-          <Building2 className="h-5 w-5" />
-          <h2 className="text-lg font-semibold">Clinic Information</h2>
+    <div className="grid gap-6 md:grid-cols-[2fr,1fr]">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          clinics.forEach((clinic) => handleSubmit(clinic));
+        }}
+        className="space-y-4 w-full"
+      >
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-2">
+            <Building2 className="h-5 w-5" />
+            <h2 className="text-lg font-semibold">Clinic Information</h2>
+          </div>
         </div>
+
+        {clinics.map((clinic) => (
+          <Card key={clinic.id} className="relative">
+            <CardContent className="pt-6">
+              <div className="absolute top-4 right-4 flex items-center space-x-2">
+                {editingId === clinic.id ? (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleSubmit(clinic)}
+                    disabled={isLoading === clinic.id}
+                  >
+                    {isLoading === clinic.id ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      "Save"
+                    )}
+                  </Button>
+                ) : (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setEditingId(clinic.id)}
+                    className="text-blue-600"
+                  >
+                    <Pencil className="h-4 w-4" />
+                    Edit
+                  </Button>
+                )}
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    setClinics(clinics.filter((c) => c.id !== clinic.id));
+                    const newValidationErrors = { ...validationErrors };
+                    delete newValidationErrors[clinic.id];
+                    setValidationErrors(newValidationErrors);
+                  }}
+                >
+                  <Trash2 className="h-4 w-4 mr-2" />
+                  Remove
+                </Button>
+              </div>
+
+              <div className="grid gap-4 mt-4">
+                <div className="grid gap-2">
+                  <Label htmlFor={`name-${clinic.id}`}>Clinic Name</Label>
+                  <Input
+                    id={`name-${clinic.id}`}
+                    value={clinic.name}
+                    onChange={(e) =>
+                      setClinics(
+                        clinics.map((c) =>
+                          c.id === clinic.id
+                            ? { ...c, name: e.target.value }
+                            : c
+                        )
+                      )
+                    }
+                    disabled={editingId !== clinic.id}
+                  />
+                  {getFieldError(clinic.id, "name") && (
+                    <p className="text-sm text-red-500">
+                      {getFieldError(clinic.id, "name")}
+                    </p>
+                  )}
+                </div>
+
+                <div className="grid gap-2">
+                  <Label htmlFor={`hci-${clinic.id}`}>HCI Code</Label>
+                  <Input
+                    id={`hci-${clinic.id}`}
+                    value={clinic.hci}
+                    onChange={(e) =>
+                      setClinics(
+                        clinics.map((c) =>
+                          c.id === clinic.id ? { ...c, hci: e.target.value } : c
+                        )
+                      )
+                    }
+                    disabled={editingId !== clinic.id}
+                  />
+                  {getFieldError(clinic.id, "hci") && (
+                    <p className="text-sm text-red-500">
+                      {getFieldError(clinic.id, "hci")}
+                    </p>
+                  )}
+                </div>
+
+                <div className="grid gap-2">
+                  <Label htmlFor={`contactNumber-${clinic.id}`}>
+                    Contact Number
+                  </Label>
+                  <Input
+                    id={`contactNumber-${clinic.id}`}
+                    value={clinic.contactNumber}
+                    onChange={(e) =>
+                      setClinics(
+                        clinics.map((c) =>
+                          c.id === clinic.id
+                            ? { ...c, contactNumber: e.target.value }
+                            : c
+                        )
+                      )
+                    }
+                    disabled={editingId !== clinic.id}
+                  />
+                  {getFieldError(clinic.id, "contactNumber") && (
+                    <p className="text-sm text-red-500">
+                      {getFieldError(clinic.id, "contactNumber")}
+                    </p>
+                  )}
+                </div>
+
+                <div className="grid gap-2">
+                  <Label htmlFor={`address-${clinic.id}`}>Address</Label>
+                  <Input
+                    id={`address-${clinic.id}`}
+                    value={clinic.address}
+                    onChange={(e) =>
+                      setClinics(
+                        clinics.map((c) =>
+                          c.id === clinic.id
+                            ? { ...c, address: e.target.value }
+                            : c
+                        )
+                      )
+                    }
+                    disabled={editingId !== clinic.id}
+                  />
+                  {getFieldError(clinic.id, "address") && (
+                    <p className="text-sm text-red-500">
+                      {getFieldError(clinic.id, "address")}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+        {/* <Button type="submit">Save Clinics</Button> */}
+
         <Button type="button" onClick={addClinic} size="sm">
           <Plus className="h-4 w-4 mr-2" />
           Add Clinic
         </Button>
-      </div>
-
-      {clinics.map((clinic) => (
-        <Card key={clinic.id} className="relative">
-          <CardContent className="pt-6">
-            <div className="absolute top-4 right-4 flex items-center space-x-2">
-              {editingId === clinic.id ? (
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={() => handleSubmit(clinic)}
-                  disabled={isLoading === clinic.id}
-                >
-                  {isLoading === clinic.id ? (
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                  ) : (
-                    "Save"
-                  )}
-                </Button>
-              ) : (
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setEditingId(clinic.id)}
-                  className="text-blue-600"
-                >
-                  <Pencil className="h-4 w-4" />
-                  Edit
-                </Button>
-              )}
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={() => {
-                  setClinics(clinics.filter((c) => c.id !== clinic.id));
-                  const newValidationErrors = { ...validationErrors };
-                  delete newValidationErrors[clinic.id];
-                  setValidationErrors(newValidationErrors);
-                }}
-              >
-                <Trash2 className="h-4 w-4 mr-2" />
-                Remove
-              </Button>
-            </div>
-
-            <div className="grid gap-4 mt-4">
-              <div className="grid gap-2">
-                <Label htmlFor={`name-${clinic.id}`}>Clinic Name</Label>
-                <Input
-                  id={`name-${clinic.id}`}
-                  value={clinic.name}
-                  onChange={(e) =>
-                    setClinics(
-                      clinics.map((c) =>
-                        c.id === clinic.id ? { ...c, name: e.target.value } : c
-                      )
-                    )
-                  }
-                  disabled={editingId !== clinic.id}
-                />
-                {getFieldError(clinic.id, "name") && (
-                  <p className="text-sm text-red-500">
-                    {getFieldError(clinic.id, "name")}
-                  </p>
-                )}
-              </div>
-
-              <div className="grid gap-2">
-                <Label htmlFor={`hci-${clinic.id}`}>HCI Code</Label>
-                <Input
-                  id={`hci-${clinic.id}`}
-                  value={clinic.hci}
-                  onChange={(e) =>
-                    setClinics(
-                      clinics.map((c) =>
-                        c.id === clinic.id ? { ...c, hci: e.target.value } : c
-                      )
-                    )
-                  }
-                  disabled={editingId !== clinic.id}
-                />
-                {getFieldError(clinic.id, "hci") && (
-                  <p className="text-sm text-red-500">
-                    {getFieldError(clinic.id, "hci")}
-                  </p>
-                )}
-              </div>
-
-              <div className="grid gap-2">
-                <Label htmlFor={`contactNumber-${clinic.id}`}>
-                  Contact Number
-                </Label>
-                <Input
-                  id={`contactNumber-${clinic.id}`}
-                  value={clinic.contactNumber}
-                  onChange={(e) =>
-                    setClinics(
-                      clinics.map((c) =>
-                        c.id === clinic.id
-                          ? { ...c, contactNumber: e.target.value }
-                          : c
-                      )
-                    )
-                  }
-                  disabled={editingId !== clinic.id}
-                />
-                {getFieldError(clinic.id, "contactNumber") && (
-                  <p className="text-sm text-red-500">
-                    {getFieldError(clinic.id, "contactNumber")}
-                  </p>
-                )}
-              </div>
-
-              <div className="grid gap-2">
-                <Label htmlFor={`address-${clinic.id}`}>Address</Label>
-                <Input
-                  id={`address-${clinic.id}`}
-                  value={clinic.address}
-                  onChange={(e) =>
-                    setClinics(
-                      clinics.map((c) =>
-                        c.id === clinic.id
-                          ? { ...c, address: e.target.value }
-                          : c
-                      )
-                    )
-                  }
-                  disabled={editingId !== clinic.id}
-                />
-                {getFieldError(clinic.id, "address") && (
-                  <p className="text-sm text-red-500">
-                    {getFieldError(clinic.id, "address")}
-                  </p>
-                )}
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      ))}
-      {/* <Button type="submit">Save Clinics</Button> */}
-    </form>
+      </form>
+    </div>
   );
 }
