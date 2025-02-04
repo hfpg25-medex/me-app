@@ -99,7 +99,7 @@ export function ClinicalExamination({
                       (value >= 15 && value <= 200) ||
                       "Weight must be between 15kg and 200kg",
                   })}
-                  className="mr-2 mt-1 pr-12 w-[216px]"
+                  className="mr-2 mt-1 w-[216px]"
                 />
                 <span className="absolute right-8 top-1/2 -translate-y-1/2 text-gray-500">
                   kg
@@ -120,7 +120,7 @@ export function ClinicalExamination({
                   {...register("clinicalExamination.height", {
                     valueAsNumber: true,
                   })}
-                  className="mr-2 mt-1 pr-12 w-[216px]"
+                  className="mr-2 mt-1 w-[216px]"
                 />
                 <span className="absolute right-8 top-1/2 -translate-y-1/2 text-gray-500">
                   cm
@@ -210,7 +210,7 @@ export function ClinicalExamination({
                   {...register("clinicalExamination.systolicBP", {
                     valueAsNumber: true,
                   })}
-                  className="mr-2 mt-1 pr-12 w-[216px]"
+                  className="mr-2 mt-1 w-[216px]"
                 />
                 <span className="absolute right-8 top-1/2 -translate-y-1/2 text-gray-500">
                   mmHg
@@ -226,7 +226,7 @@ export function ClinicalExamination({
                   {...register("clinicalExamination.diastolicBP", {
                     valueAsNumber: true,
                   })}
-                  className="mr-2 mt-1 pr-12 w-[216px]"
+                  className="mr-2 mt-1 w-[216px]"
                 />
                 <span className="absolute right-8 top-1/2 -translate-y-1/2 text-gray-500">
                   mmHg
