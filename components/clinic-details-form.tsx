@@ -1,26 +1,36 @@
-'use client'
+"use client";
 
-import * as React from 'react'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Button } from '@/components/ui/button'
-import { cn } from '@/lib/utils'
-import { clinicDetailsAction } from '@/lib/actions'
-import { Check } from 'lucide-react'
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card'
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { clinicDetailsAction } from "@/lib/actions";
+import { cn } from "@/lib/utils";
+import { Check } from "lucide-react";
+import * as React from "react";
 
-export function ClinicDetailsForm({ className }: React.ComponentProps<'div'>) {
-  const [state, formAction, pending] = React.useActionState(clinicDetailsAction, {
-    defaultValues: {
-      hcCode: '',
-      contactNumber: '',
-    },
-    success: false,
-    errors: null,
-  })
+export function ClinicDetailsForm({ className }: React.ComponentProps<"div">) {
+  const [state, formAction, pending] = React.useActionState(
+    clinicDetailsAction,
+    {
+      defaultValues: {
+        hcCode: "",
+        contactNumber: "",
+      },
+      success: false,
+      errors: null,
+    }
+  );
 
   return (
-    <Card className={cn('w-full max-w-md', className)}>
+    <Card className={cn("w-full max-w-md", className)}>
       <CardHeader>
         <CardTitle>Clinic and Doctor Details</CardTitle>
         <CardDescription>
@@ -82,8 +92,8 @@ export function ClinicDetailsForm({ className }: React.ComponentProps<'div'>) {
                 placeholder="91234567"
                 maxLength={8}
                 className={cn(
-                  'rounded-l-none',
-                  'group-data-[invalid=true]/field:border-destructive focus-visible:group-data-[invalid=true]/field:ring-destructive'
+                  "rounded-l-none",
+                  "group-data-[invalid=true]/field:border-destructive focus-visible:group-data-[invalid=true]/field:ring-destructive"
                 )}
                 disabled={pending}
                 aria-invalid={!!state.errors?.contactNumber}
@@ -100,11 +110,10 @@ export function ClinicDetailsForm({ className }: React.ComponentProps<'div'>) {
         </CardContent>
         <CardFooter>
           <Button type="submit" disabled={pending}>
-            {pending ? 'Saving...' : 'Save Clinic Details'}
+            {pending ? "Saving..." : "Save Clinic Details"}
           </Button>
         </CardFooter>
       </form>
     </Card>
-  )
+  );
 }
-

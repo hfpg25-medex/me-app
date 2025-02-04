@@ -1,61 +1,63 @@
-'use client'
+"use client";
 
-import * as React from 'react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Card, CardContent } from '@/components/ui/card'
-import { Plus, Trash2, Stethoscope, Pencil, Loader2 } from 'lucide-react'
-import { updateDoctor, getDoctorList } from '@/lib/actions/doctor'
-import { doctorSchema } from '@/lib/validations/clinicDoctorSchemas'
-import { useToast } from '@/hooks/use-toast'
-import { z } from 'zod'
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useToast } from "@/hooks/use-toast";
+import { getDoctorList, updateDoctor } from "@/lib/actions/doctor";
+import { doctorSchema } from "@/lib/validations/clinicDoctorSchemas";
+import { Loader2, Pencil, Plus, Stethoscope, Trash2 } from "lucide-react";
+import * as React from "react";
+import { z } from "zod";
 
 interface Doctor {
-  id: string
-  name: string
-  mcr: string
+  id: string;
+  name: string;
+  mcr: string;
 }
 
 interface ValidationErrors {
-  [key: string]: string[]
+  [key: string]: string[];
 }
 
 export function DoctorList() {
-  const [doctors, setDoctors] = React.useState<Doctor[]>([])
-  const [editingId, setEditingId] = React.useState<string | null>(null)
-  const [validationErrors, setValidationErrors] = React.useState<Record<string, ValidationErrors>>({})
-  const { toast } = useToast()
-  const [isLoading, setIsLoading] = React.useState<string | null>(null)
+  const [doctors, setDoctors] = React.useState<Doctor[]>([]);
+  const [editingId, setEditingId] = React.useState<string | null>(null);
+  const [validationErrors, setValidationErrors] = React.useState<
+    Record<string, ValidationErrors>
+  >({});
+  const { toast } = useToast();
+  const [isLoading, setIsLoading] = React.useState<string | null>(null);
 
   React.useEffect(() => {
     const loadDoctors = async () => {
-      const result = await getDoctorList()
-      console.log("result", result)
+      const result = await getDoctorList();
+      console.log("result", result);
       if (result.success && result.data) {
-        setDoctors(result.data)
+        setDoctors(result.data);
       } else {
-        setDoctors([])  
+        setDoctors([]);
         toast({
           variant: "destructive",
           title: "Error",
-          description: result.error || "Failed to load doctors"
-        })
+          description: result.error || "Failed to load doctors",
+        });
       }
-    }
-    loadDoctors()
-  }, [toast])
+    };
+    loadDoctors();
+  }, [toast]);
 
   const addDoctor = () => {
     const newDoctor: Doctor = {
       id: Math.random().toString(36).substr(2, 9),
-      name: '',
-      mcr: '',
-    }
-    setDoctors([...doctors, newDoctor])
-    setEditingId(newDoctor.id)
-    setValidationErrors({...validationErrors, [newDoctor.id]: {}})
-  }
+      name: "",
+      mcr: "",
+    };
+    setDoctors([...doctors, newDoctor]);
+    setEditingId(newDoctor.id);
+    setValidationErrors({ ...validationErrors, [newDoctor.id]: {} });
+  };
 
   // const validateDoctor = (doctor: Doctor) => {
   //   try {
@@ -123,93 +125,99 @@ export function DoctorList() {
   const handleSubmit = async (doctor: Doctor) => {
     try {
       // Clear previous validation errors for this doctor
-      setValidationErrors(prev => {
-        const newErrors = { ...prev }
-        delete newErrors[doctor.id]
-        return newErrors
-      })
+      setValidationErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[doctor.id];
+        return newErrors;
+      });
 
       // Validate before sending to server
       try {
         doctorSchema.parse({
           name: doctor.name,
           mcr: doctor.mcr,
-        })
+        });
       } catch (e) {
         if (e instanceof z.ZodError) {
-          const errors = e.errors.reduce((acc: { [key: string]: string[] }, curr) => {
-            const field = curr.path[0] as string
-            if (!acc[field]) acc[field] = []
-            acc[field].push(curr.message)
-            return acc
-          }, {})
-          setValidationErrors(prev => ({
+          const errors = e.errors.reduce(
+            (acc: { [key: string]: string[] }, curr) => {
+              const field = curr.path[0] as string;
+              if (!acc[field]) acc[field] = [];
+              acc[field].push(curr.message);
+              return acc;
+            },
+            {}
+          );
+          setValidationErrors((prev) => ({
             ...prev,
-            [doctor.id]: errors
-          }))
+            [doctor.id]: errors,
+          }));
           toast({
             variant: "destructive",
             title: "Validation Error",
-            description: "Please check the form for errors"
-          })
-          return
+            description: "Please check the form for errors",
+          });
+          return;
         }
       }
 
-      setIsLoading(doctor.id)
+      setIsLoading(doctor.id);
       const result = await updateDoctor(doctor.id, {
         name: doctor.name,
         mcr: doctor.mcr,
-      })
+      });
 
       if (result.success) {
-        setEditingId(null)
+        setEditingId(null);
         toast({
           title: "Success",
-          description: "Doctor information updated successfully."
-        })
-        setDoctors(prevDoctors =>
-          prevDoctors.map(d =>
+          description: "Doctor information updated successfully.",
+        });
+        setDoctors((prevDoctors) =>
+          prevDoctors.map((d) =>
             d.id === doctor.id ? { ...d, ...result.data } : d
           )
-        )
+        );
       } else {
         // Handle server-side validation errors
         if (result.validationErrors) {
-          setValidationErrors(prev => ({
+          setValidationErrors((prev) => ({
             ...prev,
-            [doctor.id]: result.validationErrors as unknown as ValidationErrors
-          }))
+            [doctor.id]: result.validationErrors as unknown as ValidationErrors,
+          }));
         }
         toast({
           variant: "destructive",
           title: "Error",
-          description: result.error
-        })
+          description: result.error,
+        });
       }
     } catch (error) {
-      console.error('Error updating clinic:', error)
+      console.error("Error updating clinic:", error);
       toast({
         variant: "destructive",
         title: "Error",
-        description: "An unexpected error occurred"
-      })
+        description: "An unexpected error occurred",
+      });
     } finally {
-      setIsLoading(null)
+      setIsLoading(null);
     }
-  }
+  };
 
   const getFieldError = (doctorId: string, field: string) => {
-    if (!validationErrors[doctorId]) return null
-    const errors = validationErrors[doctorId][field]
-    return errors ? errors[0] : null
-  }
+    if (!validationErrors[doctorId]) return null;
+    const errors = validationErrors[doctorId][field];
+    return errors ? errors[0] : null;
+  };
 
   return (
-    <form onSubmit={(e) => {
-      e.preventDefault()
-      doctors.forEach(doctor => handleSubmit(doctor))
-    }} className="space-y-4 max-w-[760px] mx-auto">
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        doctors.forEach((doctor) => handleSubmit(doctor));
+      }}
+      className="space-y-4 max-w-[760px] mx-auto"
+    >
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <Stethoscope className="h-5 w-5" />
@@ -256,10 +264,10 @@ export function DoctorList() {
                 variant="outline"
                 size="sm"
                 onClick={() => {
-                  setDoctors(doctors.filter((d) => d.id !== doctor.id))
-                  const newValidationErrors = { ...validationErrors }
-                  delete newValidationErrors[doctor.id]
-                  setValidationErrors(newValidationErrors)
+                  setDoctors(doctors.filter((d) => d.id !== doctor.id));
+                  const newValidationErrors = { ...validationErrors };
+                  delete newValidationErrors[doctor.id];
+                  setValidationErrors(newValidationErrors);
                 }}
               >
                 <Trash2 className="h-4 w-4 mr-2" />
@@ -282,8 +290,10 @@ export function DoctorList() {
                   }
                   disabled={editingId !== doctor.id}
                 />
-                {getFieldError(doctor.id, 'name') && (
-                  <p className="text-sm text-red-500">{getFieldError(doctor.id, 'name')}</p>
+                {getFieldError(doctor.id, "name") && (
+                  <p className="text-sm text-red-500">
+                    {getFieldError(doctor.id, "name")}
+                  </p>
                 )}
               </div>
 
@@ -301,8 +311,10 @@ export function DoctorList() {
                   }
                   disabled={editingId !== doctor.id}
                 />
-                {getFieldError(doctor.id, 'mcr') && (
-                  <p className="text-sm text-red-500">{getFieldError(doctor.id, 'mcr')}</p>
+                {getFieldError(doctor.id, "mcr") && (
+                  <p className="text-sm text-red-500">
+                    {getFieldError(doctor.id, "mcr")}
+                  </p>
                 )}
               </div>
 
@@ -330,7 +342,7 @@ export function DoctorList() {
       ))}
       {/* <Button type="submit">Save Clinics</Button> */}
     </form>
-  )
+  );
 }
 
 //     <form onSubmit={handleSubmit} className="space-y-4">
@@ -344,7 +356,7 @@ export function DoctorList() {
 //           Add Doctor
 //         </Button>
 //       </div>
-      
+
 //       {doctors.length === 0 ? (
 //         <p className="text-sm text-muted-foreground">No doctors added yet. Click the button above to add a doctor.</p>
 //       ) : (
@@ -363,7 +375,7 @@ export function DoctorList() {
 //                     >
 //                       <Trash2 className="h-4 w-4 mb-6" />
 //                     </Button>
-                    
+
 //                     <div className="grid gap-2">
 //                       <Label htmlFor={`doctor-name-${doctor.id}`}>Doctor Name</Label>
 //                       <Input

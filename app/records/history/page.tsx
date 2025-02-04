@@ -1,18 +1,46 @@
-"use client"
+"use client";
 
-import { useState, useMemo } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Badge } from "@/components/ui/badge"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Calendar } from "@/components/ui/calendar"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { cn } from "@/lib/utils"
-import { format, subMonths, subYears, parseISO, isWithinInterval } from "date-fns"
-import { CalendarIcon, MoreHorizontal, Plus } from "lucide-react"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { cn } from "@/lib/utils";
+import {
+  format,
+  isWithinInterval,
+  parseISO,
+  subMonths,
+  subYears,
+} from "date-fns";
+import { CalendarIcon, MoreHorizontal, Plus } from "lucide-react";
+import { useMemo, useState } from "react";
 
 // interface Record {
 //   id: string
@@ -28,19 +56,19 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 
 // Function to generate a random ID
 const generateForeignerId = () => {
-  const letters = "FGST"
-  const firstLetter = letters[Math.floor(Math.random() * letters.length)]
-  const numbers = Math.floor(Math.random() * 9000000) + 1000000
-  const lastLetter = "XNFM"[Math.floor(Math.random() * 4)]
-  return `${firstLetter}${numbers}${lastLetter}`
-}
+  const letters = "FGST";
+  const firstLetter = letters[Math.floor(Math.random() * letters.length)];
+  const numbers = Math.floor(Math.random() * 9000000) + 1000000;
+  const lastLetter = "XNFM"[Math.floor(Math.random() * 4)];
+  return `${firstLetter}${numbers}${lastLetter}`;
+};
 
 // List of sample names
 const sampleNames = [
   "Tan Wei Ming",
   "Muhammad Ismail",
   "Rajesh Kumar",
-  "Liu Mei Ling", 
+  "Liu Mei Ling",
   "Siti Nurhaliza",
   "Zhang Wei",
   "Priya Sharma",
@@ -56,21 +84,20 @@ const sampleNames = [
   "Zainab Binti Ali",
   "Lim Ah Beng",
   "Ramesh Singh",
-  "Fatimah Abdullah"
-]
-
+  "Fatimah Abdullah",
+];
 
 // List of statuses
-const statuses = ["For Review", "Submitted", "Pending"]
+const statuses = ["For Review", "Submitted", "Pending"];
 
 // Generate sample data with different dates, IDs, and statuses
 const generateRecords = () => {
   return Array(100)
     .fill(null)
     .map((_, i) => {
-      const date = new Date()
-      date.setDate(date.getDate() - Math.floor(Math.random() * 365)) // Random date within the last year
-      const dateString = format(date, "yyyy-MM-dd HH:mm")
+      const date = new Date();
+      date.setDate(date.getDate() - Math.floor(Math.random() * 365)); // Random date within the last year
+      const dateString = format(date, "yyyy-MM-dd HH:mm");
       return {
         id: `${i}`,
         foreignerId: generateForeignerId(),
@@ -81,24 +108,26 @@ const generateRecords = () => {
         name: sampleNames[Math.floor(Math.random() * sampleNames.length)],
         status: statuses[Math.floor(Math.random() * statuses.length)],
         pending: "3 / 3",
-      }
-    })
-}
+      };
+    });
+};
 
-const allRecords = generateRecords()
+const allRecords = generateRecords();
 
 export default function ExaminationRecords() {
-  const [selectedDate, setSelectedDate] = useState<[Date | undefined, Date | undefined]>([undefined, undefined])
-  const [selectedRecords, setSelectedRecords] = useState<string[]>([])
-  const [searchQuery, setSearchQuery] = useState("")
-  const [currentPage, setCurrentPage] = useState(1)
-  const [rowsPerPage, setRowsPerPage] = useState(10)
-  const [statusFilter, setStatusFilter] = useState("all")
+  const [selectedDate, setSelectedDate] = useState<
+    [Date | undefined, Date | undefined]
+  >([undefined, undefined]);
+  const [selectedRecords, setSelectedRecords] = useState<string[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [statusFilter, setStatusFilter] = useState("all");
 
   // Filter records based on date range, search query, and status
   const filteredRecords = useMemo(() => {
     return allRecords.filter((record) => {
-      const recordDate = parseISO(record.dateCreated)
+      const recordDate = parseISO(record.dateCreated);
 
       // If we have a date range, filter by it
       if (selectedDate[0] && selectedDate[1]) {
@@ -108,13 +137,13 @@ export default function ExaminationRecords() {
             end: selectedDate[1],
           })
         ) {
-          return false
+          return false;
         }
       }
 
       // Filter by search query
       if (searchQuery) {
-        const searchLower = searchQuery.toLowerCase()
+        const searchLower = searchQuery.toLowerCase();
         if (
           !(
             record.name.toLowerCase().includes(searchLower) ||
@@ -123,65 +152,68 @@ export default function ExaminationRecords() {
             record.agency.toLowerCase().includes(searchLower)
           )
         ) {
-          return false
+          return false;
         }
       }
 
       // Filter by status
       if (statusFilter !== "all" && record.status !== statusFilter) {
-        return false
+        return false;
       }
 
-      return true
-    })
-  }, [selectedDate, searchQuery, statusFilter])
+      return true;
+    });
+  }, [selectedDate, searchQuery, statusFilter]);
 
   // Calculate pagination
-  const totalPages = Math.ceil(filteredRecords.length / rowsPerPage)
-  const paginatedRecords = filteredRecords.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage)
+  const totalPages = Math.ceil(filteredRecords.length / rowsPerPage);
+  const paginatedRecords = filteredRecords.slice(
+    (currentPage - 1) * rowsPerPage,
+    currentPage * rowsPerPage
+  );
 
   // Date range filter handlers
   const handleDateRangeSelect = (range: "year" | "3months" | "month") => {
-    const endDate = new Date()
-    let startDate: Date
+    const endDate = new Date();
+    let startDate: Date;
 
     switch (range) {
       case "year":
-        startDate = subYears(endDate, 1)
-        break
+        startDate = subYears(endDate, 1);
+        break;
       case "3months":
-        startDate = subMonths(endDate, 3)
-        break
+        startDate = subMonths(endDate, 3);
+        break;
       case "month":
-        startDate = subMonths(endDate, 1)
-        break
+        startDate = subMonths(endDate, 1);
+        break;
       default:
-        return
+        return;
     }
 
-    setSelectedDate([startDate, endDate])
-    setCurrentPage(1)
-  }
+    setSelectedDate([startDate, endDate]);
+    setCurrentPage(1);
+  };
 
   // Reset date range
   const clearDateRange = () => {
-    setSelectedDate([undefined, undefined])
-    setCurrentPage(1)
-  }
+    setSelectedDate([undefined, undefined]);
+    setCurrentPage(1);
+  };
 
   // Function to get badge color based on status
   const getStatusBadgeColor = (status: string) => {
     switch (status) {
       case "For Review":
-        return "bg-yellow-50 text-yellow-700 border-yellow-200"
+        return "bg-yellow-50 text-yellow-700 border-yellow-200";
       case "Submitted":
-        return "bg-green-50 text-green-700 border-green-200"
+        return "bg-green-50 text-green-700 border-green-200";
       case "Pending":
-        return "bg-blue-50 text-blue-700 border-blue-200"
+        return "bg-blue-50 text-blue-700 border-blue-200";
       default:
-        return "bg-gray-50 text-gray-700 border-gray-200"
+        return "bg-gray-50 text-gray-700 border-gray-200";
     }
-  }
+  };
 
   return (
     <div className="p-6">
@@ -189,7 +221,7 @@ export default function ExaminationRecords() {
         <h1 className="text-2xl font-semibold">Examination Records</h1>
         <Button className="bg-black hover:bg-black/90">
           <Plus className="mr-2 h-4 w-4" />
-          New Clinical Exam
+          New Medical Examination
         </Button>
       </div>
 
@@ -199,15 +231,15 @@ export default function ExaminationRecords() {
           className="max-w-xs"
           value={searchQuery}
           onChange={(e) => {
-            setSearchQuery(e.target.value)
-            setCurrentPage(1)
+            setSearchQuery(e.target.value);
+            setCurrentPage(1);
           }}
         />
         <Select
           value={statusFilter}
           onValueChange={(value) => {
-            setStatusFilter(value)
-            setCurrentPage(1)
+            setStatusFilter(value);
+            setCurrentPage(1);
           }}
         >
           <SelectTrigger className="w-[180px]">
@@ -223,24 +255,28 @@ export default function ExaminationRecords() {
           </SelectContent>
         </Select>
         <Button
-        variant={
-          selectedDate[0] &&
-          selectedDate[1] &&
-          format(selectedDate[0], "yyyy") === format(subYears(new Date(), 1), "yyyy") &&
-          format(selectedDate[0], "MM/yyyy") !== format(subMonths(new Date(), 3), "MM/yyyy") &&
-          format(selectedDate[0], "MM/yyyy") !== format(subMonths(new Date(), 1), "MM/yyyy")
-            ? "default"
-            : "outline"
-        }
-        onClick={() => handleDateRangeSelect("year")}
-      >
-        Past year
-      </Button>
+          variant={
+            selectedDate[0] &&
+            selectedDate[1] &&
+            format(selectedDate[0], "yyyy") ===
+              format(subYears(new Date(), 1), "yyyy") &&
+            format(selectedDate[0], "MM/yyyy") !==
+              format(subMonths(new Date(), 3), "MM/yyyy") &&
+            format(selectedDate[0], "MM/yyyy") !==
+              format(subMonths(new Date(), 1), "MM/yyyy")
+              ? "default"
+              : "outline"
+          }
+          onClick={() => handleDateRangeSelect("year")}
+        >
+          Past year
+        </Button>
         <Button
           variant={
             selectedDate[0] &&
             selectedDate[1] &&
-            format(selectedDate[0], "MM/yyyy") === format(subMonths(new Date(), 3), "MM/yyyy")
+            format(selectedDate[0], "MM/yyyy") ===
+              format(subMonths(new Date(), 3), "MM/yyyy")
               ? "default"
               : "outline"
           }
@@ -252,7 +288,8 @@ export default function ExaminationRecords() {
           variant={
             selectedDate[0] &&
             selectedDate[1] &&
-            format(selectedDate[0], "MM/yyyy") === format(subMonths(new Date(), 1), "MM/yyyy")
+            format(selectedDate[0], "MM/yyyy") ===
+              format(subMonths(new Date(), 1), "MM/yyyy")
               ? "default"
               : "outline"
           }
@@ -264,11 +301,17 @@ export default function ExaminationRecords() {
           <PopoverTrigger asChild>
             <Button
               variant="outline"
-              className={cn("justify-start text-left font-normal", !selectedDate[0] && "text-muted-foreground")}
+              className={cn(
+                "justify-start text-left font-normal",
+                !selectedDate[0] && "text-muted-foreground"
+              )}
             >
               <CalendarIcon className="mr-2 h-4 w-4" />
               {selectedDate[0] && selectedDate[1]
-                ? `${format(selectedDate[0], "MM/dd/yy")} - ${format(selectedDate[1], "MM/dd/yy")}`
+                ? `${format(selectedDate[0], "MM/dd/yy")} - ${format(
+                    selectedDate[1],
+                    "MM/dd/yy"
+                  )}`
                 : "Custom range"}
             </Button>
           </PopoverTrigger>
@@ -280,14 +323,18 @@ export default function ExaminationRecords() {
                 to: selectedDate[1],
               }}
               onSelect={(range) => {
-                setSelectedDate([range?.from, range?.to])
-                setCurrentPage(1)
+                setSelectedDate([range?.from, range?.to]);
+                setCurrentPage(1);
               }}
               numberOfMonths={2}
               initialFocus
             />
             {selectedDate[0] && (
-              <Button variant="ghost" className="w-full" onClick={clearDateRange}>
+              <Button
+                variant="ghost"
+                className="w-full"
+                onClick={clearDateRange}
+              >
                 Clear Range
               </Button>
             )}
@@ -304,9 +351,9 @@ export default function ExaminationRecords() {
                   checked={selectedRecords.length === paginatedRecords.length}
                   onCheckedChange={(checked) => {
                     if (checked) {
-                      setSelectedRecords(paginatedRecords.map((r) => r.id))
+                      setSelectedRecords(paginatedRecords.map((r) => r.id));
                     } else {
-                      setSelectedRecords([])
+                      setSelectedRecords([]);
                     }
                   }}
                 />
@@ -330,9 +377,11 @@ export default function ExaminationRecords() {
                     checked={selectedRecords.includes(record.id)}
                     onCheckedChange={(checked) => {
                       if (checked) {
-                        setSelectedRecords([...selectedRecords, record.id])
+                        setSelectedRecords([...selectedRecords, record.id]);
                       } else {
-                        setSelectedRecords(selectedRecords.filter((id) => id !== record.id))
+                        setSelectedRecords(
+                          selectedRecords.filter((id) => id !== record.id)
+                        );
                       }
                     }}
                   />
@@ -344,7 +393,10 @@ export default function ExaminationRecords() {
                 <TableCell>{record.type}</TableCell>
                 <TableCell>{record.name}</TableCell>
                 <TableCell>
-                  <Badge variant="outline" className={getStatusBadgeColor(record.status)}>
+                  <Badge
+                    variant="outline"
+                    className={getStatusBadgeColor(record.status)}
+                  >
                     {record.status}
                   </Badge>
                 </TableCell>
@@ -381,8 +433,8 @@ export default function ExaminationRecords() {
               <Select
                 value={rowsPerPage.toString()}
                 onValueChange={(value) => {
-                  setRowsPerPage(Number.parseInt(value))
-                  setCurrentPage(1)
+                  setRowsPerPage(Number.parseInt(value));
+                  setCurrentPage(1);
                 }}
               >
                 <SelectTrigger className="w-[70px]">
@@ -413,7 +465,9 @@ export default function ExaminationRecords() {
                   variant="outline"
                   size="icon"
                   className="h-8 w-8"
-                  onClick={() => setCurrentPage((curr) => Math.max(1, curr - 1))}
+                  onClick={() =>
+                    setCurrentPage((curr) => Math.max(1, curr - 1))
+                  }
                   disabled={currentPage === 1}
                 >
                   {"<"}
@@ -422,7 +476,9 @@ export default function ExaminationRecords() {
                   variant="outline"
                   size="icon"
                   className="h-8 w-8"
-                  onClick={() => setCurrentPage((curr) => Math.min(totalPages, curr + 1))}
+                  onClick={() =>
+                    setCurrentPage((curr) => Math.min(totalPages, curr + 1))
+                  }
                   disabled={currentPage === totalPages}
                 >
                   {">"}
@@ -442,6 +498,5 @@ export default function ExaminationRecords() {
         </div>
       </div>
     </div>
-  )
+  );
 }
-

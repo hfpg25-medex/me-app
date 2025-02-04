@@ -18,9 +18,10 @@ import { useState } from "react";
 interface NavBarProps {
   userName: string;
   userUen: string;
+  corpPassId: string;
 }
 
-export function NavBar({ userName, userUen }: NavBarProps) {
+export function NavBar({ userName, userUen, corpPassId }: NavBarProps) {
   const { logout } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
@@ -84,6 +85,9 @@ export function NavBar({ userName, userUen }: NavBarProps) {
             <div className="px-2 py-1.5">
               <p className="text-sm font-medium">{userName}</p>
               <p className="text-xs text-muted-foreground">UEN: {userUen}</p>
+              <p className="text-xs text-muted-foreground">
+                Corppass ID: {corpPassId}
+              </p>
             </div>
             <DropdownMenuSeparator />
             <DropdownMenuItem

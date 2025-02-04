@@ -25,7 +25,13 @@ function MainLayout({ children }: { children: React.ReactNode }) {
         onPointerEnterCapture={undefined}
         onPointerLeaveCapture={undefined}
       />
-      {user && <NavBar userName={user.name} userUen={user.uen} />}
+      {user && (
+        <NavBar
+          userName={user.name}
+          userUen={user.uen}
+          corpPassId={user.corpPassId}
+        />
+      )}
       <UserProvider initialUser={user}>
         <main>{children}</main>
       </UserProvider>

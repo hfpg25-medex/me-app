@@ -9,7 +9,8 @@
     "lint": "next lint",
     "setup-logs": "tsx scripts/setup-logs.ts",
     "postinstall": "npm run setup-logs",
-    "shadcn": "shadcn-ui"
+    "shadcn": "shadcn-ui",
+    "format": "npx prettier . --write"
   },
   "dependencies": {
     "@govtechsg/sgds": "^2.3.6",

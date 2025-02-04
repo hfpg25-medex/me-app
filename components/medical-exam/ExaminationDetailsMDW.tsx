@@ -1,40 +1,46 @@
-import { useState } from 'react'
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { AccordionContent } from "@/components/ui/accordion"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Textarea } from "@/components/ui/textarea"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { format } from "date-fns"
-import { TriangleAlert as WarningIcon } from 'lucide-react'
-import { cn } from "@/lib/utils"
-import { useFormContext } from "react-hook-form"
-import { FormDataMDW } from "@/lib/schemas"
+import { AccordionContent } from "@/components/ui/accordion";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Textarea } from "@/components/ui/textarea";
+import { FormDataMDW } from "@/lib/schemas";
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
+import { TriangleAlert as WarningIcon } from "lucide-react";
+import { useState } from "react";
+import { useFormContext } from "react-hook-form";
 
 interface ExaminationDetailsProps {
-  isSummaryActive: boolean
-  handleContinue: (nextStep: string) => void
-  setWeightTouched: (value: boolean) => void
-  weightTouched: boolean
+  isSummaryActive: boolean;
+  handleContinue: (nextStep: string) => void;
+  setWeightTouched: (value: boolean) => void;
+  weightTouched: boolean;
   // showWeightWarning: boolean
-  lastRecordedWeight: number | null
-  lastRecordedHeight: number | null
-  testTypes: string[]
+  lastRecordedWeight: number | null;
+  lastRecordedHeight: number | null;
+  testTypes: string[];
 }
 
-export function ExaminationDetails({ 
-  isSummaryActive, 
-  handleContinue, 
+export function ExaminationDetails({
+  isSummaryActive,
+  handleContinue,
   setWeightTouched,
   // weightTouched,
   // showWeightWarning,
   lastRecordedWeight,
   lastRecordedHeight,
-  testTypes
+  testTypes,
 }: ExaminationDetailsProps) {
-  const { register, setValue, formState: { errors }, watch, trigger } = useFormContext<FormDataMDW>()
-  const watchedValues = watch()
+  const {
+    register,
+    setValue,
+    formState: { errors },
+    watch,
+    trigger,
+  } = useFormContext<FormDataMDW>();
+  const watchedValues = watch();
   const [showWeightWarning, setShowWeightWarning] = useState(false);
 
   return (
@@ -49,29 +55,32 @@ export function ExaminationDetails({
                 <Input
                   id="weight"
                   type="number"
-                  {...register('examinationDetails.weight', { 
+                  {...register("examinationDetails.weight", {
                     valueAsNumber: true,
-                    validate: (value) => !value || (value >= 15 && value <= 200) || "Weight must be between 15kg and 200kg"
+                    validate: (value) =>
+                      !value ||
+                      (value >= 15 && value <= 200) ||
+                      "Weight must be between 15kg and 200kg",
                   })}
                   onBlur={async (e) => {
                     const newWeight = parseFloat(e.target.value);
-                    setValue('examinationDetails.weight', newWeight);
+                    setValue("examinationDetails.weight", newWeight);
                     setWeightTouched(true);
-                    const hasError = !(await trigger('examinationDetails.weight'));
-                    
+                    const hasError = !(await trigger(
+                      "examinationDetails.weight"
+                    ));
+
                     if (hasError) {
                       setShowWeightWarning(false);
                     } else if (lastRecordedWeight && newWeight) {
-                      setShowWeightWarning(newWeight <= 0.9 * lastRecordedWeight);
+                      setShowWeightWarning(
+                        newWeight <= 0.9 * lastRecordedWeight
+                      );
                     } else {
                       setShowWeightWarning(false);
                     }
                   }}
-                  onChange={()=>{
-
-                  }
-
-                  }
+                  onChange={() => {}}
                   // onBlur={() => {
                   //   setWeightTouched(true);
                   //   trigger('examinationDetails.weight');
@@ -82,18 +91,30 @@ export function ExaminationDetails({
                 <span>kg</span>
               </div>
               {errors.examinationDetails?.weight && (
-                <span className="text-red-500 text-sm mt-1">{errors.examinationDetails.weight.message}</span>
+                <span className="text-red-500 text-sm mt-1">
+                  {errors.examinationDetails.weight.message}
+                </span>
               )}
               {showWeightWarning && (
                 <div className="flex items-start space-x-2 p-3 bg-orange-100 border border-orange-300 rounded-md mt-2">
                   <WarningIcon className="w-5 h-5 text-orange-500 flex-shrink-0 mt-0.5" />
                   <div className="text-sm text-orange-500">
-                    This helper has lost {'>'}=10% weight since the last examination. If her weight loss was unintentional or if its reason cannot be determined, please select {'Yes'} for weight loss under the Physical examination details.
+                    This helper has lost {">"}=10% weight since the last
+                    examination. If her weight loss was unintentional or if its
+                    reason cannot be determined, please select {"Yes"} for
+                    weight loss under the Physical examination details.
                   </div>
                 </div>
               )}
               {lastRecordedWeight && (
-                <p className="text-sm text-muted-foreground mt-1">Last recorded weight: {lastRecordedWeight} kg (Date: {format(new Date(new Date().setMonth(new Date().getMonth() - 6)), 'dd/MM/yyyy')})</p>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Last recorded weight: {lastRecordedWeight} kg (Date:{" "}
+                  {format(
+                    new Date(new Date().setMonth(new Date().getMonth() - 6)),
+                    "dd/MM/yyyy"
+                  )}
+                  )
+                </p>
               )}
             </div>
             <div>
@@ -102,7 +123,9 @@ export function ExaminationDetails({
                 <Input
                   id="height"
                   type="number"
-                  {...register('examinationDetails.height', { valueAsNumber: true })}
+                  {...register("examinationDetails.height", {
+                    valueAsNumber: true,
+                  })}
                   placeholder="Enter height"
                   className="mr-2 w-40"
                 />
@@ -110,7 +133,14 @@ export function ExaminationDetails({
               </div>
               {/* {errors.examinationDetails?.height && <p className="text-red-500 text-sm mt-1">{errors.examinationDetails.height.message}</p>} */}
               {lastRecordedHeight && (
-                <p className="text-sm text-muted-foreground mt-1">Last recorded height: {lastRecordedHeight} cm (Date: {format(new Date().setMonth(new Date().getMonth() - 6), 'dd/MM/yyyy')})</p>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Last recorded height: {lastRecordedHeight} cm (Date:{" "}
+                  {format(
+                    new Date().setMonth(new Date().getMonth() - 6),
+                    "dd/MM/yyyy"
+                  )}
+                  )
+                </p>
               )}
             </div>
             {watchedValues.examinationDetails.bmi !== null && (
@@ -123,7 +153,9 @@ export function ExaminationDetails({
         </div>
         <div>
           <h3 className="text-lg font-semibold mb-2">Test results</h3>
-          <p className="text-sm text-muted-foreground mb-2">Indicate <b>positive</b> test results:</p>
+          <p className="text-sm text-muted-foreground mb-2">
+            Indicate <b>positive</b> test results:
+          </p>
           {testTypes.map((test) => (
             <div key={test} className="flex items-center mb-2">
               <Label
@@ -135,25 +167,38 @@ export function ExaminationDetails({
               <div className="flex items-center space-x-2 ml-4 pl-24">
                 <Checkbox
                   id={test}
-                  checked={watchedValues.examinationDetails.positiveTests.includes(test)}
+                  checked={watchedValues.examinationDetails.positiveTests.includes(
+                    test
+                  )}
                   onCheckedChange={(checked) => {
                     const updatedTests = checked
-                      ? [...watchedValues.examinationDetails.positiveTests, test]
-                      : watchedValues.examinationDetails.positiveTests.filter((t) => t !== test);
-                    setValue('examinationDetails.positiveTests', updatedTests);
+                      ? [
+                          ...watchedValues.examinationDetails.positiveTests,
+                          test,
+                        ]
+                      : watchedValues.examinationDetails.positiveTests.filter(
+                          (t) => t !== test
+                        );
+                    setValue("examinationDetails.positiveTests", updatedTests);
                   }}
                   className={cn(
                     "border-2",
-                    watchedValues.examinationDetails.positiveTests.includes(test) 
-                    ? " border-red-600 data-[state=checked]:bg-red-600 text-primary-foreground hover:bg-red-400 hover:text-primary-foreground" 
-                    : "border-primary"
+                    watchedValues.examinationDetails.positiveTests.includes(
+                      test
+                    )
+                      ? " border-red-600 data-[state=checked]:bg-red-600 text-primary-foreground hover:bg-red-400 hover:text-primary-foreground"
+                      : "border-primary"
                   )}
                 />
                 <Label
                   htmlFor={test}
                   className={cn(
                     "text-sm",
-                    watchedValues.examinationDetails.positiveTests.includes(test) ? "text-red-500" : ""
+                    watchedValues.examinationDetails.positiveTests.includes(
+                      test
+                    )
+                      ? "text-red-500"
+                      : ""
                   )}
                 >
                   Positive/Reactive
@@ -161,14 +206,16 @@ export function ExaminationDetails({
               </div>
             </div>
           ))}
-          {testTypes.includes('HIV') && (
+          {testTypes.includes("HIV") && (
             <p className="text-sm text-muted-foreground mt-2">
               Note: HIV test must be done by an MOH-approved laboratory.
             </p>
           )}
         </div>
         <div>
-          <h3 className="text-lg font-semibold mb-2">Physical examination details</h3>
+          <h3 className="text-lg font-semibold mb-2">
+            Physical examination details
+          </h3>
           <div className="space-y-4">
             <div>
               <div className="flex items-center mb-2">
@@ -181,17 +228,26 @@ export function ExaminationDetails({
                 <div className="flex items-center space-x-2 ml-auto pl-24">
                   <Checkbox
                     id="suspicious-injuries"
-                    checked={watchedValues.examinationDetails.suspiciousInjuries}
+                    checked={
+                      watchedValues.examinationDetails.suspiciousInjuries
+                    }
                     onCheckedChange={(checked) => {
-                      setValue('examinationDetails.suspiciousInjuries', checked as boolean);
-                      if (!checked && !watchedValues.examinationDetails.unintentionalWeightLoss) {
-                        setValue('examinationDetails.policeReport', null);
+                      setValue(
+                        "examinationDetails.suspiciousInjuries",
+                        checked as boolean
+                      );
+                      if (
+                        !checked &&
+                        !watchedValues.examinationDetails
+                          .unintentionalWeightLoss
+                      ) {
+                        setValue("examinationDetails.policeReport", null);
                       }
                     }}
                     className={cn(
                       "border-2",
-                      watchedValues.examinationDetails.suspiciousInjuries 
-                      ? " border-red-600 data-[state=checked]:bg-red-600 text-primary-foreground hover:bg-red-400 hover:text-primary-foreground" 
+                      watchedValues.examinationDetails.suspiciousInjuries
+                        ? " border-red-600 data-[state=checked]:bg-red-600 text-primary-foreground hover:bg-red-400 hover:text-primary-foreground"
                         : "border-primary"
                     )}
                   />
@@ -199,7 +255,9 @@ export function ExaminationDetails({
                     htmlFor="suspicious-injuries"
                     className={cn(
                       "text-sm",
-                      watchedValues.examinationDetails.suspiciousInjuries ? "text-red-500" : ""
+                      watchedValues.examinationDetails.suspiciousInjuries
+                        ? "text-red-500"
+                        : ""
                     )}
                   >
                     Yes
@@ -224,17 +282,25 @@ export function ExaminationDetails({
                 <div className="flex items-center space-x-2 ml-auto pl-24">
                   <Checkbox
                     id="unintentional-weight-loss"
-                    checked={watchedValues.examinationDetails.unintentionalWeightLoss}
+                    checked={
+                      watchedValues.examinationDetails.unintentionalWeightLoss
+                    }
                     onCheckedChange={(checked) => {
-                      setValue('examinationDetails.unintentionalWeightLoss', checked as boolean);
-                      if (!checked && !watchedValues.examinationDetails.suspiciousInjuries) {
-                        setValue('examinationDetails.policeReport', null);
+                      setValue(
+                        "examinationDetails.unintentionalWeightLoss",
+                        checked as boolean
+                      );
+                      if (
+                        !checked &&
+                        !watchedValues.examinationDetails.suspiciousInjuries
+                      ) {
+                        setValue("examinationDetails.policeReport", null);
                       }
                     }}
                     className={cn(
                       "border-2",
-                      watchedValues.examinationDetails.unintentionalWeightLoss 
-                      ? " border-red-600 data-[state=checked]:bg-red-600 text-primary-foreground hover:bg-red-400 hover:text-primary-foreground" 
+                      watchedValues.examinationDetails.unintentionalWeightLoss
+                        ? " border-red-600 data-[state=checked]:bg-red-600 text-primary-foreground hover:bg-red-400 hover:text-primary-foreground"
                         : "border-primary"
                     )}
                   />
@@ -242,7 +308,9 @@ export function ExaminationDetails({
                     htmlFor="unintentional-weight-loss"
                     className={cn(
                       "text-sm ",
-                      watchedValues.examinationDetails.unintentionalWeightLoss ? "text-red-500" : ""
+                      watchedValues.examinationDetails.unintentionalWeightLoss
+                        ? "text-red-500"
+                        : ""
                     )}
                   >
                     Yes
@@ -256,7 +324,8 @@ export function ExaminationDetails({
                 </p>
               )}
             </div>
-            {(watchedValues.examinationDetails.suspiciousInjuries || watchedValues.examinationDetails.unintentionalWeightLoss) && (
+            {(watchedValues.examinationDetails.suspiciousInjuries ||
+              watchedValues.examinationDetails.unintentionalWeightLoss) && (
               <div>
                 <Label
                   htmlFor="police-report"
@@ -264,9 +333,14 @@ export function ExaminationDetails({
                 >
                   Have you made a police report?
                 </Label>
-                <RadioGroup 
-                  value={watchedValues.examinationDetails.policeReport || ''} 
-                  onValueChange={(value) => setValue('examinationDetails.policeReport', value as 'yes' | 'no')}
+                <RadioGroup
+                  value={watchedValues.examinationDetails.policeReport || ""}
+                  onValueChange={(value) =>
+                    setValue(
+                      "examinationDetails.policeReport",
+                      value as "yes" | "no"
+                    )
+                  }
                   className="flex space-x-4"
                 >
                   <div className="flex items-center space-x-2">
@@ -278,7 +352,11 @@ export function ExaminationDetails({
                     <Label htmlFor="police-report-no">No</Label>
                   </div>
                 </RadioGroup>
-                {errors.examinationDetails?.policeReport && <p className="text-red-500 text-sm mt-1">{errors.examinationDetails.policeReport.message}</p>}
+                {errors.examinationDetails?.policeReport && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.examinationDetails.policeReport.message}
+                  </p>
+                )}
               </div>
             )}
           </div>
@@ -286,44 +364,54 @@ export function ExaminationDetails({
         <div>
           <h3 className="text-lg font-semibold mb-2">Remarks</h3>
           <div className="space-y-4">
-            {!watchedValues.examinationDetails.suspiciousInjuries && !watchedValues.examinationDetails.unintentionalWeightLoss && (
-              <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="something-to-report"
-                  checked={watchedValues.examinationDetails.remarks !== ''}
-                  onCheckedChange={(checked) => {
-                    setValue('examinationDetails.remarks', checked ? ' ' : '');
-                  }}
-                  className={cn(
-                    "border-2",
-                    "border-primary"
-                  )}
-                />
-                <Label htmlFor="something-to-report">
-                  I have something else to report to MOM about the helper
-                </Label>
-              </div>
-            )}
-                        {(watchedValues.examinationDetails.suspiciousInjuries ||
+            {!watchedValues.examinationDetails.suspiciousInjuries &&
+              !watchedValues.examinationDetails.unintentionalWeightLoss && (
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="something-to-report"
+                    checked={watchedValues.examinationDetails.remarks !== ""}
+                    onCheckedChange={(checked) => {
+                      setValue(
+                        "examinationDetails.remarks",
+                        checked ? " " : ""
+                      );
+                    }}
+                    className={cn("border-2", "border-primary")}
+                  />
+                  <Label htmlFor="something-to-report">
+                    I have something else to report to MOM about the helper
+                  </Label>
+                </div>
+              )}
+            {(watchedValues.examinationDetails.suspiciousInjuries ||
               watchedValues.examinationDetails.unintentionalWeightLoss ||
-              watchedValues.examinationDetails.remarks !== '') && (
+              watchedValues.examinationDetails.remarks !== "") && (
               <>
                 <Textarea
                   placeholder="Enter any additional remarks here"
                   className="w-full"
-                  {...register('examinationDetails.remarks')}
+                  {...register("examinationDetails.remarks")}
                   maxLength={500}
                 />
                 <p className="text-sm text-muted-foreground">
-                  {500 - (watchedValues.examinationDetails.remarks?.length || 0)} characters left
+                  {500 -
+                    (watchedValues.examinationDetails.remarks?.length ||
+                      0)}{" "}
+                  characters left
                 </p>
               </>
             )}
           </div>
-          {errors.examinationDetails?.remarks && <p className="text-red-500 text-sm mt-1">{errors.examinationDetails.remarks.message}</p>}
+          {errors.examinationDetails?.remarks && (
+            <p className="text-red-500 text-sm mt-1">
+              {errors.examinationDetails.remarks.message}
+            </p>
+          )}
         </div>
       </div>
-      <Button className="mt-4" onClick={() => handleContinue('summary')}>{isSummaryActive ? 'Continue to Summary' : 'Continue'}</Button>
+      <Button className="mt-4" onClick={() => handleContinue("summary")}>
+        {isSummaryActive ? "Continue to Summary" : "Continue"}
+      </Button>
     </AccordionContent>
-  )
+  );
 }

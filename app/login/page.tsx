@@ -1,36 +1,36 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { useToast } from "@/hooks/use-toast"
-import { useAuth } from '@/lib/context/auth-context'
-import { mockUsers } from '@/lib/auth/mock-users'
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useToast } from "@/hooks/use-toast";
+import { mockUsers } from "@/lib/auth/mock-users";
+import { useAuth } from "@/lib/context/auth-context";
+import { useState } from "react";
 
 export default function LoginPage() {
-  const [uen, setUen] = useState('')
-  const [corppassId, setCorppassId] = useState('')
-  const { toast } = useToast()
-  const { login } = useAuth()
+  const [uen, setUen] = useState("");
+  const [corppassId, setCorppassId] = useState("");
+  const { toast } = useToast();
+  const { login } = useAuth();
 
   const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
-      await login(uen, corppassId)
+      await login(uen, corppassId);
       toast({
         title: "Login Successful",
         description: "Welcome to the Medical Examination Portal",
-      })
+      });
     } catch (error) {
       toast({
         title: "Login Failed",
         description: "Invalid UEN or CorpPass ID",
         variant: "destructive",
-      })
-      console.log(error)
+      });
+      console.log(error);
     }
-  }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -45,9 +45,13 @@ export default function LoginPage() {
           <h3 className="font-medium mb-2">Test Accounts:</h3>
           {mockUsers.map((user) => (
             <div key={user.id} className="text-sm mb-2">
-              <div>{user.name} ({user.role})</div>
+              <div>
+                {user.name} ({user.role})
+              </div>
               <div className="text-gray-600">UEN: {user.uen}</div>
-              <div className="text-gray-600">CorpPass ID: {user.corpPassId}</div>
+              <div className="text-gray-600">
+                CorpPass ID: {user.corpPassId}
+              </div>
             </div>
           ))}
         </div>
@@ -90,5 +94,5 @@ export default function LoginPage() {
         </form>
       </div>
     </div>
-  )
+  );
 }

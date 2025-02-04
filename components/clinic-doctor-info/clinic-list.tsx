@@ -1,65 +1,67 @@
-'use client'
+"use client";
 
-import * as React from 'react'
-import { z } from 'zod'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Card, CardContent } from '@/components/ui/card'
-import { Plus, Trash2, Building2, Pencil, Loader2 } from 'lucide-react'
-import { updateClinic, getClinicList } from '@/lib/actions/clinic'
-import { clinicSchema } from '@/lib/validations/clinicDoctorSchemas'
-import { useToast } from '@/hooks/use-toast'
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useToast } from "@/hooks/use-toast";
+import { getClinicList, updateClinic } from "@/lib/actions/clinic";
+import { clinicSchema } from "@/lib/validations/clinicDoctorSchemas";
+import { Building2, Loader2, Pencil, Plus, Trash2 } from "lucide-react";
+import * as React from "react";
+import { z } from "zod";
 
 interface Clinic {
-  id: string
-  name: string
-  hci: string
-  contactNumber: string
-  address: string
+  id: string;
+  name: string;
+  hci: string;
+  contactNumber: string;
+  address: string;
 }
 
 interface ValidationErrors {
-  [key: string]: string[]
+  [key: string]: string[];
 }
 
 export function ClinicList() {
-  const [clinics, setClinics] = React.useState<Clinic[]>([])
-  const [editingId, setEditingId] = React.useState<string | null>(null)
-  const [validationErrors, setValidationErrors] = React.useState<Record<string, ValidationErrors>>({})
-  const { toast } = useToast()
-  const [isLoading, setIsLoading] = React.useState<string | null>(null)
+  const [clinics, setClinics] = React.useState<Clinic[]>([]);
+  const [editingId, setEditingId] = React.useState<string | null>(null);
+  const [validationErrors, setValidationErrors] = React.useState<
+    Record<string, ValidationErrors>
+  >({});
+  const { toast } = useToast();
+  const [isLoading, setIsLoading] = React.useState<string | null>(null);
 
   React.useEffect(() => {
     const loadClinics = async () => {
-      const result = await getClinicList()
-      console.log("result", result)
+      const result = await getClinicList();
+      console.log("result", result);
       if (result.success && result.data) {
-        setClinics(result.data)
+        setClinics(result.data);
       } else {
-        setClinics([])  
+        setClinics([]);
         toast({
           variant: "destructive",
           title: "Error",
-          description: result.error || "Failed to load clinics"
-        })
+          description: result.error || "Failed to load clinics",
+        });
       }
-    }
-    loadClinics()
-  }, [toast])
+    };
+    loadClinics();
+  }, [toast]);
 
   const addClinic = () => {
     const newClinic: Clinic = {
       id: Math.random().toString(36).substr(2, 9),
-      name: '',
-      hci: '',
-      contactNumber: '',
-      address: '',
-    }
-    setClinics([...clinics, newClinic])
-    setEditingId(newClinic.id)
-    setValidationErrors({...validationErrors, [newClinic.id]: {}})
-  }
+      name: "",
+      hci: "",
+      contactNumber: "",
+      address: "",
+    };
+    setClinics([...clinics, newClinic]);
+    setEditingId(newClinic.id);
+    setValidationErrors({ ...validationErrors, [newClinic.id]: {} });
+  };
 
   // const validateClinic = (clinic: Clinic) => {
   //   try {
@@ -91,11 +93,11 @@ export function ClinicList() {
   const handleSubmit = async (clinic: Clinic) => {
     try {
       // Clear previous validation errors for this clinic
-      setValidationErrors(prev => {
-        const newErrors = { ...prev }
-        delete newErrors[clinic.id]
-        return newErrors
-      })
+      setValidationErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[clinic.id];
+        return newErrors;
+      });
 
       // Validate before sending to server
       try {
@@ -104,84 +106,90 @@ export function ClinicList() {
           hci: clinic.hci,
           contactNumber: clinic.contactNumber,
           address: clinic.address,
-        })
+        });
       } catch (e) {
         if (e instanceof z.ZodError) {
-          const errors = e.errors.reduce((acc: { [key: string]: string[] }, curr) => {
-            const field = curr.path[0] as string
-            if (!acc[field]) acc[field] = []
-            acc[field].push(curr.message)
-            return acc
-          }, {})
-          setValidationErrors(prev => ({
+          const errors = e.errors.reduce(
+            (acc: { [key: string]: string[] }, curr) => {
+              const field = curr.path[0] as string;
+              if (!acc[field]) acc[field] = [];
+              acc[field].push(curr.message);
+              return acc;
+            },
+            {}
+          );
+          setValidationErrors((prev) => ({
             ...prev,
-            [clinic.id]: errors
-          }))
+            [clinic.id]: errors,
+          }));
           toast({
             variant: "destructive",
             title: "Validation Error",
-            description: "Please check the form for errors"
-          })
-          return
+            description: "Please check the form for errors",
+          });
+          return;
         }
       }
 
-      setIsLoading(clinic.id)
+      setIsLoading(clinic.id);
       const result = await updateClinic(clinic.id, {
         name: clinic.name,
         hci: clinic.hci,
         contactNumber: clinic.contactNumber,
         address: clinic.address,
-      })
+      });
 
       if (result.success) {
-        setEditingId(null)
+        setEditingId(null);
         toast({
           title: "Success",
-          description: "Clinic information updated successfully."
-        })
-        setClinics(prevClinics =>
-          prevClinics.map(c =>
+          description: "Clinic information updated successfully.",
+        });
+        setClinics((prevClinics) =>
+          prevClinics.map((c) =>
             c.id === clinic.id ? { ...c, ...result.data } : c
           )
-        )
+        );
       } else {
         // Handle server-side validation errors
         if (result.validationErrors) {
-          setValidationErrors(prev => ({
+          setValidationErrors((prev) => ({
             ...prev,
-            [clinic.id]: result.validationErrors as unknown as ValidationErrors
-          }))
+            [clinic.id]: result.validationErrors as unknown as ValidationErrors,
+          }));
         }
         toast({
           variant: "destructive",
           title: "Error",
-          description: result.error
-        })
+          description: result.error,
+        });
       }
     } catch (error) {
-      console.error('Error updating clinic:', error)
+      console.error("Error updating clinic:", error);
       toast({
         variant: "destructive",
         title: "Error",
-        description: "An unexpected error occurred"
-      })
+        description: "An unexpected error occurred",
+      });
     } finally {
-      setIsLoading(null)
+      setIsLoading(null);
     }
-  }
+  };
 
   const getFieldError = (clinicId: string, field: string) => {
-    if (!validationErrors[clinicId]) return null
-    const errors = validationErrors[clinicId][field]
-    return errors ? errors[0] : null
-  }
+    if (!validationErrors[clinicId]) return null;
+    const errors = validationErrors[clinicId][field];
+    return errors ? errors[0] : null;
+  };
 
   return (
-    <form onSubmit={(e) => {
-      e.preventDefault()
-      clinics.forEach(clinic => handleSubmit(clinic))
-    }} className="space-y-4 max-w-[760px] mx-auto">
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        clinics.forEach((clinic) => handleSubmit(clinic));
+      }}
+      className="space-y-4 max-w-[760px] mx-auto"
+    >
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <Building2 className="h-5 w-5" />
@@ -228,10 +236,10 @@ export function ClinicList() {
                 variant="outline"
                 size="sm"
                 onClick={() => {
-                  setClinics(clinics.filter((c) => c.id !== clinic.id))
-                  const newValidationErrors = { ...validationErrors }
-                  delete newValidationErrors[clinic.id]
-                  setValidationErrors(newValidationErrors)
+                  setClinics(clinics.filter((c) => c.id !== clinic.id));
+                  const newValidationErrors = { ...validationErrors };
+                  delete newValidationErrors[clinic.id];
+                  setValidationErrors(newValidationErrors);
                 }}
               >
                 <Trash2 className="h-4 w-4 mr-2" />
@@ -254,8 +262,10 @@ export function ClinicList() {
                   }
                   disabled={editingId !== clinic.id}
                 />
-                {getFieldError(clinic.id, 'name') && (
-                  <p className="text-sm text-red-500">{getFieldError(clinic.id, 'name')}</p>
+                {getFieldError(clinic.id, "name") && (
+                  <p className="text-sm text-red-500">
+                    {getFieldError(clinic.id, "name")}
+                  </p>
                 )}
               </div>
 
@@ -273,27 +283,35 @@ export function ClinicList() {
                   }
                   disabled={editingId !== clinic.id}
                 />
-                {getFieldError(clinic.id, 'hci') && (
-                  <p className="text-sm text-red-500">{getFieldError(clinic.id, 'hci')}</p>
+                {getFieldError(clinic.id, "hci") && (
+                  <p className="text-sm text-red-500">
+                    {getFieldError(clinic.id, "hci")}
+                  </p>
                 )}
               </div>
 
               <div className="grid gap-2">
-                <Label htmlFor={`contactNumber-${clinic.id}`}>Contact Number</Label>
+                <Label htmlFor={`contactNumber-${clinic.id}`}>
+                  Contact Number
+                </Label>
                 <Input
                   id={`contactNumber-${clinic.id}`}
                   value={clinic.contactNumber}
                   onChange={(e) =>
                     setClinics(
                       clinics.map((c) =>
-                        c.id === clinic.id ? { ...c, contactNumber: e.target.value } : c
+                        c.id === clinic.id
+                          ? { ...c, contactNumber: e.target.value }
+                          : c
                       )
                     )
                   }
                   disabled={editingId !== clinic.id}
                 />
-                {getFieldError(clinic.id, 'contactNumber') && (
-                  <p className="text-sm text-red-500">{getFieldError(clinic.id, 'contactNumber')}</p>
+                {getFieldError(clinic.id, "contactNumber") && (
+                  <p className="text-sm text-red-500">
+                    {getFieldError(clinic.id, "contactNumber")}
+                  </p>
                 )}
               </div>
 
@@ -305,14 +323,18 @@ export function ClinicList() {
                   onChange={(e) =>
                     setClinics(
                       clinics.map((c) =>
-                        c.id === clinic.id ? { ...c, address: e.target.value } : c
+                        c.id === clinic.id
+                          ? { ...c, address: e.target.value }
+                          : c
                       )
                     )
                   }
                   disabled={editingId !== clinic.id}
                 />
-                {getFieldError(clinic.id, 'address') && (
-                  <p className="text-sm text-red-500">{getFieldError(clinic.id, 'address')}</p>
+                {getFieldError(clinic.id, "address") && (
+                  <p className="text-sm text-red-500">
+                    {getFieldError(clinic.id, "address")}
+                  </p>
                 )}
               </div>
             </div>
@@ -321,5 +343,5 @@ export function ClinicList() {
       ))}
       {/* <Button type="submit">Save Clinics</Button> */}
     </form>
-  )
+  );
 }
