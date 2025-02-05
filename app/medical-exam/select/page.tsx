@@ -20,41 +20,47 @@ export default function SelectExamPage() {
       title: "Migrant Domestic Workers",
       description: "6-monthly medical exam - MOM",
       href: "/medical-exam/mdw",
+      agency: "MOM",
       icon: "/fdw.svg",
     },
     {
       title: "Migrant Workers",
       description: "Full medical exam - MOM",
       href: "/medical-exam/fme",
+      agency: "MOM",
       icon: "/mw.svg",
     },
     {
       title: "Female Migrant Workers",
       description: "6-monthly medical exam - MOM",
       href: "/medical-exam/fmw",
+      agency: "MOM",
       icon: "/fmw.svg",
     },
     {
       title: "Drivers aged 65 and above",
       description: "Medical exam for drivers aged 65 and above - SPF",
       href: "/medical-exam/aged-drivers",
+      agency: "SPF",
       icon: "/aged-driver.svg",
     },
     {
       title: "Vocational Drivers",
       description: "Medical exam for vocational driving licenses - LTA",
       href: "/medical-exam/vocational-drivers",
+      agency: "LTA",
       icon: "/vocational-driver.svg",
     },
     {
       title: "PR Applications",
       description: "Medical exam for permanant residency applications - ICA",
       href: "/medical-exam/pr",
+      agency: "ICA",
       icon: "/pr.svg",
     },
   ].filter(
     (exam) =>
-      (filter === "" || exam.description === filter) &&
+      (filter === "" || exam.agency === filter) &&
       (searchTerm === "" ||
         exam.title.toLowerCase().includes(searchTerm.toLowerCase()))
   );
