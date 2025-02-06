@@ -18,7 +18,7 @@ import { examTitles } from "@/constants/exam-titles";
 import { STEPS, StepType } from "@/constants/steps";
 import { FormDataWP, formSchemaWP } from "@/lib/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import React, { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
 const clinics = [
@@ -60,10 +60,16 @@ const mockApiCall = async (fin: string) => {
 };
 
 export default function WPExamPage() {
+  const [isClient, setIsClient] = useState(false);
   const [step, setStep] = useState<StepType>(STEPS.SUBMISSION);
   const [expandedAccordion, setExpandedAccordion] = useState<
     string | undefined
   >("clinic-doctor");
+
+  // This effect runs once after hydration
+  React.useEffect(() => {
+    setIsClient(true);
+  }, []);
   const [isHelperDetailsEnabled, setIsHelperDetailsEnabled] = useState(false);
   const [isMedicalHistoryEnabled, setIsMedicalHistoryEnabled] = useState(false);
   const [isClinicalExaminationEnabled, setIsClinicalExaminationEnabled] =
@@ -305,6 +311,17 @@ export default function WPExamPage() {
           onEdit={handleEdit}
           onSubmit={handleSubmit(onSubmit)}
         />
+      </div>
+    );
+  }
+
+  // Don't render form content until after hydration
+  if (!isClient) {
+    return (
+      <div className="container mx-auto px-3 w-full pt-8 pb-16">
+        <div className="flex justify-center items-center min-h-[200px]">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+        </div>
       </div>
     );
   }
