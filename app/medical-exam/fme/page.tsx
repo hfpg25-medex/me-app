@@ -40,13 +40,15 @@ const doctors = [
   { id: "2", name: "Dr. Sarah Chen", mcrNumber: "M67890B" },
 ];
 
+const sampleFin = "F2770033X";
+
 // Mock API call
 const mockApiCall = async (fin: string) => {
   // Simulate API delay
   await new Promise((resolve) => setTimeout(resolve, 0));
 
   // Mock response
-  if (fin === "F2770033X") {
+  if (fin === sampleFin) {
     return {
       name: "R** ME**",
       doe: "2025-08-10",
@@ -367,6 +369,7 @@ export default function WPExamPage() {
                   nextStep="medical-history"
                   requireVisitDate={true}
                   defaultToday={false}
+                  sampleFin={sampleFin}
                 />
               </AccordionItem>
               <AccordionItem value="medical-history">

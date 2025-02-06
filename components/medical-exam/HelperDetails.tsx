@@ -20,6 +20,7 @@ interface HelperDetailsProps {
   nextStep: "examination-details" | "medical-history";
   requireVisitDate?: boolean;
   defaultToday?: boolean;
+  sampleFin?: string;
 }
 
 export function HelperDetails({
@@ -34,6 +35,7 @@ export function HelperDetails({
   nextStep,
   requireVisitDate = true,
   defaultToday = false,
+  sampleFin,
 }: HelperDetailsProps) {
   const {
     register,
@@ -79,6 +81,7 @@ export function HelperDetails({
       <div className="space-y-4">
         <div>
           <Label htmlFor="fin">FIN</Label>
+          <span className="text-blue-500"> (Test FIN: {sampleFin})</span>
           <Input
             className="w-[200px] mt-1"
             id="fin"

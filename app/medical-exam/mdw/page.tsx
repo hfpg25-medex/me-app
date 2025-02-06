@@ -43,13 +43,15 @@ const doctors = [
   { id: "2", name: "Dr. Sarah Chen", mcrNumber: "M67890B" },
 ];
 
+const sampleFin = "G1234567X";
+
 // Mock API call
 const mockApiCall = async (fin: string) => {
   // Simulate API delay
   await new Promise((resolve) => setTimeout(resolve, 0));
 
   // Mock response
-  if (fin === "G1234567X") {
+  if (fin === sampleFin) {
     return {
       name: "JUNAID** SULAIM**",
       testTypes: [
@@ -348,6 +350,7 @@ export default function MDWExamPage() {
                     nextStep="examination-details"
                     requireVisitDate={true}
                     defaultToday={false}
+                    sampleFin={sampleFin}
                   />
                 </AccordionItem>
                 <AccordionItem
