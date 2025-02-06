@@ -1,4 +1,4 @@
-import { Check, Download } from "lucide-react";
+import { Check } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -66,7 +66,7 @@ export function AcknowledgementPage({
           </dl>
         </div>
 
-        <div className="flex items-center pl-6">
+        {/* <div className="flex items-center pl-6">
           <Download className="h-4 w-4 text-blue-600 mr-1" />
           <Link
             href="/download-pdf"
@@ -75,7 +75,7 @@ export function AcknowledgementPage({
             Download acknowledgement and summary
           </Link>
           <span className="text-gray-500">(PDF, ~100KB)</span>
-        </div>
+        </div> */}
 
         {/* <p className="text-gray-600">
             If you need a record of this submission, download the PDF now. You will
