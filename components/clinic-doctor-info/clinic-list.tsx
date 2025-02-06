@@ -34,17 +34,28 @@ export function ClinicList() {
 
   React.useEffect(() => {
     const loadClinics = async () => {
-      const result = await getClinicList();
-      console.log("result", result);
-      if (result.success && result.data) {
-        setClinics(result.data);
-      } else {
-        setClinics([]);
+      setIsLoading("loading");
+      try {
+        const result = await getClinicList();
+        if (result.success && result.data) {
+          setClinics(result.data);
+        } else {
+          setClinics([]);
+          toast({
+            variant: "destructive",
+            title: "Error",
+            description: result.error || "Failed to load clinics",
+          });
+        }
+      } catch (error) {
+        console.log(error);
         toast({
           variant: "destructive",
           title: "Error",
-          description: result.error || "Failed to load clinics",
+          description: "Failed to load clinics",
         });
+      } finally {
+        setIsLoading(null);
       }
     };
     loadClinics();
@@ -196,7 +207,26 @@ export function ClinicList() {
             <Building2 className="h-5 w-5" />
             <h2 className="text-lg font-semibold">Clinic Information</h2>
           </div>
+          <Button
+            onClick={addClinic}
+            variant="outline"
+            size="sm"
+            disabled={isLoading === "loading"}
+          >
+            <Plus className="mr-2 h-4 w-4" />
+            Add Clinic
+          </Button>
         </div>
+
+        {isLoading === "loading" ? (
+          <div className="flex justify-center py-8">
+            <Loader2 className="h-8 w-8 animate-spin text-gray-500" />
+          </div>
+        ) : clinics.length === 0 ? (
+          <p className="text-sm text-muted-foreground text-center py-8">
+            No clinics added yet. Click the button above to add a clinic.
+          </p>
+        ) : null}
 
         {clinics.map((clinic) => (
           <Card key={clinic.id} className="relative">
@@ -342,10 +372,10 @@ export function ClinicList() {
         ))}
         {/* <Button type="submit">Save Clinics</Button> */}
 
-        <Button type="button" onClick={addClinic} size="sm">
+        {/* <Button type="button" onClick={addClinic} size="sm">
           <Plus className="h-4 w-4 mr-2" />
           Add Clinic
-        </Button>
+        </Button> */}
       </form>
     </div>
   );

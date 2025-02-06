@@ -32,17 +32,28 @@ export function DoctorList() {
 
   React.useEffect(() => {
     const loadDoctors = async () => {
-      const result = await getDoctorList();
-      console.log("result", result);
-      if (result.success && result.data) {
-        setDoctors(result.data);
-      } else {
-        setDoctors([]);
+      setIsLoading("loading");
+      try {
+        const result = await getDoctorList();
+        if (result.success && result.data) {
+          setDoctors(result.data);
+        } else {
+          setDoctors([]);
+          toast({
+            variant: "destructive",
+            title: "Error",
+            description: result.error || "Failed to load doctors",
+          });
+        }
+      } catch (error) {
+        console.log(error);
         toast({
           variant: "destructive",
           title: "Error",
-          description: result.error || "Failed to load doctors",
+          description: "Failed to load doctors",
         });
+      } finally {
+        setIsLoading(null);
       }
     };
     loadDoctors();
@@ -224,7 +235,26 @@ export function DoctorList() {
             <Stethoscope className="h-5 w-5" />
             <h2 className="text-lg font-semibold">Doctor Information</h2>
           </div>
+          <Button
+            onClick={addDoctor}
+            variant="outline"
+            size="sm"
+            disabled={isLoading === "loading"}
+          >
+            <Plus className="mr-2 h-4 w-4" />
+            Add Doctor
+          </Button>
         </div>
+
+        {isLoading === "loading" ? (
+          <div className="flex justify-center py-8">
+            <Loader2 className="h-8 w-8 animate-spin text-gray-500" />
+          </div>
+        ) : doctors.length === 0 ? (
+          <p className="text-sm text-muted-foreground text-center py-8">
+            No doctors added yet. Click the button above to add a doctor.
+          </p>
+        ) : null}
 
         {doctors.map((doctor) => (
           <Card key={doctor.id} className="relative">
@@ -340,10 +370,10 @@ export function DoctorList() {
           </Card>
         ))}
         {/* <Button type="submit">Save Clinics</Button> */}
-        <Button type="button" onClick={addDoctor} size="sm">
+        {/* <Button type="button" onClick={addDoctor} size="sm">
           <Plus className="h-4 w-4 mr-2" />
           Add Doctor
-        </Button>
+        </Button> */}
       </form>
     </div>
   );
