@@ -6,10 +6,13 @@ import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
-const RadioGroup = React.forwardRef<
-  React.ElementRef<typeof RadioGroupPrimitive.Root>,
-  React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Root>
->(({ className, ...props }, ref) => {
+const RadioGroup = React.forwardRef(function RadioGroup(
+  {
+    className,
+    ...props
+  }: React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Root>,
+  ref: React.Ref<React.ElementRef<typeof RadioGroupPrimitive.Root>>
+) {
   return (
     <RadioGroupPrimitive.Root
       className={cn("grid gap-2", className)}
