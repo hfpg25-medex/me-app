@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { FormDataWP } from "@/lib/schemas";
 import { cn } from "@/lib/utils";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 import {
   Select,
@@ -46,26 +46,22 @@ export function ClinicalExamination({
   ];
 
   // Calculate BMI function
-  const calculateBMI = (weight: number, height: number) => {
-    if (weight > 0 && height > 0) {
-      const bmiValue = weight / (height / 100) ** 2;
-      setValue(
-        "clinicalExamination.bmi",
-        Number.parseFloat(bmiValue.toFixed(2))
-      );
-    } else {
-      setValue("clinicalExamination.bmi", 0);
-    }
-  };
+  const calculateBMI = useCallback(
+    (weight: number, height: number) => {
+      if (weight > 0 && height > 0) {
+        const bmiValue = weight / (height / 100) ** 2;
+        setValue(
+          "clinicalExamination.bmi",
+          Number.parseFloat(bmiValue.toFixed(2))
+        );
+      } else {
+        setValue("clinicalExamination.bmi", 0);
+      }
+    },
+    [setValue]
+  );
 
   // Calculate BMI on mount if weight and height exist
-  useEffect(() => {
-    const weight = watchedValues.clinicalExamination?.weight as number;
-    const height = watchedValues.clinicalExamination?.height as number;
-    calculateBMI(weight, height);
-  }, []);
-
-  // Watch for weight and height changes
   useEffect(() => {
     const subscription = watch((value, { name }) => {
       if (
@@ -78,7 +74,7 @@ export function ClinicalExamination({
       }
     });
     return () => subscription.unsubscribe();
-  }, [watch, setValue]);
+  }, [watch, setValue, calculateBMI]);
 
   return (
     <AccordionContent>
