@@ -72,18 +72,18 @@ type RecordsResponse = {
 const statuses = ["For Review", "Submitted", "Pending"];
 
 // Helper function to get badge color based on status
-const getStatusBadgeColor = (status: string) => {
-  switch (status) {
-    case "For Review":
-      return "bg-yellow-100 text-yellow-800 border-yellow-200";
-    case "Submitted":
-      return "bg-green-100 text-green-800 border-green-200";
-    case "Pending":
-      return "bg-blue-100 text-blue-800 border-blue-200";
-    default:
-      return "";
-  }
-};
+// const getStatusBadgeColor = (status: string) => {
+//   switch (status) {
+//     case "For Review":
+//       return "bg-yellow-100 text-yellow-800 border-yellow-200";
+//     case "Submitted":
+//       return "bg-green-100 text-green-800 border-green-200";
+//     case "Pending":
+//       return "bg-blue-100 text-blue-800 border-blue-200";
+//     default:
+//       return "";
+//   }
+// };
 
 // Helper function to format date for display
 const formatDate = (dateString: string) => {
@@ -91,6 +91,7 @@ const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return format(date, "MMM dd, yyyy HH:mm");
   } catch (error) {
+    console.log(error);
     return dateString;
   }
 };
