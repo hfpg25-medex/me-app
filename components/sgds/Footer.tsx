@@ -8,7 +8,7 @@ export function DefaultFooter() {
 
   return (
     <footer className="w-full bg-black text-[#d0d5dd] min-h-[125px] py-6">
-      <div className="max-w-[1376px] mx-auto px-8 sm:px-12 md:px-16 lg:px-8 w-full">
+      <div className="container mx-auto px-3 w-full">
         <div className="flex flex-col justify-between gap-4 h-full w-full">
           <div className="flex flex-col lg:flex-row flex-wrap gap-x-6 gap-y-2 text-base w-full">
             <a href="" className="text-[#d0d5dd] hover:text-[#f7f7f9]">

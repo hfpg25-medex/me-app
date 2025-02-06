@@ -114,7 +114,7 @@ export function MedicalHistory({
 
   return (
     <AccordionContent>
-      <div className="w-full">
+      <div className="w-full space-y-6">
         <p className="text-sm text-gray-500">
           Please provide information about worker&apos;s medical history.
         </p>
@@ -164,9 +164,7 @@ function HistoryItemComponent({
   return (
     <div className="space-y-2">
       <div className="grid grid-cols-[1fr,auto] gap-x-8 gap-y-4">
-        <Label htmlFor={`checkbox-${item.condition}`}>
-          {item.condition}
-        </Label>
+        <Label htmlFor={`checkbox-${item.condition}`}>{item.condition}</Label>
         <div className="flex items-center gap-2">
           <Checkbox
             id={`checkbox-${item.condition}`}

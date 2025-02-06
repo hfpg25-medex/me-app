@@ -83,11 +83,7 @@ export default {
       },
       container: {
         screens: {
-          sm: "640px",
-          md: "760px", // This will force max-width to 760px
-          lg: "760px", // Keep it at 760px for larger screens
-          xl: "760px", // Keep it at 760px for xl screens
-          "2xl": "760px", // Keep it at 760px for 2xl screens
+          "2xl": "1368px", // Keep it at 1368px for 2xl screens
         },
       },
     },

@@ -71,7 +71,7 @@ export function Summary({
   }, []);
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <div className="container mx-auto space-y-6">
       <h1 className="text-2xl font-semibold mb-6">{TITLES[type]}</h1>
 
       <StepIndicator
@@ -154,7 +154,7 @@ export function Summary({
               )}
 
               {/* Test Results */}
-              {examinationDetails?.testResults?.length ?? 0 > 0 ? (
+              {(examinationDetails?.testResults?.length ?? 0 > 0) ? (
                 <div className="space-y-2">
                   {examinationDetails &&
                     examinationDetails.testResults &&
@@ -237,42 +237,6 @@ export function Summary({
               </div>
             </div>
           </Card>
-
-          {/* Declaration Section */}
-          <Card className="bg-blue-50 p-4 text-sm border-2 border-blue-100 shadow-md hover:shadow-lg transition-shadow rounded-md">
-            <SectionHeader title="Declaration" />
-            <p className="mb-4">Please read and acknowledge the following:</p>
-            <ul className="list-disc pl-5 space-y-2 mb-4">
-              <li>
-                I am authorised by the clinic to submit the results and make the
-                declarations in this form on its behalf.
-              </li>
-              <li>
-                By submitting this form, I understand that the information given
-                will be submitted to the Controller or an authorised officer who
-                may act on the information given by me. I further declare that
-                the information provided by me is true to the best of my
-                knowledge and belief.
-              </li>
-            </ul>
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="declaration"
-                checked={declarationChecked}
-                onCheckedChange={(checked) =>
-                  setDeclarationChecked(checked as boolean)
-                }
-              />
-              <Label htmlFor="declaration">
-                I declare that all of the above is true.
-              </Label>
-            </div>
-          </Card>
-          <div className="flex justify-start mt-4">
-            <Button onClick={onSubmit} disabled={!declarationChecked}>
-              Submit
-            </Button>
-          </div>
         </div>
 
         <div className="space-y-6">
@@ -315,6 +279,44 @@ export function Summary({
             </div>
           </Card>
         </div>
+      </div>
+
+      {/* Declaration Section */}
+      <div className="grid gap-6 md:grid-cols-[2fr,1fr]">
+        <Card className="bg-blue-50 p-4 text-sm border-2 border-blue-100 shadow-md hover:shadow-lg transition-shadow rounded-md">
+          <SectionHeader title="Declaration" />
+          <p className="mb-4">Please read and acknowledge the following:</p>
+          <ul className="list-disc pl-5 space-y-2 mb-4">
+            <li>
+              I am authorised by the clinic to submit the results and make the
+              declarations in this form on its behalf.
+            </li>
+            <li>
+              By submitting this form, I understand that the information given
+              will be submitted to the Controller or an authorised officer who
+              may act on the information given by me. I further declare that the
+              information provided by me is true to the best of my knowledge and
+              belief.
+            </li>
+          </ul>
+          <div className="flex items-center space-x-2">
+            <Checkbox
+              id="declaration"
+              checked={declarationChecked}
+              onCheckedChange={(checked) =>
+                setDeclarationChecked(checked as boolean)
+              }
+            />
+            <Label htmlFor="declaration">
+              I declare that all of the above is true.
+            </Label>
+          </div>
+        </Card>
+      </div>
+      <div className="flex justify-start mt-4">
+        <Button onClick={onSubmit} disabled={!declarationChecked}>
+          Submit
+        </Button>
       </div>
     </div>
   );

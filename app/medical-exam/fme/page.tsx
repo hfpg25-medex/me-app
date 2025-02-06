@@ -260,7 +260,7 @@ export default function WPExamPage() {
 
   if (step === STEPS.SUMMARY) {
     return (
-      <div className="container mx-auto">
+      <div className="container mx-auto px-3 w-full pt-8 pb-16">
         <MedicalSummary
           clinicDetails={{
             clinic: selectedClinicDetails?.name || "",
@@ -308,110 +308,112 @@ export default function WPExamPage() {
   }
 
   return (
-    <div className="w-full max-w-[760px] mx-auto my-6 ">
-      <h1 className="text-2xl font-bold mb-6">{examTitles.fme}</h1>
-      <StepIndicator
-        className="mb-6"
-        steps={[
-          {
-            number: 1,
-            label: "Submission",
-            isActive: step === STEPS.SUBMISSION,
-            isEnabled: true,
-          },
-          {
-            number: 2,
-            label: "Summary",
-            // @ts-expect-error to fix STEPS.SUMMARY error
-            isActive: step === STEPS.SUMMARY,
-            isEnabled: isSummaryActive,
-          },
-        ]}
-      />
-      <div className="border border-gray-300 px-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-        <FormProvider {...methods}>
-          <Accordion
-            type="single"
-            value={expandedAccordion}
-            onValueChange={setExpandedAccordion}
-            collapsible
-          >
-            <AccordionItem value="clinic-doctor">
-              <AccordionTrigger isCompleted={isCompletedStates.clinicDoctor}>
-                Clinic & Doctor Details
-              </AccordionTrigger>
-              <ClinicDoctorDetails
-                isSummaryActive={isSummaryActive}
-                handleContinue={handleContinue}
-                clinics={clinics}
-                doctors={doctors}
-              />
-            </AccordionItem>
-            <AccordionItem value="helper-details">
-              <AccordionTrigger
-                isCompleted={isCompletedStates.helperDetails}
-                isDisabled={!isHelperDetailsEnabled}
-              >
-                Person Details
-              </AccordionTrigger>
-              <HelperDetails
-                handleContinue={handleContinue}
-                handleFinChange={handleFinChange}
-                setFinTouched={setFinTouched}
-                setVisitDateTouched={setVisitDateTouched}
-                isSummaryActive={isSummaryActive}
-                finTouched={finTouched}
-                visitDateTouched={visitDateTouched}
-                isPendingMe={isPendingMe}
-                nextStep="medical-history"
-                requireVisitDate={true}
-                defaultToday={false}
-              />
-            </AccordionItem>
-            <AccordionItem value="medical-history">
-              <AccordionTrigger
-                isCompleted={isCompletedStates.medicalHistory}
-                isDisabled={!isMedicalHistoryEnabled}
-              >
-                Medical History
-              </AccordionTrigger>
-              <MedicalHistory
-                isSummaryActive={isSummaryActive}
-                handleContinue={handleContinue}
-              />
-            </AccordionItem>
-            <AccordionItem value="clinical-examination">
-              <AccordionTrigger
-                isCompleted={isCompletedStates.clinicalExamination}
-                isDisabled={!isClinicalExaminationEnabled}
-              >
-                Clinical Examination
-              </AccordionTrigger>
-              <ClinicalExamination
-                isSummaryActive={isSummaryActive}
-                handleContinue={handleContinue}
-              />
-            </AccordionItem>
-            <AccordionItem value="tests">
-              <AccordionTrigger
-                isCompleted={isCompletedStates.tests}
-                isDisabled={!isTestsEnabled}
-              >
-                Tests
-              </AccordionTrigger>
-              <Tests
-                isSummaryActive={isSummaryActive}
-                handleContinue={handleContinue}
-              />
-            </AccordionItem>
-          </Accordion>
-        </FormProvider>
+    <div className="container mx-auto grid gap-6 md:grid-cols-[2fr,1fr] px-3 w-full pt-8 pb-16">
+      <div className="my-6 ">
+        <h1 className="text-2xl font-bold mb-6">{examTitles.fme}</h1>
+        <StepIndicator
+          className="mb-6"
+          steps={[
+            {
+              number: 1,
+              label: "Submission",
+              isActive: step === STEPS.SUBMISSION,
+              isEnabled: true,
+            },
+            {
+              number: 2,
+              label: "Summary",
+              // @ts-expect-error to fix STEPS.SUMMARY error
+              isActive: step === STEPS.SUMMARY,
+              isEnabled: isSummaryActive,
+            },
+          ]}
+        />
+        <div className="border border-gray-300 px-8 py-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+          <FormProvider {...methods}>
+            <Accordion
+              type="single"
+              value={expandedAccordion}
+              onValueChange={setExpandedAccordion}
+              collapsible
+            >
+              <AccordionItem value="clinic-doctor">
+                <AccordionTrigger isCompleted={isCompletedStates.clinicDoctor}>
+                  Clinic & Doctor Details
+                </AccordionTrigger>
+                <ClinicDoctorDetails
+                  isSummaryActive={isSummaryActive}
+                  handleContinue={handleContinue}
+                  clinics={clinics}
+                  doctors={doctors}
+                />
+              </AccordionItem>
+              <AccordionItem value="helper-details">
+                <AccordionTrigger
+                  isCompleted={isCompletedStates.helperDetails}
+                  isDisabled={!isHelperDetailsEnabled}
+                >
+                  Person Details
+                </AccordionTrigger>
+                <HelperDetails
+                  handleContinue={handleContinue}
+                  handleFinChange={handleFinChange}
+                  setFinTouched={setFinTouched}
+                  setVisitDateTouched={setVisitDateTouched}
+                  isSummaryActive={isSummaryActive}
+                  finTouched={finTouched}
+                  visitDateTouched={visitDateTouched}
+                  isPendingMe={isPendingMe}
+                  nextStep="medical-history"
+                  requireVisitDate={true}
+                  defaultToday={false}
+                />
+              </AccordionItem>
+              <AccordionItem value="medical-history">
+                <AccordionTrigger
+                  isCompleted={isCompletedStates.medicalHistory}
+                  isDisabled={!isMedicalHistoryEnabled}
+                >
+                  Medical History
+                </AccordionTrigger>
+                <MedicalHistory
+                  isSummaryActive={isSummaryActive}
+                  handleContinue={handleContinue}
+                />
+              </AccordionItem>
+              <AccordionItem value="clinical-examination">
+                <AccordionTrigger
+                  isCompleted={isCompletedStates.clinicalExamination}
+                  isDisabled={!isClinicalExaminationEnabled}
+                >
+                  Clinical Examination
+                </AccordionTrigger>
+                <ClinicalExamination
+                  isSummaryActive={isSummaryActive}
+                  handleContinue={handleContinue}
+                />
+              </AccordionItem>
+              <AccordionItem value="tests">
+                <AccordionTrigger
+                  isCompleted={isCompletedStates.tests}
+                  isDisabled={!isTestsEnabled}
+                >
+                  Tests
+                </AccordionTrigger>
+                <Tests
+                  isSummaryActive={isSummaryActive}
+                  handleContinue={handleContinue}
+                />
+              </AccordionItem>
+            </Accordion>
+          </FormProvider>
+        </div>
+        <FinChangeModal
+          isOpen={isFinChangeModalOpen}
+          onClose={() => setIsFinChangeModalOpen(false)}
+          onConfirm={confirmFinChange}
+        />
       </div>
-      <FinChangeModal
-        isOpen={isFinChangeModalOpen}
-        onClose={() => setIsFinChangeModalOpen(false)}
-        onConfirm={confirmFinChange}
-      />
     </div>
   );
 }

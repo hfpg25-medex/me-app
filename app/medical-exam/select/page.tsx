@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { ClipboardList } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -17,45 +17,57 @@ export default function SelectExamPage() {
 
   const examTypes = [
     {
-      title: "Six-monthly Medical Exam for Migrant Domestic Workers",
-      description: "MOM",
+      title: "Migrant Domestic Workers",
+      description: "6-monthly medical exam - MOM",
       href: "/medical-exam/mdw",
+      agency: "MOM",
+      icon: "/fdw.svg",
     },
     {
-      title: "Full Medical Exam for Foreign Workers",
-      description: "MOM",
+      title: "Migrant Workers",
+      description: "Full medical exam - MOM",
       href: "/medical-exam/fme",
+      agency: "MOM",
+      icon: "/mw.svg",
     },
     {
-      title: "Six-monthly Medical Exam for Female Migrant Workers",
-      description: "MOM",
+      title: "Female Migrant Workers",
+      description: "6-monthly medical exam - MOM",
       href: "/medical-exam/fmw",
+      agency: "MOM",
+      icon: "/fmw.svg",
     },
     {
-      title: "Medical Exam for Aged Drivers 65 Years Old and Above",
-      description: "SPF",
+      title: "Drivers aged 65 and above",
+      description: "Medical exam for drivers aged 65 and above - SPF",
       href: "/medical-exam/aged-drivers",
+      agency: "SPF",
+      icon: "/aged-driver.svg",
     },
     {
-      title: "Medical Exam for Vocational Driving Licenses",
-      description: "LTA",
+      title: "Vocational Drivers",
+      description: "Medical exam for vocational driving licenses - LTA",
       href: "/medical-exam/vocational-drivers",
+      agency: "LTA",
+      icon: "/vocational-driver.svg",
     },
     {
-      title: "Medical Exam for Permanant Residency Application",
-      description: "ICA",
+      title: "PR Applications",
+      description: "Medical exam for permanant residency applications - ICA",
       href: "/medical-exam/pr",
+      agency: "ICA",
+      icon: "/pr.svg",
     },
   ].filter(
     (exam) =>
-      (filter === "" || exam.description === filter) &&
+      (filter === "" || exam.agency === filter) &&
       (searchTerm === "" ||
         exam.title.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <main className="max-w-[1376px] mx-auto px-8 sm:px-12 md:px-16 lg:px-8 w-full pt-4 sm:pt-6 md:pt-8 lg:pt-10 pb-8 sm:pb-12 md:pb-16 lg:pb-20">
+      <div className="container mx-auto px-3 w-full pt-4 sm:pt-6 md:pt-8 lg:pt-10 pb-8 sm:pb-12 md:pb-16 lg:pb-20">
         <h1 className="text-4xl font-bold tracking-tight mb-6">
           Select Medical Examination
         </h1>
@@ -88,17 +100,21 @@ export default function SelectExamPage() {
               className="w-full h-[356px] rounded-xl border border-border transition-shadow hover:shadow-lg"
             >
               <CardHeader className="h-full flex flex-col justify-between">
-                <div className="flex flex-col gap-3">
-                  <div className="w-fit rounded-full bg-primary/10 p-2">
-                    <ClipboardList className="h-6 w-6 text-primary" />
-                  </div>
-                  <CardTitle className="font-inter text-[20px] font-semibold leading-[28px] tracking-[-0.005em] text-left underline-offset-[from-font] decoration-skip-ink-none text-[#09090B]">
-                    {exam.title}
-                  </CardTitle>
-                  <CardDescription className="font-inter text-[14px] font-normal leading-[20px] text-left underline-offset-[from-font] decoration-skip-ink-none text-[#71717A]">
-                    {exam.description}
-                  </CardDescription>
+                <div className="w-[148px] h-[148px]">
+                  <Image
+                    src={exam.icon}
+                    alt={exam.title}
+                    width={148}
+                    height={148}
+                    className="w-full h-auto"
+                  />
                 </div>
+                <CardTitle className="font-inter text-[20px] font-semibold leading-[28px] tracking-[-0.005em] text-left underline-offset-[from-font] decoration-skip-ink-none text-[#09090B]">
+                  {exam.title}
+                </CardTitle>
+                <CardDescription className="font-inter text-[14px] font-normal leading-[20px] text-left underline-offset-[from-font] decoration-skip-ink-none text-[#71717A]">
+                  {exam.description}
+                </CardDescription>
                 <div className="flex justify-start">
                   <Button
                     asChild
@@ -111,7 +127,7 @@ export default function SelectExamPage() {
             </Card>
           ))}
         </div>
-      </main>
+      </div>
     </div>
   );
 }

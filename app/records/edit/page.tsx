@@ -8,7 +8,7 @@ import {
 
 export default function EditRecordsPage() {
   return (
-    <div className="container mx-auto p-6">
+    <div className="container mx-auto px-3 py-6">
       <Card>
         <CardHeader>
           <CardTitle>Update Medical Records</CardTitle>

@@ -216,7 +216,7 @@ export default function ExaminationRecords() {
   };
 
   return (
-    <div className="p-6">
+    <div className="container mx-auto px-3 w-full pt-8 pb-16">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-2xl font-semibold">Examination Records</h1>
         <Button className="bg-black hover:bg-black/90">
