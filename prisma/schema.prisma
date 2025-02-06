@@ -73,8 +73,27 @@ model Submission {
   doctorId        String?  // Optional reference to the doctor
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
+  record          Record?  // One-to-one relation with Record
 
   @@index([userId])
   @@index([examType])
   @@index([submissionId])
+}
+
+model Record {
+  id           String     @id @default(cuid())
+  foreignerId  String     // FIN/WP number
+  dateCreated  DateTime   @default(now())
+  lastUpdate   DateTime   @updatedAt
+  agency       String     // e.g., "MOM"
+  type         String     // e.g., "Medical Examination"
+  name         String     // Helper's name
+  status       String     // e.g., "For Review", "Submitted", "Pending"
+  pending      String     // e.g., "3/3"
+  submission   Submission @relation(fields: [submissionId], references: [id])
+  submissionId String     @unique
+
+  @@index([foreignerId])
+  @@index([status])
+  @@index([dateCreated])
 }
