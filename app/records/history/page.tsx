@@ -33,7 +33,7 @@ import {
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 import { format, subMonths, subYears } from "date-fns";
-import { CalendarIcon, MoreHorizontal, Plus } from "lucide-react";
+import { CalendarIcon, MoreHorizontal } from "lucide-react";
 import { useEffect, useState } from "react";
 
 // interface Record {
@@ -207,10 +207,10 @@ export default function ExaminationRecords() {
     <div className="container mx-auto px-3 w-full pt-8 pb-16">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-2xl font-semibold">Examination Records</h1>
-        <Button className="bg-black hover:bg-black/90">
+        {/* <Button className="bg-black hover:bg-black/90">
           <Plus className="mr-2 h-4 w-4" />
           New Medical Examination
-        </Button>
+        </Button> */}
       </div>
 
       <div className="flex gap-4 mb-6">

@@ -1,6 +1,6 @@
 "use client";
 
-import { ReviewSection } from "@/components/review-section";
+import ExaminationRecords from "@/app/records/history/page";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -125,7 +125,7 @@ export default function HomePage() {
           </Card>
         </div>
 
-        <ReviewSection />
+        <ExaminationRecords />
       </div>
     </div>
   );
