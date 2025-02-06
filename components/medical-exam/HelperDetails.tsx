@@ -52,6 +52,11 @@ export function HelperDetails({
 
   const handleFinBlur = async (e: React.FocusEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
+    if (!newValue) {
+      // Don't trigger validation for empty value
+      return;
+    }
+
     if (
       watchedValues.helperDetails.helperName &&
       newValue !== watchedValues.helperDetails.fin
