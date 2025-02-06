@@ -32,15 +32,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
-import {
-  format,
-  isWithinInterval,
-  parseISO,
-  subMonths,
-  subYears,
-} from "date-fns";
+import { format, subMonths, subYears } from "date-fns";
 import { CalendarIcon, MoreHorizontal, Plus } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 // interface Record {
 //   id: string
@@ -54,65 +48,52 @@ import { useMemo, useState } from "react";
 //   pending: string
 // }
 
-// Function to generate a random ID
-const generateForeignerId = () => {
-  const letters = "FGST";
-  const firstLetter = letters[Math.floor(Math.random() * letters.length)];
-  const numbers = Math.floor(Math.random() * 9000000) + 1000000;
-  const lastLetter = "XNFM"[Math.floor(Math.random() * 4)];
-  return `${firstLetter}${numbers}${lastLetter}`;
+// Types
+type Record = {
+  id: string;
+  foreignerId: string;
+  dateCreated: string;
+  lastUpdate: string;
+  agency: string;
+  type: string;
+  name: string;
+  status: string;
+  pending: string;
 };
 
-// List of sample names
-const sampleNames = [
-  "Tan Wei Ming",
-  "Muhammad Ismail",
-  "Rajesh Kumar",
-  "Liu Mei Ling",
-  "Siti Nurhaliza",
-  "Zhang Wei",
-  "Priya Sharma",
-  "Abdullah Rahman",
-  "Wong Mei Fen",
-  "Suresh Patel",
-  "Nurul Huda",
-  "Chen Xiao Ming",
-  "Deepa Krishnan",
-  "Ahmad Yusof",
-  "Li Wei",
-  "Kavitha Raj",
-  "Zainab Binti Ali",
-  "Lim Ah Beng",
-  "Ramesh Singh",
-  "Fatimah Abdullah",
-];
+type RecordsResponse = {
+  records: Record[];
+  total: number;
+  page: number;
+  totalPages: number;
+};
 
-// List of statuses
+// Available statuses
 const statuses = ["For Review", "Submitted", "Pending"];
 
-// Generate sample data with different dates, IDs, and statuses
-const generateRecords = () => {
-  return Array(100)
-    .fill(null)
-    .map((_, i) => {
-      const date = new Date();
-      date.setDate(date.getDate() - Math.floor(Math.random() * 365)); // Random date within the last year
-      const dateString = format(date, "yyyy-MM-dd HH:mm");
-      return {
-        id: `${i}`,
-        foreignerId: generateForeignerId(),
-        dateCreated: dateString,
-        lastUpdate: dateString,
-        agency: "MOM",
-        type: "Migrant workers work permit",
-        name: sampleNames[Math.floor(Math.random() * sampleNames.length)],
-        status: statuses[Math.floor(Math.random() * statuses.length)],
-        pending: "3 / 3",
-      };
-    });
+// Helper function to get badge color based on status
+const getStatusBadgeColor = (status: string) => {
+  switch (status) {
+    case "For Review":
+      return "bg-yellow-100 text-yellow-800 border-yellow-200";
+    case "Submitted":
+      return "bg-green-100 text-green-800 border-green-200";
+    case "Pending":
+      return "bg-blue-100 text-blue-800 border-blue-200";
+    default:
+      return "";
+  }
 };
 
-const allRecords = generateRecords();
+// Helper function to format date for display
+const formatDate = (dateString: string) => {
+  try {
+    const date = new Date(dateString);
+    return format(date, "MMM dd, yyyy HH:mm");
+  } catch (error) {
+    return dateString;
+  }
+};
 
 export default function ExaminationRecords() {
   const [selectedDate, setSelectedDate] = useState<
@@ -123,54 +104,60 @@ export default function ExaminationRecords() {
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [statusFilter, setStatusFilter] = useState("all");
+  const [records, setRecords] = useState<Record[]>([]);
+  const [totalRecords, setTotalRecords] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
-  // Filter records based on date range, search query, and status
-  const filteredRecords = useMemo(() => {
-    return allRecords.filter((record) => {
-      const recordDate = parseISO(record.dateCreated);
+  // Fetch records from the API
+  const fetchRecords = async () => {
+    try {
+      setIsLoading(true);
+      const params = new URLSearchParams({
+        page: currentPage.toString(),
+        limit: rowsPerPage.toString(),
+        search: searchQuery,
+      });
 
-      // If we have a date range, filter by it
+      if (statusFilter !== "all") {
+        params.set("status", statusFilter);
+      }
+
       if (selectedDate[0] && selectedDate[1]) {
-        if (
-          !isWithinInterval(recordDate, {
-            start: selectedDate[0],
-            end: selectedDate[1],
-          })
-        ) {
-          return false;
-        }
+        // Set end date to end of day to include the entire day
+        const endDate = new Date(selectedDate[1]);
+        endDate.setHours(23, 59, 59, 999);
+        params.set(
+          "dateRange",
+          `${selectedDate[0].toISOString()},${endDate.toISOString()}`
+        );
       }
 
-      // Filter by search query
-      if (searchQuery) {
-        const searchLower = searchQuery.toLowerCase();
-        if (
-          !(
-            record.name.toLowerCase().includes(searchLower) ||
-            record.foreignerId.toLowerCase().includes(searchLower) ||
-            record.type.toLowerCase().includes(searchLower) ||
-            record.agency.toLowerCase().includes(searchLower)
-          )
-        ) {
-          return false;
-        }
+      const response = await fetch(`/api/records?${params}`);
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to fetch records");
       }
 
-      // Filter by status
-      if (statusFilter !== "all" && record.status !== statusFilter) {
-        return false;
-      }
+      const data: RecordsResponse = await response.json();
+      setRecords(data.records);
+      setTotalRecords(data.total);
+      setTotalPages(data.totalPages);
+    } catch (error) {
+      console.error("Error fetching records:", error);
+      // You might want to add a toast notification here
+      setRecords([]);
+      setTotalRecords(0);
+      setTotalPages(0);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-      return true;
-    });
-  }, [selectedDate, searchQuery, statusFilter]);
-
-  // Calculate pagination
-  const totalPages = Math.ceil(filteredRecords.length / rowsPerPage);
-  const paginatedRecords = filteredRecords.slice(
-    (currentPage - 1) * rowsPerPage,
-    currentPage * rowsPerPage
-  );
+  // Fetch records when filters change
+  useEffect(() => {
+    fetchRecords();
+  }, [currentPage, searchQuery, statusFilter, selectedDate]);
 
   // Date range filter handlers
   const handleDateRangeSelect = (range: "year" | "3months" | "month") => {
@@ -348,14 +335,15 @@ export default function ExaminationRecords() {
             <TableRow>
               <TableHead className="w-12">
                 <Checkbox
-                  checked={selectedRecords.length === paginatedRecords.length}
+                  checked={selectedRecords.length === records.length}
                   onCheckedChange={(checked) => {
                     if (checked) {
-                      setSelectedRecords(paginatedRecords.map((r) => r.id));
+                      setSelectedRecords(records.map((r) => r.id));
                     } else {
                       setSelectedRecords([]);
                     }
                   }}
+                  disabled={isLoading}
                 />
               </TableHead>
               <TableHead>ID</TableHead>
@@ -370,62 +358,82 @@ export default function ExaminationRecords() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {paginatedRecords.map((record) => (
-              <TableRow key={record.id}>
-                <TableCell>
-                  <Checkbox
-                    checked={selectedRecords.includes(record.id)}
-                    onCheckedChange={(checked) => {
-                      if (checked) {
-                        setSelectedRecords([...selectedRecords, record.id]);
-                      } else {
-                        setSelectedRecords(
-                          selectedRecords.filter((id) => id !== record.id)
-                        );
-                      }
-                    }}
-                  />
-                </TableCell>
-                <TableCell>{record.foreignerId}</TableCell>
-                <TableCell>{record.dateCreated}</TableCell>
-                <TableCell>{record.lastUpdate}</TableCell>
-                <TableCell>{record.agency}</TableCell>
-                <TableCell>{record.type}</TableCell>
-                <TableCell>{record.name}</TableCell>
-                <TableCell>
-                  <Badge
-                    variant="outline"
-                    className={getStatusBadgeColor(record.status)}
-                  >
-                    {record.status}
-                  </Badge>
-                </TableCell>
-                <TableCell>{record.pending}</TableCell>
-                <TableCell className="text-right">
-                  <div className="flex justify-end items-center gap-2">
-                    <Button variant="outline" size="sm">
-                      Review
-                    </Button>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon" className="h-8 w-8">
-                          <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem>View details</DropdownMenuItem>
-                        <DropdownMenuItem>Download</DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+            {isLoading ? (
+              <TableRow>
+                <TableCell colSpan={10} className="text-center py-8">
+                  <div className="flex justify-center items-center">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
                   </div>
                 </TableCell>
               </TableRow>
-            ))}
+            ) : records.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={10} className="text-center py-8">
+                  No records found
+                </TableCell>
+              </TableRow>
+            ) : (
+              records.map((record) => (
+                <TableRow key={record.id}>
+                  <TableCell>
+                    <Checkbox
+                      checked={selectedRecords.includes(record.id)}
+                      onCheckedChange={(checked) => {
+                        if (checked) {
+                          setSelectedRecords([...selectedRecords, record.id]);
+                        } else {
+                          setSelectedRecords(
+                            selectedRecords.filter((id) => id !== record.id)
+                          );
+                        }
+                      }}
+                    />
+                  </TableCell>
+                  <TableCell>{record.foreignerId}</TableCell>
+                  <TableCell>{formatDate(record.dateCreated)}</TableCell>
+                  <TableCell>{formatDate(record.lastUpdate)}</TableCell>
+                  <TableCell>{record.agency}</TableCell>
+                  <TableCell>{record.type}</TableCell>
+                  <TableCell>{record.name}</TableCell>
+                  <TableCell>
+                    <Badge
+                      variant="outline"
+                      className={getStatusBadgeColor(record.status)}
+                    >
+                      {record.status}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>{record.pending}</TableCell>
+                  <TableCell className="text-right">
+                    <div className="flex justify-end items-center gap-2">
+                      <Button variant="outline" size="sm">
+                        Review
+                      </Button>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8"
+                          >
+                            <MoreHorizontal className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem>View details</DropdownMenuItem>
+                          <DropdownMenuItem>Download</DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
         <div className="flex items-center justify-between px-4 py-4 border-t">
           <div className="text-sm text-gray-500">
-            {selectedRecords.length} of {filteredRecords.length} row(s) selected
+            {selectedRecords.length} of {totalRecords} row(s) selected
           </div>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
@@ -436,6 +444,7 @@ export default function ExaminationRecords() {
                   setRowsPerPage(Number.parseInt(value));
                   setCurrentPage(1);
                 }}
+                disabled={isLoading}
               >
                 <SelectTrigger className="w-[70px]">
                   <SelectValue />
@@ -457,7 +466,7 @@ export default function ExaminationRecords() {
                   size="icon"
                   className="h-8 w-8"
                   onClick={() => setCurrentPage(1)}
-                  disabled={currentPage === 1}
+                  disabled={currentPage === 1 || isLoading}
                 >
                   {"<<"}
                 </Button>
@@ -468,7 +477,7 @@ export default function ExaminationRecords() {
                   onClick={() =>
                     setCurrentPage((curr) => Math.max(1, curr - 1))
                   }
-                  disabled={currentPage === 1}
+                  disabled={currentPage === 1 || isLoading}
                 >
                   {"<"}
                 </Button>
@@ -479,7 +488,7 @@ export default function ExaminationRecords() {
                   onClick={() =>
                     setCurrentPage((curr) => Math.min(totalPages, curr + 1))
                   }
-                  disabled={currentPage === totalPages}
+                  disabled={currentPage === totalPages || isLoading}
                 >
                   {">"}
                 </Button>
@@ -488,7 +497,7 @@ export default function ExaminationRecords() {
                   size="icon"
                   className="h-8 w-8"
                   onClick={() => setCurrentPage(totalPages)}
-                  disabled={currentPage === totalPages}
+                  disabled={currentPage === totalPages || isLoading}
                 >
                   {">>"}
                 </Button>
