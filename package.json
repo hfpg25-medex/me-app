@@ -10,7 +10,8 @@
     "setup-logs": "tsx scripts/setup-logs.ts",
     "postinstall": "npm run setup-logs",
     "shadcn": "shadcn-ui",
-    "format": "npx prettier . --write"
+    "format": "npx prettier . --write",
+    "prisma:seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
     "@govtechsg/sgds": "^2.3.6",
