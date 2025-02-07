@@ -105,9 +105,6 @@ export default function WPExamPage() {
         waistCircumference: 0,
         systolicBP: 0,
         diastolicBP: 0,
-        urineAlbumin: "normal",
-        urineGlucose: "normal",
-        pregnancyTest: "negative",
         colorVision: "normal",
         hearing: "normal",
         cardiovascularSystem: "normal",
@@ -130,6 +127,9 @@ export default function WPExamPage() {
         hiv: "negative",
         hba1c: "normal",
         lipids: "normal",
+        urineAlbumin: "normal",
+        urineGlucose: "normal",
+        pregnancyTest: "negative",
       },
     },
   });
@@ -306,9 +306,6 @@ export default function WPExamPage() {
             diastolicBP: watchedValues.clinicalExamination.diastolicBP,
             rightEyeVision: watchedValues.clinicalExamination.rightEyeVision,
             leftEyeVision: watchedValues.clinicalExamination.leftEyeVision,
-            urineAlbumin: watchedValues.clinicalExamination.urineAlbumin,
-            urineGlucose: watchedValues.clinicalExamination.urineGlucose,
-            pregnancyTest: watchedValues.clinicalExamination.pregnancyTest,
             colorVision: watchedValues.clinicalExamination.colorVision,
             hearing: watchedValues.clinicalExamination.hearing,
             cardiovascularSystem:
@@ -337,6 +334,9 @@ export default function WPExamPage() {
             hiv: watchedValues.tests.hiv,
             hba1c: watchedValues.tests.hba1c || undefined,
             lipids: watchedValues.tests.lipids || undefined,
+            urineAlbumin: watchedValues.tests.urineAlbumin,
+            urineGlucose: watchedValues.tests.urineGlucose,
+            pregnancyTest: watchedValues.tests.pregnancyTest,
           }}
           onEdit={handleEdit}
           onSubmit={handleSubmit(onSubmit)}

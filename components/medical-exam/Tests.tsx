@@ -235,6 +235,98 @@ export function Tests({ isSummaryActive, handleContinue }: TestsProps) {
                   Abnormal
                 </span>
               </div>
+              <Label htmlFor="urineAlbumin">Urine Albumin</Label>
+              <div className="flex items-center gap-2">
+                <Checkbox
+                  id="urineAlbumin"
+                  checked={watchedValues.tests?.urineAlbumin === "abnormal"}
+                  {...register("tests.urineAlbumin")}
+                  onCheckedChange={(checked) => {
+                    setValue(
+                      "tests.urineAlbumin",
+                      checked ? "abnormal" : "normal"
+                    );
+                  }}
+                  className={cn(
+                    "border-2",
+                    watchedValues.tests?.urineAlbumin === "abnormal"
+                      ? " border-red-600 data-[state=checked]:bg-red-600 text-primary-foreground hover:bg-red-400 hover:text-primary-foreground"
+                      : "border-primary"
+                  )}
+                />
+                <span
+                  className={cn(
+                    "text-sm",
+                    watchedValues.tests?.urineAlbumin === "abnormal"
+                      ? "text-red-500"
+                      : "text-gray-500"
+                  )}
+                >
+                  Abnormal
+                </span>
+              </div>
+
+              <Label htmlFor="urineGlucose">Urine Glucose</Label>
+              <div className="flex items-center gap-2">
+                <Checkbox
+                  id="urineGlucose"
+                  checked={watchedValues.tests?.urineGlucose === "abnormal"}
+                  {...register("tests.urineGlucose")}
+                  onCheckedChange={(checked) => {
+                    setValue(
+                      "tests.urineGlucose",
+                      checked ? "abnormal" : "normal"
+                    );
+                  }}
+                  className={cn(
+                    "border-2",
+                    watchedValues.tests?.urineGlucose === "abnormal"
+                      ? " border-red-600 data-[state=checked]:bg-red-600 text-primary-foreground hover:bg-red-400 hover:text-primary-foreground"
+                      : "border-primary"
+                  )}
+                />
+                <span
+                  className={cn(
+                    "text-sm",
+                    watchedValues.tests?.urineGlucose === "abnormal"
+                      ? "text-red-500"
+                      : "text-gray-500"
+                  )}
+                >
+                  Abnormal
+                </span>
+              </div>
+
+              <Label htmlFor="pregnancyTest">Pregnancy Test</Label>
+              <div className="flex items-center gap-2">
+                <Checkbox
+                  id="pregnancyTest"
+                  checked={watchedValues.tests?.pregnancyTest === "positive"}
+                  {...register("tests.pregnancyTest")}
+                  onCheckedChange={(checked) => {
+                    setValue(
+                      "tests.pregnancyTest",
+                      checked ? "positive" : "negative"
+                    );
+                  }}
+                  className={cn(
+                    "border-2",
+                    watchedValues.tests?.pregnancyTest === "positive"
+                      ? " border-red-600 data-[state=checked]:bg-red-600 text-primary-foreground hover:bg-red-400 hover:text-primary-foreground"
+                      : "border-primary"
+                  )}
+                />
+                <span
+                  className={cn(
+                    "text-sm",
+                    watchedValues.tests?.pregnancyTest === "positive"
+                      ? "text-red-500"
+                      : "text-gray-500"
+                  )}
+                >
+                  Positive
+                </span>
+              </div>
             </div>
           </div>
         </div>

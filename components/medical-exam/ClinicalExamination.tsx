@@ -669,40 +669,7 @@ export function ClinicalExamination({
                 </span>
               </div>
 
-              <Label htmlFor="others">Others</Label>
-              <div className="flex items-center gap-2">
-                <Checkbox
-                  id="others"
-                  checked={
-                    watchedValues.clinicalExamination?.others === "abnormal"
-                  }
-                  {...register("clinicalExamination.others")}
-                  onCheckedChange={(checked) => {
-                    setValue(
-                      "clinicalExamination.others",
-                      checked ? "abnormal" : "normal"
-                    );
-                  }}
-                  className={cn(
-                    "border-2",
-                    watchedValues.clinicalExamination?.others === "abnormal"
-                      ? " border-red-600 data-[state=checked]:bg-red-600 text-primary-foreground hover:bg-red-400 hover:text-primary-foreground"
-                      : "border-primary"
-                  )}
-                />
-                <span
-                  className={cn(
-                    "text-sm",
-                    watchedValues.clinicalExamination?.others === "abnormal"
-                      ? "text-red-500"
-                      : "text-gray-500"
-                  )}
-                >
-                  Abnormal
-                </span>
-              </div>
-
-              <Label htmlFor="urineAlbumin">Urine Albumin</Label>
+              {/* <Label htmlFor="urineAlbumin">Urine Albumin</Label>
               <div className="flex items-center gap-2">
                 <Checkbox
                   id="urineAlbumin"
@@ -808,7 +775,7 @@ export function ClinicalExamination({
                 >
                   Positive/Reactive
                 </span>
-              </div>
+              </div> */}
 
               <Label htmlFor="colorVision">Color Vision</Label>
               <div className="flex items-center gap-2">
@@ -871,6 +838,39 @@ export function ClinicalExamination({
                   className={cn(
                     "text-sm",
                     watchedValues.clinicalExamination?.hearing === "abnormal"
+                      ? "text-red-500"
+                      : "text-gray-500"
+                  )}
+                >
+                  Abnormal
+                </span>
+              </div>
+
+              <Label htmlFor="others">Others</Label>
+              <div className="flex items-center gap-2">
+                <Checkbox
+                  id="others"
+                  checked={
+                    watchedValues.clinicalExamination?.others === "abnormal"
+                  }
+                  {...register("clinicalExamination.others")}
+                  onCheckedChange={(checked) => {
+                    setValue(
+                      "clinicalExamination.others",
+                      checked ? "abnormal" : "normal"
+                    );
+                  }}
+                  className={cn(
+                    "border-2",
+                    watchedValues.clinicalExamination?.others === "abnormal"
+                      ? " border-red-600 data-[state=checked]:bg-red-600 text-primary-foreground hover:bg-red-400 hover:text-primary-foreground"
+                      : "border-primary"
+                  )}
+                />
+                <span
+                  className={cn(
+                    "text-sm",
+                    watchedValues.clinicalExamination?.others === "abnormal"
                       ? "text-red-500"
                       : "text-gray-500"
                   )}

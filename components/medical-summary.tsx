@@ -41,9 +41,6 @@ interface SummaryProps {
     diastolicBP: number;
     rightEyeVision: string;
     leftEyeVision: string;
-    urineAlbumin: string;
-    urineGlucose: string;
-    pregnancyTest: string;
     colorVision: string;
     hearing: string;
     cardiovascularSystem: string;
@@ -61,6 +58,9 @@ interface SummaryProps {
   };
   tests: {
     radiological: { result: string; details: string | null };
+    urineAlbumin: string;
+    urineGlucose: string;
+    pregnancyTest: string;
     syphilis: string;
     malaria: string;
     hiv: string;
@@ -423,62 +423,36 @@ export function MedicalSummary({
                     : "Normal"}
                 </div>
               </div>
-              <div>
-                <div className="text-gray-500 text-sm">Others</div>
-                <div
-                  className={
-                    clinicalExamination.others === "abnormal"
-                      ? "text-red-500"
-                      : ""
-                  }
-                >
-                  {clinicalExamination.others === "abnormal"
-                    ? "Abnormal"
-                    : "Normal"}
-                </div>
-              </div>
-              <div>
+              {/* <div>
                 <div className="text-gray-500 text-sm">Urine Albumin</div>
                 <div
                   className={
-                    clinicalExamination.urineAlbumin === "abnormal"
-                      ? "text-red-500"
-                      : ""
+                    tests.urineAlbumin === "abnormal" ? "text-red-500" : ""
                   }
                 >
-                  {clinicalExamination.urineAlbumin === "abnormal"
-                    ? "Abnormal"
-                    : "Normal"}
+                  {tests.urineAlbumin === "abnormal" ? "Abnormal" : "Normal"}
                 </div>
               </div>
               <div>
                 <div className="text-gray-500 text-sm">Urine Glucose</div>
                 <div
                   className={
-                    clinicalExamination.urineGlucose === "abnormal"
-                      ? "text-red-500"
-                      : ""
+                    tests.urineGlucose === "abnormal" ? "text-red-500" : ""
                   }
                 >
-                  {clinicalExamination.urineGlucose === "abnormal"
-                    ? "Abnormal"
-                    : "Normal"}
+                  {tests.urineGlucose === "abnormal" ? "Abnormal" : "Normal"}
                 </div>
               </div>
               <div>
                 <div className="text-gray-500 text-sm">Pregnancy Test</div>
                 <div
                   className={
-                    clinicalExamination.pregnancyTest === "positive"
-                      ? "text-red-500"
-                      : ""
+                    tests.pregnancyTest === "positive" ? "text-red-500" : ""
                   }
                 >
-                  {clinicalExamination.pregnancyTest === "positive"
-                    ? "Positive"
-                    : "Negative"}
+                  {tests.pregnancyTest === "positive" ? "Positive" : "Negative"}
                 </div>
-              </div>
+              </div> */}
               <div>
                 <div className="text-gray-500 text-sm">Color Vision</div>
                 <div
@@ -503,6 +477,20 @@ export function MedicalSummary({
                   }
                 >
                   {clinicalExamination.hearing === "abnormal"
+                    ? "Abnormal"
+                    : "Normal"}
+                </div>
+              </div>
+              <div>
+                <div className="text-gray-500 text-sm">Others</div>
+                <div
+                  className={
+                    clinicalExamination.others === "abnormal"
+                      ? "text-red-500"
+                      : ""
+                  }
+                >
+                  {clinicalExamination.others === "abnormal"
                     ? "Abnormal"
                     : "Normal"}
                 </div>
@@ -574,6 +562,36 @@ export function MedicalSummary({
                   className={tests.lipids === "abnormal" ? "text-red-500" : ""}
                 >
                   {tests.lipids === "abnormal" ? "Abnormal" : "Normal"}
+                </div>
+              </div>
+              <div>
+                <div className="text-gray-500 text-sm">Urine Albumin</div>
+                <div
+                  className={
+                    tests.urineAlbumin === "abnormal" ? "text-red-500" : ""
+                  }
+                >
+                  {tests.urineAlbumin === "abnormal" ? "Abnormal" : "Normal"}
+                </div>
+              </div>
+              <div>
+                <div className="text-gray-500 text-sm">Urine Glucose</div>
+                <div
+                  className={
+                    tests.urineGlucose === "abnormal" ? "text-red-500" : ""
+                  }
+                >
+                  {tests.urineGlucose === "abnormal" ? "Abnormal" : "Normal"}
+                </div>
+              </div>
+              <div>
+                <div className="text-gray-500 text-sm">Pregnancy Test</div>
+                <div
+                  className={
+                    tests.pregnancyTest === "positive" ? "text-red-500" : ""
+                  }
+                >
+                  {tests.pregnancyTest === "positive" ? "Positive" : "Negative"}
                 </div>
               </div>
             </div>
