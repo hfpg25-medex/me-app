@@ -88,21 +88,21 @@ export function AcknowledgementPage({
         <h2 className="text-xl font-semibold pl-6 mb-4 mt-4">
           What do you want to do next?
         </h2>
-        <ul className="space-y-2 list-disc ml-4">
-          <li>
+        <ul className="space-y-2 list-disc !ml-4 pl-4 pb-4">
+          {/* <li>
             <button
               onClick={() => router.push(window.location.pathname)}
               className="text-blue-600 no-underline bg-transparent border-0 p-0 cursor-pointer"
             >
               Start a new submission (same medical exam type)
             </button>
-          </li>
+          </li> */}
           <li>
             <Link
               href="/medical-exam/select"
               className="text-blue-600 no-underline"
             >
-              Start a new submission (different medical exam type)
+              Start a new submission
             </Link>
           </li>
           <li>
