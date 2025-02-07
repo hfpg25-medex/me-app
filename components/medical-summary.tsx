@@ -54,8 +54,7 @@ interface SummaryProps {
     neck: string;
     genitourinarySystem: string;
     mentalHealth: string;
-    others: string;
-    othersDetails: string | null;
+    others: string | null;
   };
   tests: {
     radiological: { result: string; details: string | null };
@@ -482,26 +481,14 @@ export function MedicalSummary({
                     : "Normal"}
                 </div>
               </div>
-              <div>
-                <div className="text-gray-500 text-sm">Others</div>
-                <div
-                  className={
-                    clinicalExamination.others === "abnormal"
-                      ? "text-red-500"
-                      : ""
-                  }
-                >
-                  {clinicalExamination.others === "abnormal"
-                    ? "Abnormal"
-                    : "Normal"}
+              {clinicalExamination.others && (
+                <div>
+                  <div className="text-gray-500 text-sm">
+                    Other significant abnormalities
+                  </div>
+                  <div className="mt-1">{clinicalExamination.others}</div>
                 </div>
-                {clinicalExamination.others === "abnormal" &&
-                  clinicalExamination.othersDetails && (
-                    <p className="mt-1 text-sm text-gray-600">
-                      {clinicalExamination.othersDetails}
-                    </p>
-                  )}
-              </div>
+              )}
             </div>
           </Card>
           <Card className="p-4 shadow-md hover:shadow-lg transition-shadow rounded-md">

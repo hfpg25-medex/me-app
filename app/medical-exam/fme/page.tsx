@@ -118,8 +118,7 @@ export default function WPExamPage() {
         neck: "normal",
         genitourinarySystem: "normal",
         mentalHealth: "normal",
-        others: "normal",
-        othersDetails: null,
+        others: null,
       },
       tests: {
         radiological: { result: "negative", details: null },
