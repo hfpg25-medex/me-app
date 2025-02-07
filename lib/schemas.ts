@@ -19,7 +19,7 @@ export const helperDetailsSchema = z.object({
     .default(new Date()),
 });
 
-function validateNRIC(str: string) {
+export function validateNRIC(str: string) {
   if (str.length !== 9) return false;
 
   str = str.toUpperCase();
