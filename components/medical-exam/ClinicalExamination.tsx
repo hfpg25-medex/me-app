@@ -284,6 +284,424 @@ export function ClinicalExamination({
               Indicate <b>abnormal</b> or <b>positive/reactive</b> test results:
             </p>
             <div className="grid grid-cols-[210px,1fr] gap-x-8 gap-y-4 mt-4">
+              <Label htmlFor="hearing">Cardiovascular System</Label>
+              <div className="flex items-center gap-2">
+                <Checkbox
+                  id="hearing"
+                  checked={
+                    watchedValues.clinicalExamination?.cardiovascularSystem ===
+                    "abnormal"
+                  }
+                  {...register("clinicalExamination.cardiovascularSystem")}
+                  onCheckedChange={(checked) => {
+                    setValue(
+                      "clinicalExamination.cardiovascularSystem",
+                      checked ? "abnormal" : "normal"
+                    );
+                  }}
+                  className={cn(
+                    "border-2",
+                    watchedValues.clinicalExamination?.cardiovascularSystem ===
+                      "abnormal"
+                      ? " border-red-600 data-[state=checked]:bg-red-600 text-primary-foreground hover:bg-red-400 hover:text-primary-foreground"
+                      : "border-primary"
+                  )}
+                />
+                <span
+                  className={cn(
+                    "text-sm",
+                    watchedValues.clinicalExamination?.cardiovascularSystem ===
+                      "abnormal"
+                      ? "text-red-500"
+                      : "text-gray-500"
+                  )}
+                >
+                  Abnormal
+                </span>
+              </div>
+              <Label htmlFor="ecg">ECG</Label>
+              <div className="flex items-center gap-2">
+                <Checkbox
+                  id="ecg"
+                  checked={
+                    watchedValues.clinicalExamination?.ecg === "abnormal"
+                  }
+                  {...register("clinicalExamination.ecg")}
+                  onCheckedChange={(checked) => {
+                    setValue(
+                      "clinicalExamination.ecg",
+                      checked ? "abnormal" : "normal"
+                    );
+                  }}
+                  className={cn(
+                    "border-2",
+                    watchedValues.clinicalExamination?.ecg === "abnormal"
+                      ? " border-red-600 data-[state=checked]:bg-red-600 text-primary-foreground hover:bg-red-400 hover:text-primary-foreground"
+                      : "border-primary"
+                  )}
+                />
+                <span
+                  className={cn(
+                    "text-sm",
+                    watchedValues.clinicalExamination?.ecg === "abnormal"
+                      ? "text-red-500"
+                      : "text-gray-500"
+                  )}
+                >
+                  Abnormal
+                </span>
+              </div>
+
+              <Label htmlFor="hearing">Anaemia</Label>
+              <div className="flex items-center gap-2">
+                <Checkbox
+                  id="anaemia"
+                  checked={
+                    watchedValues.clinicalExamination?.anaemia === "abnormal"
+                  }
+                  {...register("clinicalExamination.anaemia")}
+                  onCheckedChange={(checked) => {
+                    setValue(
+                      "clinicalExamination.anaemia",
+                      checked ? "abnormal" : "normal"
+                    );
+                  }}
+                  className={cn(
+                    "border-2",
+                    watchedValues.clinicalExamination?.anaemia === "abnormal"
+                      ? " border-red-600 data-[state=checked]:bg-red-600 text-primary-foreground hover:bg-red-400 hover:text-primary-foreground"
+                      : "border-primary"
+                  )}
+                />
+                <span
+                  className={cn(
+                    "text-sm",
+                    watchedValues.clinicalExamination?.anaemia === "abnormal"
+                      ? "text-red-500"
+                      : "text-gray-500"
+                  )}
+                >
+                  Abnormal
+                </span>
+              </div>
+
+              <Label htmlFor="hearing">Respiratory System</Label>
+              <div className="flex items-center gap-2">
+                <Checkbox
+                  id="respiratory"
+                  checked={
+                    watchedValues.clinicalExamination?.respiratorySystem ===
+                    "abnormal"
+                  }
+                  {...register("clinicalExamination.respiratorySystem")}
+                  onCheckedChange={(checked) => {
+                    setValue(
+                      "clinicalExamination.respiratorySystem",
+                      checked ? "abnormal" : "normal"
+                    );
+                  }}
+                  className={cn(
+                    "border-2",
+                    watchedValues.clinicalExamination?.respiratorySystem ===
+                      "abnormal"
+                      ? " border-red-600 data-[state=checked]:bg-red-600 text-primary-foreground hover:bg-red-400 hover:text-primary-foreground"
+                      : "border-primary"
+                  )}
+                />
+                <span
+                  className={cn(
+                    "text-sm",
+                    watchedValues.clinicalExamination?.respiratorySystem ===
+                      "abnormal"
+                      ? "text-red-500"
+                      : "text-gray-500"
+                  )}
+                >
+                  Abnormal
+                </span>
+              </div>
+
+              <Label htmlFor="hearing">Gastrointestinal System</Label>
+              <div className="flex items-center gap-2">
+                <Checkbox
+                  id="gastrointestinal"
+                  checked={
+                    watchedValues.clinicalExamination
+                      ?.gastroIntestinalSystem === "abnormal"
+                  }
+                  {...register("clinicalExamination.gastroIntestinalSystem")}
+                  onCheckedChange={(checked) => {
+                    setValue(
+                      "clinicalExamination.gastroIntestinalSystem",
+                      checked ? "abnormal" : "normal"
+                    );
+                  }}
+                  className={cn(
+                    "border-2",
+                    watchedValues.clinicalExamination
+                      ?.gastroIntestinalSystem === "abnormal"
+                      ? " border-red-600 data-[state=checked]:bg-red-600 text-primary-foreground hover:bg-red-400 hover:text-primary-foreground"
+                      : "border-primary"
+                  )}
+                />
+                <span
+                  className={cn(
+                    "text-sm",
+                    watchedValues.clinicalExamination
+                      ?.gastroIntestinalSystem === "abnormal"
+                      ? "text-red-500"
+                      : "text-gray-500"
+                  )}
+                >
+                  Abnormal
+                </span>
+              </div>
+
+              <Label htmlFor="neurologicalSystem">Neurological System</Label>
+              <div className="flex items-center gap-2">
+                <Checkbox
+                  id="neurologicalSystem"
+                  checked={
+                    watchedValues.clinicalExamination?.neurologicalSystem ===
+                    "abnormal"
+                  }
+                  {...register("clinicalExamination.neurologicalSystem")}
+                  onCheckedChange={(checked) => {
+                    setValue(
+                      "clinicalExamination.neurologicalSystem",
+                      checked ? "abnormal" : "normal"
+                    );
+                  }}
+                  className={cn(
+                    "border-2",
+                    watchedValues.clinicalExamination?.neurologicalSystem ===
+                      "abnormal"
+                      ? " border-red-600 data-[state=checked]:bg-red-600 text-primary-foreground hover:bg-red-400 hover:text-primary-foreground"
+                      : "border-primary"
+                  )}
+                />
+                <span
+                  className={cn(
+                    "text-sm",
+                    watchedValues.clinicalExamination?.neurologicalSystem ===
+                      "abnormal"
+                      ? "text-red-500"
+                      : "text-gray-500"
+                  )}
+                >
+                  Abnormal
+                </span>
+              </div>
+
+              <Label htmlFor="skin">Skin</Label>
+              <div className="flex items-center gap-2">
+                <Checkbox
+                  id="skin"
+                  checked={
+                    watchedValues.clinicalExamination?.skin === "abnormal"
+                  }
+                  {...register("clinicalExamination.skin")}
+                  onCheckedChange={(checked) => {
+                    setValue(
+                      "clinicalExamination.skin",
+                      checked ? "abnormal" : "normal"
+                    );
+                  }}
+                  className={cn(
+                    "border-2",
+                    watchedValues.clinicalExamination?.skin === "abnormal"
+                      ? " border-red-600 data-[state=checked]:bg-red-600 text-primary-foreground hover:bg-red-400 hover:text-primary-foreground"
+                      : "border-primary"
+                  )}
+                />
+                <span
+                  className={cn(
+                    "text-sm",
+                    watchedValues.clinicalExamination?.skin === "abnormal"
+                      ? "text-red-500"
+                      : "text-gray-500"
+                  )}
+                >
+                  Abnormal
+                </span>
+              </div>
+
+              <Label htmlFor="musculoskeletalSystem">
+                Musculoskeletal System
+              </Label>
+              <div className="flex items-center gap-2">
+                <Checkbox
+                  id="musculoskeletalSystem"
+                  checked={
+                    watchedValues.clinicalExamination?.musculoskeletalSystem ===
+                    "abnormal"
+                  }
+                  {...register("clinicalExamination.musculoskeletalSystem")}
+                  onCheckedChange={(checked) => {
+                    setValue(
+                      "clinicalExamination.musculoskeletalSystem",
+                      checked ? "abnormal" : "normal"
+                    );
+                  }}
+                  className={cn(
+                    "border-2",
+                    watchedValues.clinicalExamination?.musculoskeletalSystem ===
+                      "abnormal"
+                      ? " border-red-600 data-[state=checked]:bg-red-600 text-primary-foreground hover:bg-red-400 hover:text-primary-foreground"
+                      : "border-primary"
+                  )}
+                />
+                <span
+                  className={cn(
+                    "text-sm",
+                    watchedValues.clinicalExamination?.musculoskeletalSystem ===
+                      "abnormal"
+                      ? "text-red-500"
+                      : "text-gray-500"
+                  )}
+                >
+                  Abnormal
+                </span>
+              </div>
+
+              <Label htmlFor="neck">Neck</Label>
+              <div className="flex items-center gap-2">
+                <Checkbox
+                  id="neck"
+                  checked={
+                    watchedValues.clinicalExamination?.neck === "abnormal"
+                  }
+                  {...register("clinicalExamination.neck")}
+                  onCheckedChange={(checked) => {
+                    setValue(
+                      "clinicalExamination.neck",
+                      checked ? "abnormal" : "normal"
+                    );
+                  }}
+                  className={cn(
+                    "border-2",
+                    watchedValues.clinicalExamination?.neck === "abnormal"
+                      ? " border-red-600 data-[state=checked]:bg-red-600 text-primary-foreground hover:bg-red-400 hover:text-primary-foreground"
+                      : "border-primary"
+                  )}
+                />
+                <span
+                  className={cn(
+                    "text-sm",
+                    watchedValues.clinicalExamination?.neck === "abnormal"
+                      ? "text-red-500"
+                      : "text-gray-500"
+                  )}
+                >
+                  Abnormal
+                </span>
+              </div>
+
+              <Label htmlFor="genitourinarySystem">Genitourinary System</Label>
+              <div className="flex items-center gap-2">
+                <Checkbox
+                  id="genitourinarySystem"
+                  checked={
+                    watchedValues.clinicalExamination?.genitourinarySystem ===
+                    "abnormal"
+                  }
+                  {...register("clinicalExamination.genitourinarySystem")}
+                  onCheckedChange={(checked) => {
+                    setValue(
+                      "clinicalExamination.genitourinarySystem",
+                      checked ? "abnormal" : "normal"
+                    );
+                  }}
+                  className={cn(
+                    "border-2",
+                    watchedValues.clinicalExamination?.genitourinarySystem ===
+                      "abnormal"
+                      ? " border-red-600 data-[state=checked]:bg-red-600 text-primary-foreground hover:bg-red-400 hover:text-primary-foreground"
+                      : "border-primary"
+                  )}
+                />
+                <span
+                  className={cn(
+                    "text-sm",
+                    watchedValues.clinicalExamination?.genitourinarySystem ===
+                      "abnormal"
+                      ? "text-red-500"
+                      : "text-gray-500"
+                  )}
+                >
+                  Abnormal
+                </span>
+              </div>
+
+              <Label htmlFor="mentalHealth">Mental Health</Label>
+              <div className="flex items-center gap-2">
+                <Checkbox
+                  id="mentalHealth"
+                  checked={
+                    watchedValues.clinicalExamination?.mentalHealth ===
+                    "abnormal"
+                  }
+                  {...register("clinicalExamination.mentalHealth")}
+                  onCheckedChange={(checked) => {
+                    setValue(
+                      "clinicalExamination.mentalHealth",
+                      checked ? "abnormal" : "normal"
+                    );
+                  }}
+                  className={cn(
+                    "border-2",
+                    watchedValues.clinicalExamination?.mentalHealth ===
+                      "abnormal"
+                      ? " border-red-600 data-[state=checked]:bg-red-600 text-primary-foreground hover:bg-red-400 hover:text-primary-foreground"
+                      : "border-primary"
+                  )}
+                />
+                <span
+                  className={cn(
+                    "text-sm",
+                    watchedValues.clinicalExamination?.mentalHealth ===
+                      "abnormal"
+                      ? "text-red-500"
+                      : "text-gray-500"
+                  )}
+                >
+                  Abnormal
+                </span>
+              </div>
+
+              <Label htmlFor="others">Others</Label>
+              <div className="flex items-center gap-2">
+                <Checkbox
+                  id="others"
+                  checked={
+                    watchedValues.clinicalExamination?.others === "abnormal"
+                  }
+                  {...register("clinicalExamination.others")}
+                  onCheckedChange={(checked) => {
+                    setValue(
+                      "clinicalExamination.others",
+                      checked ? "abnormal" : "normal"
+                    );
+                  }}
+                  className={cn(
+                    "border-2",
+                    watchedValues.clinicalExamination?.others === "abnormal"
+                      ? " border-red-600 data-[state=checked]:bg-red-600 text-primary-foreground hover:bg-red-400 hover:text-primary-foreground"
+                      : "border-primary"
+                  )}
+                />
+                <span
+                  className={cn(
+                    "text-sm",
+                    watchedValues.clinicalExamination?.others === "abnormal"
+                      ? "text-red-500"
+                      : "text-gray-500"
+                  )}
+                >
+                  Abnormal
+                </span>
+              </div>
+
               <Label htmlFor="urineAlbumin">Urine Albumin</Label>
               <div className="flex items-center gap-2">
                 <Checkbox
