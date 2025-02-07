@@ -493,7 +493,7 @@ export function ClinicalExamination({
                 </span>
               </div>
 
-              <Label htmlFor="skin">Skin</Label>
+              <Label htmlFor="skin">Skin (e.g. eczema, psoriasis)</Label>
               <div className="flex items-center gap-2">
                 <Checkbox
                   id="skin"
@@ -564,7 +564,7 @@ export function ClinicalExamination({
                 </span>
               </div>
 
-              <Label htmlFor="neck">Neck</Label>
+              <Label htmlFor="neck">Neck (e.g. enlarged thyroid gland)</Label>
               <div className="flex items-center gap-2">
                 <Checkbox
                   id="neck"
@@ -777,7 +777,9 @@ export function ClinicalExamination({
                 </span>
               </div> */}
 
-              <Label htmlFor="colorVision">Color Vision</Label>
+              <Label htmlFor="colorVision">
+                Color Vision (For electricians & drivers only)
+              </Label>
               <div className="flex items-center gap-2">
                 <Checkbox
                   id="colorVision"
@@ -813,7 +815,9 @@ export function ClinicalExamination({
                 </span>
               </div>
 
-              <Label htmlFor="hearing">Hearing</Label>
+              <Label htmlFor="hearing">
+                Hearing - ability to hear ordinary conversation at 2 metres
+              </Label>
               <div className="flex items-center gap-2">
                 <Checkbox
                   id="hearing"
