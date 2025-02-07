@@ -1,5 +1,6 @@
 "use client";
 
+import { createSubmissionAndRecord } from "@/app/actions/records";
 import { AcknowledgementPage } from "@/components/AcknowledgementPage";
 import { FinChangeModal } from "@/components/FinChangeModal";
 import { ClinicDoctorDetails } from "@/components/medical-exam/ClinicDoctorDetails";
@@ -14,7 +15,9 @@ import {
 import { StepIndicator } from "@/components/ui/step-indicator";
 import { examTitles } from "@/constants/exam-titles";
 import { STEPS, StepType } from "@/constants/steps";
+import { getCurrentUserId } from "@/lib/auth";
 import { FormDataMW, formSchemaMW } from "@/lib/schemas";
+import { generateSubmissionId } from "@/lib/utils/submission";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -167,9 +170,35 @@ export default function PRExamPage() {
     setExpandedAccordion(section);
   };
 
-  const onSubmit = (data: FormDataMW) => {
-    console.log("Form submitted!", data);
-    setIsSubmitted(true);
+  const onSubmit = async (data: FormDataMW) => {
+    try {
+      const submissionId = generateSubmissionId("PR");
+      const userId = getCurrentUserId();
+
+      const result = await createSubmissionAndRecord({
+        userId,
+        examType: "PR",
+        formData: data,
+        submissionId,
+        clinicId: data.clinicDoctor.clinic,
+        doctorId: data.clinicDoctor.doctor,
+        foreignerId: data.helperDetails.fin,
+        agency: "ICA",
+        type: "Medical Examination for PR Application",
+        name: data.helperDetails.helperName,
+      });
+
+      if (result.success) {
+        setIsSubmitted(true);
+      } else {
+        // Handle error
+        console.error("Failed to submit form:", result.error);
+        alert("Failed to submit form. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      alert("An error occurred while submitting the form. Please try again.");
+    }
   };
 
   if (isSubmitted) {
