@@ -14,7 +14,6 @@ import { useEffect, useState } from "react";
 import { Label } from "./ui/label";
 
 interface SummaryProps {
-  fitnessAssessment: "fit" | "unfit" | null;
   clinicDetails: {
     clinic: string;
     doctor: string;
