@@ -1,6 +1,5 @@
 import { Check } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 
@@ -36,7 +35,6 @@ export function AcknowledgementPage({
   }
 
   const referenceNumber = generateReferenceNumber();
-  const router = useRouter();
 
   return (
     <div className="mx-auto p-6 max-w-[760px]">
