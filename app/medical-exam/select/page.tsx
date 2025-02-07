@@ -71,17 +71,17 @@ export default function SelectExamPage() {
         <h1 className="text-4xl font-bold tracking-tight mb-6">
           Select Medical Examination
         </h1>
-        <div className="flex justify-between mb-8">
-          <div className="ml-auto flex items-center gap-2">
+        <div className="flex flex-col sm:flex-row sm:justify-between mb-8 gap-2">
+          <div className="flex flex-col sm:flex-row sm:ml-auto items-stretch sm:items-center gap-2">
             <input
               type="text"
               placeholder="Search by title"
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="border rounded p-2 w-64 h-10"
+              className="border rounded p-2 w-full sm:w-64 h-10"
             />
             <select
               onChange={(e) => setFilter(e.target.value)}
-              className="border rounded p-2 w-24 h-10"
+              className="border rounded p-2 w-full sm:w-24 h-10"
               defaultValue=""
             >
               <option value="">All</option>
@@ -90,7 +90,9 @@ export default function SelectExamPage() {
               <option value="LTA">LTA</option>
               <option value="ICA">ICA</option>
             </select>
-            <Button onClick={() => setFilter("")}>Clear Filter</Button>
+            <Button onClick={() => setFilter("")} className="w-full sm:w-auto">
+              Clear Filter
+            </Button>
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 md:gap-6 xl:gap-8">

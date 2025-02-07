@@ -32,7 +32,7 @@ export function NavBar({ userName, userUen, corpPassId }: NavBarProps) {
         <div className="flex items-center space-x-6">
           <Link href="/" className="flex items-center">
             <Image
-              src="/medex-logo.svg"
+              src="/checkup-logo.svg"
               alt="MedEx Logo"
               width={120}
               height={40}
@@ -104,14 +104,15 @@ export function NavBar({ userName, userUen, corpPassId }: NavBarProps) {
         </div>
 
         {/* Mobile view - show hamburger menu */}
-        <div className="md:hidden">
+        {/* Mobile view - show hamburger menu */}
+        <div className="md:hidden w-10">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="h-10 w-10 p-0">
                 <Menu className="h-6 w-6" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
+            <DropdownMenuContent align="end" className="w-56" sideOffset={8}>
               <div className="px-2 py-1.5">
                 <p className="text-sm font-medium">{userName}</p>
                 <p className="text-xs text-muted-foreground">UEN: {userUen}</p>

@@ -213,7 +213,7 @@ export default function ExaminationRecords() {
         </Button> */}
       </div>
 
-      <div className="flex gap-4 mb-6">
+      <div className="flex flex-col sm:flex-row gap-4 mb-6 overflow-x-auto">
         <Input
           placeholder="Search records"
           className="max-w-xs"
@@ -255,6 +255,7 @@ export default function ExaminationRecords() {
               ? "default"
               : "outline"
           }
+          className="whitespace-nowrap"
           onClick={() => handleDateRangeSelect("year")}
         >
           Past year
@@ -268,6 +269,7 @@ export default function ExaminationRecords() {
               ? "default"
               : "outline"
           }
+          className="whitespace-nowrap"
           onClick={() => handleDateRangeSelect("3months")}
         >
           Past 3 months
@@ -281,6 +283,7 @@ export default function ExaminationRecords() {
               ? "default"
               : "outline"
           }
+          className="whitespace-nowrap"
           onClick={() => handleDateRangeSelect("month")}
         >
           Past 1 month
@@ -432,13 +435,13 @@ export default function ExaminationRecords() {
             )}
           </TableBody>
         </Table>
-        <div className="flex items-center justify-between px-4 py-4 border-t">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between px-4 py-4 border-t gap-4">
           <div className="text-sm text-gray-500">
             {selectedRecords.length} of {totalRecords} row(s) selected
           </div>
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2">
-              <span className="text-sm">Rows per page</span>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full sm:w-auto">
+            <div className="flex items-center gap-2 w-full sm:w-auto">
+              <span className="text-sm whitespace-nowrap">Rows per page</span>
               <Select
                 value={rowsPerPage.toString()}
                 onValueChange={(value) => {
@@ -457,8 +460,8 @@ export default function ExaminationRecords() {
                 </SelectContent>
               </Select>
             </div>
-            <div className="flex items-center gap-2">
-              <span className="text-sm">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 w-full sm:w-auto">
+              <span className="text-sm whitespace-nowrap">
                 Page {currentPage} of {totalPages}
               </span>
               <div className="flex gap-1">
