@@ -43,25 +43,30 @@ const doctors = [
   { id: "2", name: "Dr. Sarah Chen", mcrNumber: "M67890B" },
 ];
 
-const sampleFin = "G1234567X";
+import { generateSamplePeople } from "@/lib/utils/sample-data";
+
+// Generate sample data
+const samplePerson = generateSamplePeople(1);
 
 // Mock API call
 const mockApiCall = async (fin: string) => {
   // Simulate API delay
-  await new Promise((resolve) => setTimeout(resolve, 0));
+  await new Promise((resolve) => setTimeout(resolve, 1000));
 
-  // Mock response
-  if (fin === sampleFin) {
+  // Find person by FIN
+  const person = samplePerson.find((p) => p.fin === fin);
+
+  if (person) {
     return {
-      name: "JUNAID** SULAIM**",
+      name: person.name,
       testTypes: [
         "Pregnancy",
         "Syphilis test",
         "HIV",
         "Chest X-ray to screen for TB",
       ],
-      lastRecordedWeight: 55,
-      lastRecordedHeight: 160,
+      lastRecordedWeight: Math.floor(Math.random() * (70 - 45) + 45), // Random weight between 45-70kg
+      lastRecordedHeight: Math.floor(Math.random() * (170 - 150) + 150), // Random height between 150-170cm
     };
   }
   return null;
@@ -367,7 +372,7 @@ export default function MDWExamPage() {
                     nextStep="examination-details"
                     requireVisitDate={true}
                     defaultToday={false}
-                    sampleFin={sampleFin}
+                    sampleFin={samplePerson[0].fin}
                   />
                 </AccordionItem>
                 <AccordionItem

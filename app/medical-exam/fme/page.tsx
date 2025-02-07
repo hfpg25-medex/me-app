@@ -40,20 +40,37 @@ const doctors = [
   { id: "2", name: "Dr. Sarah Chen", mcrNumber: "M67890B" },
 ];
 
-const sampleFin = "F2770033X";
+import { generateSamplePeople } from "@/lib/utils/sample-data";
+
+// Generate sample data
+const samplePerson = generateSamplePeople(1);
 
 // Mock API call
 const mockApiCall = async (fin: string) => {
   // Simulate API delay
-  await new Promise((resolve) => setTimeout(resolve, 0));
+  await new Promise((resolve) => setTimeout(resolve, 1000));
 
-  // Mock response
-  if (fin === sampleFin) {
+  // Find person by FIN
+  const person = samplePerson.find((p) => p.fin === fin);
+
+  if (person) {
+    const dob = new Date(
+      1980 + Math.floor(Math.random() * 20),
+      Math.floor(Math.random() * 12),
+      Math.floor(Math.random() * 28) + 1
+    );
+    const doe = new Date(dob.getFullYear() + 2, dob.getMonth(), dob.getDate());
+
     return {
-      name: "R** ME**",
-      doe: "2025-08-10",
-      dob: "1990-01-01",
-      occupation: "Driver",
+      name: person.name,
+      doe: doe.toISOString().split("T")[0],
+      dob: dob.toISOString().split("T")[0],
+      occupation: [
+        "Driver",
+        "Construction Worker",
+        "Factory Worker",
+        "Cleaner",
+      ][Math.floor(Math.random() * 4)],
     };
   }
   return null;
@@ -326,7 +343,6 @@ export default function WPExamPage() {
               watchedValues.clinicalExamination.genitourinarySystem,
             mentalHealth: watchedValues.clinicalExamination.mentalHealth,
             others: watchedValues.clinicalExamination.others,
-            othersDetails: watchedValues.clinicalExamination.othersDetails,
           }}
           tests={{
             radiological: watchedValues.tests.radiological,
@@ -417,7 +433,7 @@ export default function WPExamPage() {
                   nextStep="medical-history"
                   requireVisitDate={true}
                   defaultToday={false}
-                  sampleFin={sampleFin}
+                  sampleFin={samplePerson[0].fin}
                 />
               </AccordionItem>
               <AccordionItem value="medical-history">
