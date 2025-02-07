@@ -32,7 +32,7 @@ export function NavBar({ userName, userUen, corpPassId }: NavBarProps) {
         <div className="flex items-center space-x-6">
           <Link href="/" className="flex items-center">
             <Image
-              src="/medex-logo.svg"
+              src="/checkup-logo.svg"
               alt="MedEx Logo"
               width={120}
               height={40}
