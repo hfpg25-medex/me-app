@@ -46,6 +46,18 @@ interface SummaryProps {
     pregnancyTest: string;
     colorVision: string;
     hearing: string;
+    cardiovascularSystem: string;
+    ecg: string;
+    anaemia: string;
+    respiratorySystem: string;
+    gastroIntestinalSystem: string;
+    neurologicalSystem: string;
+    skin: string;
+    musculoskeletalSystem: string;
+    neck: string;
+    genitourinarySystem: string;
+    mentalHealth: string;
+    others: string;
   };
   tests: {
     radiological: { result: string; details: string | null };
@@ -246,6 +258,180 @@ export function MedicalSummary({
                 <div>
                   <div className="text-gray-500 text-sm">Left Eye Vision</div>
                   <div>{clinicalExamination.leftEyeVision}</div>
+                </div>
+              </div>
+              <div>
+                <div className="text-gray-500 text-sm">
+                  Cardiovascular System
+                </div>
+                <div
+                  className={
+                    clinicalExamination.cardiovascularSystem === "abnormal"
+                      ? "text-red-500"
+                      : ""
+                  }
+                >
+                  {clinicalExamination.cardiovascularSystem === "abnormal"
+                    ? "Abnormal"
+                    : "Normal"}
+                </div>
+              </div>
+              <div>
+                <div className="text-gray-500 text-sm">ECG</div>
+                <div
+                  className={
+                    clinicalExamination.ecg === "abnormal" ? "text-red-500" : ""
+                  }
+                >
+                  {clinicalExamination.ecg === "abnormal"
+                    ? "Abnormal"
+                    : "Normal"}
+                </div>
+              </div>
+              <div>
+                <div className="text-gray-500 text-sm">Anaemia</div>
+                <div
+                  className={
+                    clinicalExamination.anaemia === "abnormal"
+                      ? "text-red-500"
+                      : ""
+                  }
+                >
+                  {clinicalExamination.anaemia === "abnormal"
+                    ? "Abnormal"
+                    : "Normal"}
+                </div>
+              </div>
+              <div>
+                <div className="text-gray-500 text-sm">Respiratory System</div>
+                <div
+                  className={
+                    clinicalExamination.respiratorySystem === "abnormal"
+                      ? "text-red-500"
+                      : ""
+                  }
+                >
+                  {clinicalExamination.respiratorySystem === "abnormal"
+                    ? "Abnormal"
+                    : "Normal"}
+                </div>
+              </div>
+              <div>
+                <div className="text-gray-500 text-sm">
+                  Gastrointestinal System
+                </div>
+                <div
+                  className={
+                    clinicalExamination.gastroIntestinalSystem === "abnormal"
+                      ? "text-red-500"
+                      : ""
+                  }
+                >
+                  {clinicalExamination.gastroIntestinalSystem === "abnormal"
+                    ? "Abnormal"
+                    : "Normal"}
+                </div>
+              </div>
+              <div>
+                <div className="text-gray-500 text-sm">Neurological System</div>
+                <div
+                  className={
+                    clinicalExamination.neurologicalSystem === "abnormal"
+                      ? "text-red-500"
+                      : ""
+                  }
+                >
+                  {clinicalExamination.neurologicalSystem === "abnormal"
+                    ? "Abnormal"
+                    : "Normal"}
+                </div>
+              </div>
+              <div>
+                <div className="text-gray-500 text-sm">Skin</div>
+                <div
+                  className={
+                    clinicalExamination.skin === "abnormal"
+                      ? "text-red-500"
+                      : ""
+                  }
+                >
+                  {clinicalExamination.skin === "abnormal"
+                    ? "Abnormal"
+                    : "Normal"}
+                </div>
+              </div>
+              <div>
+                <div className="text-gray-500 text-sm">
+                  Musculoskeletal System
+                </div>
+                <div
+                  className={
+                    clinicalExamination.musculoskeletalSystem === "abnormal"
+                      ? "text-red-500"
+                      : ""
+                  }
+                >
+                  {clinicalExamination.musculoskeletalSystem === "abnormal"
+                    ? "Abnormal"
+                    : "Normal"}
+                </div>
+              </div>
+              <div>
+                <div className="text-gray-500 text-sm">Neck</div>
+                <div
+                  className={
+                    clinicalExamination.neck === "abnormal"
+                      ? "text-red-500"
+                      : ""
+                  }
+                >
+                  {clinicalExamination.neck === "abnormal"
+                    ? "Abnormal"
+                    : "Normal"}
+                </div>
+              </div>
+              <div>
+                <div className="text-gray-500 text-sm">
+                  Genitourinary System
+                </div>
+                <div
+                  className={
+                    clinicalExamination.genitourinarySystem === "abnormal"
+                      ? "text-red-500"
+                      : ""
+                  }
+                >
+                  {clinicalExamination.genitourinarySystem === "abnormal"
+                    ? "Abnormal"
+                    : "Normal"}
+                </div>
+              </div>
+              <div>
+                <div className="text-gray-500 text-sm">Mental Health</div>
+                <div
+                  className={
+                    clinicalExamination.mentalHealth === "abnormal"
+                      ? "text-red-500"
+                      : ""
+                  }
+                >
+                  {clinicalExamination.mentalHealth === "abnormal"
+                    ? "Abnormal"
+                    : "Normal"}
+                </div>
+              </div>
+              <div>
+                <div className="text-gray-500 text-sm">Others</div>
+                <div
+                  className={
+                    clinicalExamination.others === "abnormal"
+                      ? "text-red-500"
+                      : ""
+                  }
+                >
+                  {clinicalExamination.others === "abnormal"
+                    ? "Abnormal"
+                    : "Normal"}
                 </div>
               </div>
               <div>

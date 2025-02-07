@@ -110,6 +110,18 @@ export default function WPExamPage() {
         pregnancyTest: "negative",
         colorVision: "normal",
         hearing: "normal",
+        cardiovascularSystem: "normal",
+        ecg: "normal",
+        anaemia: "normal",
+        respiratorySystem: "normal",
+        gastroIntestinalSystem: "normal",
+        neurologicalSystem: "normal",
+        skin: "normal",
+        musculoskeletalSystem: "normal",
+        neck: "normal",
+        genitourinarySystem: "normal",
+        mentalHealth: "normal",
+        others: "normal",
       },
       tests: {
         radiological: { result: "negative", details: null },
@@ -299,6 +311,24 @@ export default function WPExamPage() {
             pregnancyTest: watchedValues.clinicalExamination.pregnancyTest,
             colorVision: watchedValues.clinicalExamination.colorVision,
             hearing: watchedValues.clinicalExamination.hearing,
+            cardiovascularSystem:
+              watchedValues.clinicalExamination.cardiovascularSystem,
+            ecg: watchedValues.clinicalExamination.ecg,
+            anaemia: watchedValues.clinicalExamination.anaemia,
+            respiratorySystem:
+              watchedValues.clinicalExamination.respiratorySystem,
+            gastroIntestinalSystem:
+              watchedValues.clinicalExamination.gastroIntestinalSystem,
+            neurologicalSystem:
+              watchedValues.clinicalExamination.neurologicalSystem,
+            skin: watchedValues.clinicalExamination.skin,
+            musculoskeletalSystem:
+              watchedValues.clinicalExamination.musculoskeletalSystem,
+            neck: watchedValues.clinicalExamination.neck,
+            genitourinarySystem:
+              watchedValues.clinicalExamination.genitourinarySystem,
+            mentalHealth: watchedValues.clinicalExamination.mentalHealth,
+            others: watchedValues.clinicalExamination.others,
           }}
           tests={{
             radiological: watchedValues.tests.radiological,

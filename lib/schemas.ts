@@ -102,6 +102,18 @@ export const clinicalExaminationSchema = z.object({
   pregnancyTest: z.string().default("negative"),
   colorVision: z.string().default("normal"),
   hearing: z.string().default("normal"),
+  cardiovascularSystem: z.string().default("normal"),
+  ecg: z.string().default("normal"),
+  anaemia: z.string().default("normal"),
+  respiratorySystem: z.string().default("normal"),
+  gastroIntestinalSystem: z.string().default("normal"),
+  neurologicalSystem: z.string().default("normal"),
+  skin: z.string().default("normal"),
+  musculoskeletalSystem: z.string().default("normal"),
+  neck: z.string().default("normal"),
+  genitourinarySystem: z.string().default("normal"),
+  mentalHealth: z.string().default("normal"),
+  others: z.string().default("normal"),
 });
 
 export const testsSchema = z.object({
