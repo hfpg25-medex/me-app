@@ -111,6 +111,7 @@ export const clinicalExaminationSchema = z.object({
   genitourinarySystem: z.string().default("normal"),
   mentalHealth: z.string().default("normal"),
   others: z.string().default("normal"),
+  othersDetails: z.string().nullable(),
 });
 
 export const testsSchema = z.object({

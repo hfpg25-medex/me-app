@@ -847,36 +847,58 @@ export function ClinicalExamination({
               </div>
 
               <Label htmlFor="others">Others</Label>
-              <div className="flex items-center gap-2">
-                <Checkbox
-                  id="others"
-                  checked={
-                    watchedValues.clinicalExamination?.others === "abnormal"
-                  }
-                  {...register("clinicalExamination.others")}
-                  onCheckedChange={(checked) => {
-                    setValue(
-                      "clinicalExamination.others",
-                      checked ? "abnormal" : "normal"
-                    );
-                  }}
-                  className={cn(
-                    "border-2",
-                    watchedValues.clinicalExamination?.others === "abnormal"
-                      ? " border-red-600 data-[state=checked]:bg-red-600 text-primary-foreground hover:bg-red-400 hover:text-primary-foreground"
-                      : "border-primary"
-                  )}
-                />
-                <span
-                  className={cn(
-                    "text-sm",
-                    watchedValues.clinicalExamination?.others === "abnormal"
-                      ? "text-red-500"
-                      : "text-gray-500"
-                  )}
-                >
-                  Abnormal
-                </span>
+              <div className="flex flex-col gap-2">
+                <div className="flex items-center gap-2">
+                  <Checkbox
+                    id="others"
+                    checked={
+                      watchedValues.clinicalExamination?.others === "abnormal"
+                    }
+                    {...register("clinicalExamination.others")}
+                    onCheckedChange={(checked) => {
+                      setValue(
+                        "clinicalExamination.others",
+                        checked ? "abnormal" : "normal"
+                      );
+                      if (!checked) {
+                        setValue("clinicalExamination.othersDetails", null);
+                      }
+                    }}
+                    className={cn(
+                      "border-2",
+                      watchedValues.clinicalExamination?.others === "abnormal"
+                        ? " border-red-600 data-[state=checked]:bg-red-600 text-primary-foreground hover:bg-red-400 hover:text-primary-foreground"
+                        : "border-primary"
+                    )}
+                  />
+                  <span
+                    className={cn(
+                      "text-sm",
+                      watchedValues.clinicalExamination?.others === "abnormal"
+                        ? "text-red-500"
+                        : "text-gray-500"
+                    )}
+                  >
+                    Abnormal
+                  </span>
+                </div>
+                {watchedValues.clinicalExamination?.others === "abnormal" && (
+                  <div className="mt-2 w-full">
+                    <textarea
+                      id="othersDetails"
+                      className="w-full min-h-[100px] p-2 border rounded-md focus:outline-none"
+                      placeholder="Please provide details"
+                      {...register("clinicalExamination.othersDetails")}
+                      maxLength={500}
+                    />
+                    <p className="text-sm text-muted-foreground">
+                      {500 -
+                        (watchedValues.clinicalExamination.othersDetails?.length ||
+                          0)}{" "}
+                      characters left
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
           </div>

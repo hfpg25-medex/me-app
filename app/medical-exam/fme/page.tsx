@@ -119,6 +119,7 @@ export default function WPExamPage() {
         genitourinarySystem: "normal",
         mentalHealth: "normal",
         others: "normal",
+        othersDetails: null,
       },
       tests: {
         radiological: { result: "negative", details: null },
@@ -326,6 +327,7 @@ export default function WPExamPage() {
               watchedValues.clinicalExamination.genitourinarySystem,
             mentalHealth: watchedValues.clinicalExamination.mentalHealth,
             others: watchedValues.clinicalExamination.others,
+            othersDetails: watchedValues.clinicalExamination.othersDetails,
           }}
           tests={{
             radiological: watchedValues.tests.radiological,
