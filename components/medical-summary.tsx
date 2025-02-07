@@ -88,6 +88,9 @@ export function MedicalSummary({
   onSubmit,
 }: SummaryProps) {
   const [declarationChecked, setDeclarationChecked] = useState(false);
+  const [fitnessAssessment, setFitnessAssessment] = useState<
+    "fit" | "unfit" | null
+  >(null);
   const { canEditSection, canSubmitReport } = usePermissions();
   const { user } = useAuth();
   const isNurse = user?.role === "nurse";
@@ -710,42 +713,73 @@ export function MedicalSummary({
         </div>
       </div>
 
-      {/* Declaration Section */}
-      {!isNurse && (
-        <div className="grid gap-6 md:grid-cols-[2fr,1fr]">
-          <Card className="bg-blue-50 p-4 text-sm shadow-md hover:shadow-lg transition-shadow rounded-md border-2 border-blue-100">
-            <SectionHeader title="Declaration" />
-            <p className="mb-0">Please read and acknowledge the following:</p>
-            <ul className="list-disc pl-4 mb-4">
-              <li>
-                I am authorised by the clinic to submit the results and make the
-                declarations in this form on its behalf.
-              </li>
-              <li>
-                By submitting this form, I understand that the information given
-                will be submitted to the Controller or an authorised officer who
-                may act on the information given by me. I further declare that
-                the information provided by me is true to the best of my
-                knowledge and belief.
-              </li>
-            </ul>
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="declaration"
-                checked={declarationChecked}
-                onCheckedChange={(checked) =>
-                  setDeclarationChecked(checked as boolean)
-                }
-              />
-              <Label htmlFor="declaration">
-                I declare that all of the above is true.
-              </Label>
-            </div>
-          </Card>
-        </div>
-      )}
-      <div className="flex justify-start mt-4">
-        <Button type="button" onClick={onSubmit} disabled={!declarationChecked}>
+      {/* Fitness Assessment Section */}
+      <div className="grid gap-6">
+        <Card className="p-6">
+          <SectionHeader title="Fitness Assessment" />
+          <div className="space-y-4">
+            <RadioGroup
+              value={fitnessAssessment as string | undefined}
+              onValueChange={(value: "fit" | "unfit") => {
+                setFitnessAssessment(value);
+              }}
+              className="flex space-x-6"
+            >
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="fit" id="fit" />
+                <Label htmlFor="fit">Fit for employment</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="unfit" id="unfit" />
+                <Label htmlFor="unfit">Unfit for employment</Label>
+              </div>
+            </RadioGroup>
+          </div>
+        </Card>
+
+        {/* Declaration Section */}
+        <Card className="bg-blue-50 p-6 text-sm shadow-md hover:shadow-lg transition-shadow rounded-md border-2 border-blue-100">
+          <SectionHeader title="Declaration" />
+          <p className="mb-2">Please read and acknowledge the following:</p>
+          <ul className="list-disc pl-4 mb-4 space-y-2">
+            <li>
+              I am authorised by the clinic to submit the results and make the
+              declarations in this form on its behalf.
+            </li>
+            <li>
+              I hereby declare that I have examined the person named above and
+              that the results shown above are my findings.
+            </li>
+            <li>
+              By submitting this form, I understand that the information given
+              will be submitted to the Controller or an authorised officer who
+              may act on the information given by me.
+            </li>
+            <li>
+              I further declare that the information provided by me is true to
+              the best of my knowledge and belief.
+            </li>
+          </ul>
+          <div className="flex items-center space-x-2">
+            <Checkbox
+              id="declaration"
+              checked={declarationChecked}
+              onCheckedChange={(checked) => {
+                setDeclarationChecked(checked as boolean);
+              }}
+            />
+            <Label htmlFor="declaration" className="font-medium">
+              I declare that all of the above is true.
+            </Label>
+          </div>
+        </Card>
+      </div>
+
+      <div className="flex justify-start mt-6">
+        <Button
+          onClick={onSubmit}
+          disabled={!declarationChecked || !fitnessAssessment}
+        >
           {isNurse ? "Submit for review" : "Submit report"}
         </Button>
       </div>
