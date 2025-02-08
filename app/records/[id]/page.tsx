@@ -91,7 +91,7 @@ export default function RecordView() {
 
   return (
     <div className="container mx-auto py-6">
-      <div className="mb-6">
+      <div className="mb-6 flex items-center gap-4">
         <Button
           variant="ghost"
           onClick={() => router.back()}
@@ -100,6 +100,12 @@ export default function RecordView() {
           <ChevronLeft className="h-4 w-4" />
           Back to Records
         </Button>
+        {/* <Button
+          variant="outline"
+          onClick={() => window.open(`/api/records/${params.id}/pdf`, '_blank')}
+        >
+          Download PDF
+        </Button> */}
       </div>
 
       <div className="bg-white shadow-sm rounded-lg">

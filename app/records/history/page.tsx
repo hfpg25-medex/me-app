@@ -1,16 +1,9 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import {
   Popover,
@@ -34,7 +27,8 @@ import {
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 import { format, subMonths, subYears } from "date-fns";
-import { CalendarIcon, MoreHorizontal } from "lucide-react";
+import { CalendarIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 // interface Record {
@@ -412,8 +406,8 @@ export default function ExaminationRecords() {
                   <TableCell>{record.pending}</TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end items-center gap-2">
-                      <Button 
-                        variant="outline" 
+                      <Button
+                        variant="outline"
                         size="sm"
                         onClick={() => {
                           if (record.status === "For Review") {
@@ -425,7 +419,7 @@ export default function ExaminationRecords() {
                       >
                         {record.status === "For Review" ? "Review" : "View"}
                       </Button>
-                      <DropdownMenu>
+                      {/* <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button
                             variant="ghost"
@@ -436,9 +430,18 @@ export default function ExaminationRecords() {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuItem>Download</DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() =>
+                              window.open(
+                                `/api/records/${record.id}/pdf`,
+                                "_blank"
+                              )
+                            }
+                          >
+                            Download PDF
+                          </DropdownMenuItem>
                         </DropdownMenuContent>
-                      </DropdownMenu>
+                      </DropdownMenu> */}
                     </div>
                   </TableCell>
                 </TableRow>
