@@ -1,5 +1,6 @@
 "use client";
 
+import { createSubmissionAndRecord } from "@/app/actions/records";
 import { AcknowledgementPage } from "@/components/AcknowledgementPage";
 import { FinChangeModal } from "@/components/FinChangeModal";
 import { ClinicDoctorDetails } from "@/components/medical-exam/ClinicDoctorDetails";
@@ -14,10 +15,15 @@ import {
 import { StepIndicator } from "@/components/ui/step-indicator";
 import { examTitles } from "@/constants/exam-titles";
 import { STEPS, StepType } from "@/constants/steps";
+import { getCurrentUserId } from "@/lib/auth";
 import { FormDataMDW, formSchemaMDW } from "@/lib/schemas";
+import { generateSamplePeople } from "@/lib/utils/sample-data";
+import { generateSubmissionId } from "@/lib/utils/submission";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
+
+const submissionId = generateSubmissionId("MDW");
 
 const clinics = [
   {
@@ -42,8 +48,6 @@ const doctors = [
   { id: "1", name: "Dr. John Doe", mcrNumber: "M12345A" },
   { id: "2", name: "Dr. Sarah Chen", mcrNumber: "M67890B" },
 ];
-
-import { generateSamplePeople } from "@/lib/utils/sample-data";
 
 // Generate sample data
 const samplePerson = generateSamplePeople(1);
@@ -223,9 +227,33 @@ export default function MDWExamPage() {
     setExpandedAccordion(section);
   };
 
-  const onSubmit = (data: FormDataMDW) => {
-    console.log("Form submitted!", data);
-    setIsSubmitted(true);
+  const onSubmit = async (data: FormDataMDW) => {
+    try {
+      const userId = getCurrentUserId();
+
+      const result = await createSubmissionAndRecord({
+        userId,
+        examType: "MDW",
+        formData: data,
+        submissionId,
+        clinicId: data.clinicDoctor.clinic,
+        doctorId: data.clinicDoctor.doctor,
+        foreignerId: data.helperDetails.fin,
+        agency: "MOM",
+        type: "Medical Examination for Migrant Domestic Worker",
+        name: data.helperDetails.helperName,
+      });
+
+      if (result.success) {
+        setIsSubmitted(true);
+      } else {
+        console.error("Failed to submit form:", result.error);
+        alert("Failed to submit form. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      alert("An error occurred while submitting the form. Please try again.");
+    }
   };
 
   if (isSubmitted) {
@@ -233,7 +261,7 @@ export default function MDWExamPage() {
       <AcknowledgementPage
         finNumber={watchedValues.helperDetails.fin}
         helperName={watchedValues.helperDetails.helperName}
-        referenceNumber="6ME2108120001" // Replace with actual reference number if available
+        referenceNumber={submissionId}
         submissionDateTime={new Date().toLocaleString()} // Current date and time for submission
       />
     );
