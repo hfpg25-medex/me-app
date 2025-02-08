@@ -1,5 +1,6 @@
 "use client";
 
+import { saveDraft } from "@/app/actions/draft";
 import { AcknowledgementPage } from "@/components/AcknowledgementPage";
 import { FinChangeModal } from "@/components/FinChangeModal";
 import { ClinicalExamination } from "@/components/medical-exam/ClinicalExamination";
@@ -18,8 +19,8 @@ import { examTitles } from "@/constants/exam-titles";
 import { STEPS, StepType } from "@/constants/steps";
 import { FormDataWP, formSchemaWP } from "@/lib/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useState } from "react";
-import { FormProvider, useForm } from "react-hook-form";
+import React, { useEffect, useState } from "react";
+import { FormProvider, useForm, useWatch } from "react-hook-form";
 
 const clinics = [
   {
@@ -40,6 +41,7 @@ const doctors = [
   { id: "2", name: "Dr. Sarah Chen", mcrNumber: "M67890B" },
 ];
 
+import { Button } from "@/components/ui/button";
 import { generateSamplePeople } from "@/lib/utils/sample-data";
 
 // Generate sample data
@@ -89,6 +91,7 @@ export default function WPExamPage() {
   React.useEffect(() => {
     setIsClient(true);
   }, []);
+
   const [isHelperDetailsEnabled, setIsHelperDetailsEnabled] = useState(false);
   const [isMedicalHistoryEnabled, setIsMedicalHistoryEnabled] = useState(false);
   const [isClinicalExaminationEnabled, setIsClinicalExaminationEnabled] =
@@ -99,7 +102,9 @@ export default function WPExamPage() {
   const [tempFin, setTempFin] = useState("");
   const [finTouched, setFinTouched] = useState(false);
   const [visitDateTouched, setVisitDateTouched] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false); // New state to track submission
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [lastSaved, setLastSaved] = useState<Date | null>(null);
   const [isPendingMe, setIsPendingMe] = useState(false);
   const [isCompletedStates, setIsCompletedStates] = useState({
     helperDetails: false,
@@ -157,6 +162,39 @@ export default function WPExamPage() {
 
   const watchedValues = watch();
 
+  // Auto-save effect
+  const formValues = useWatch({ control: methods.control });
+
+  useEffect(() => {
+    const autoSave = async () => {
+      // TODO: Replace '123' with actual user ID from your auth system
+      const userId = "123";
+      if (
+        !formValues.helperDetails?.fin ||
+        !isMedicalHistoryEnabled ||
+        isSubmitted ||
+        isSaving
+      ) {
+        return;
+      }
+
+      try {
+        setIsSaving(true);
+        const result = await saveDraft(formValues as FormDataWP, userId);
+        if (result.success && result.lastSaved) {
+          setLastSaved(new Date(result.lastSaved));
+        }
+      } catch (error) {
+        console.error("Error auto-saving:", error);
+      } finally {
+        setIsSaving(false);
+      }
+    };
+
+    const timeoutId = setTimeout(autoSave, 20000);
+    return () => clearTimeout(timeoutId);
+  }, [formValues, isMedicalHistoryEnabled, isSubmitted, isSaving]);
+
   const handleFinChange = async (value: string) => {
     if (isSummaryActive && value !== watchedValues.helperDetails.fin) {
       setTempFin(value);
@@ -194,6 +232,42 @@ export default function WPExamPage() {
     setValue("helperDetails.fin", tempFin);
     setIsFinChangeModalOpen(false);
     await validateAndFetchHelperDetails(tempFin);
+  };
+
+  const formatDate = (date: Date) => {
+    return (
+      date.toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      }) +
+      " " +
+      date
+        .toLocaleTimeString("en-US", {
+          hour: "numeric",
+          minute: "2-digit",
+          hour12: true,
+        })
+        .toLowerCase()
+    );
+  };
+
+  const handleManualSave = async () => {
+    if (!formValues.helperDetails?.fin || isSubmitted) {
+      return;
+    }
+
+    try {
+      setIsSaving(true);
+      const result = await saveDraft(formValues as FormDataWP, "123");
+      if (result.success && result.lastSaved) {
+        setLastSaved(new Date(result.lastSaved));
+      }
+    } catch (error) {
+      console.error("Error saving draft:", error);
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const handleContinue = async (nextStep: string) => {
@@ -396,7 +470,24 @@ export default function WPExamPage() {
   return (
     <div className="container mx-auto grid gap-6 md:grid-cols-[2fr,1fr] px-3 w-full pt-8 pb-16">
       <div className="my-6 ">
-        <h1 className="text-2xl font-bold mb-6">{examTitles.fme}</h1>
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-bold">{examTitles.fme}</h1>
+        </div>
+        <div className="flex items-center justify-end gap-4">
+          {lastSaved && (
+            <p className="text-sm text-gray-500">
+              Last saved at {formatDate(lastSaved)}
+            </p>
+          )}
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleManualSave}
+            disabled={isSaving || isSubmitted || !formValues.helperDetails?.fin}
+          >
+            {isSaving ? "Saving..." : "Save draft"}
+          </Button>
+        </div>
         <StepIndicator
           className="mb-6"
           steps={[
