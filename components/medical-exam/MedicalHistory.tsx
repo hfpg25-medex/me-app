@@ -71,7 +71,7 @@ const medicalHistoryItems = [
 type HistoryItem = {
   condition: string;
   hasCondition: boolean;
-  details: string;
+  details?: string;
 };
 
 interface MedicalHistoryProps {
@@ -97,7 +97,7 @@ export function MedicalHistory({
       : medicalHistoryItems.map((item) => ({
           condition: item.text,
           hasCondition: false,
-          details: "",
+          details: undefined,
         }))
   );
 
