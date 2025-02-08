@@ -3,7 +3,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import {
   Popover,
@@ -333,8 +332,8 @@ export default function ExaminationRecords() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-12">
-                <Checkbox
+              {/* <TableHead className="w-12"> */}
+              {/* <Checkbox
                   checked={selectedRecords.length === records.length}
                   onCheckedChange={(checked) => {
                     if (checked) {
@@ -344,8 +343,8 @@ export default function ExaminationRecords() {
                     }
                   }}
                   disabled={isLoading}
-                />
-              </TableHead>
+                /> */}
+              {/* </TableHead> */}
               <TableHead>ID</TableHead>
               <TableHead>Date created</TableHead>
               <TableHead>Last update</TableHead>
@@ -375,7 +374,7 @@ export default function ExaminationRecords() {
             ) : (
               records.map((record) => (
                 <TableRow key={record.id}>
-                  <TableCell>
+                  {/* <TableCell>
                     <Checkbox
                       checked={selectedRecords.includes(record.id)}
                       onCheckedChange={(checked) => {
@@ -388,7 +387,7 @@ export default function ExaminationRecords() {
                         }
                       }}
                     />
-                  </TableCell>
+                  </TableCell> */}
                   <TableCell>{record.foreignerId}</TableCell>
                   <TableCell>{formatDate(record.dateCreated)}</TableCell>
                   <TableCell>{formatDate(record.lastUpdate)}</TableCell>
