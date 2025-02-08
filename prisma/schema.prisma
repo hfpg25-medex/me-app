@@ -56,6 +56,7 @@ model DraftSubmission {
   status      String   @default("draft") // Status of the submission (draft, submitted, etc.)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  record      Record?  // One-to-one relation with Record
   
   @@unique([userId, examType], name: "userId_examType")
   @@index([userId])
@@ -90,8 +91,10 @@ model Record {
   name         String     // Helper's name
   status       String     // e.g., "For Review", "Submitted", "Pending"
   pending      String     // e.g., "3/3"
-  submission   Submission @relation(fields: [submissionId], references: [id])
-  submissionId String     @unique
+  submission   Submission? @relation(fields: [submissionId], references: [id])
+  submissionId String?     @unique
+  draftSubmission   DraftSubmission? @relation(fields: [draftSubmissionId], references: [id])
+  draftSubmissionId String?     @unique
 
   @@index([foreignerId])
   @@index([status])

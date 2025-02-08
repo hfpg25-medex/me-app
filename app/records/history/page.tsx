@@ -30,18 +30,6 @@ import { CalendarIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-// interface Record {
-//   id: string
-//   foreignerId: string
-//   dateCreated: string
-//   lastUpdate: string
-//   agency: string
-//   type: string
-//   name: string
-//   status: string
-//   pending: string
-// }
-
 // Types
 type Record = {
   id: string;
@@ -193,6 +181,8 @@ export default function ExaminationRecords() {
       case "Submitted":
         return "bg-green-50 text-green-700 border-green-200";
       case "Pending":
+        return "bg-blue-50 text-blue-700 border-blue-200";
+      case "Draft":
         return "bg-blue-50 text-blue-700 border-blue-200";
       default:
         return "bg-gray-50 text-gray-700 border-gray-200";

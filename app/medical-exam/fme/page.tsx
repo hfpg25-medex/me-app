@@ -167,10 +167,12 @@ export default function WPExamPage() {
 
   useEffect(() => {
     const autoSave = async () => {
-      // TODO: Replace '123' with actual user ID from your auth system
-      const userId = "123";
+      // TODO: Replace with actual user ID from your auth system
+      const userId = "user123";
+
+      // Only attempt to save if we have the minimum required data
       if (
-        !formValues.helperDetails?.fin ||
+        !formValues?.helperDetails?.fin ||
         !isMedicalHistoryEnabled ||
         isSubmitted ||
         isSaving
@@ -183,6 +185,8 @@ export default function WPExamPage() {
         const result = await saveDraft(formValues as FormDataWP, userId);
         if (result.success && result.lastSaved) {
           setLastSaved(new Date(result.lastSaved));
+        } else if (!result.success) {
+          console.error("Failed to auto-save:", result.error);
         }
       } catch (error) {
         console.error("Error auto-saving:", error);
@@ -259,7 +263,7 @@ export default function WPExamPage() {
 
     try {
       setIsSaving(true);
-      const result = await saveDraft(formValues as FormDataWP, "123");
+      const result = await saveDraft(formValues as FormDataWP, "user123");
       if (result.success && result.lastSaved) {
         setLastSaved(new Date(result.lastSaved));
       }
