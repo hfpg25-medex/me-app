@@ -1,12 +1,15 @@
 import { getDraft } from "@/app/actions/getDraft";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { draftId: string } }
-) {
+export async function GET(request: NextRequest) {
+  const draftId = request.nextUrl.pathname.split("/").pop();
+  if (!draftId) {
+    return NextResponse.json(
+      { error: "Missing Draft ID parameter" },
+      { status: 400 }
+    );
+  }
   try {
-    const { draftId } = await params;
     const result = await getDraft(draftId);
 
     if (!result.success) {
