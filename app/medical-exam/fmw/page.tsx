@@ -17,6 +17,7 @@ import { examTitles } from "@/constants/exam-titles";
 import { STEPS, StepType } from "@/constants/steps";
 import { getCurrentUserId } from "@/lib/auth";
 import { FormDataMW, formSchemaMW } from "@/lib/schemas";
+import { generateSamplePeople } from "@/lib/utils/sample-data";
 import { generateSubmissionId } from "@/lib/utils/submission";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useState } from "react";
@@ -42,8 +43,6 @@ const doctors = [
   { id: "1", name: "Dr. John Doe", mcrNumber: "M12345A" },
   { id: "2", name: "Dr. Sarah Chen", mcrNumber: "M67890B" },
 ];
-
-import { generateSamplePeople } from "@/lib/utils/sample-data";
 
 // Generate sample data
 const samplePerson = generateSamplePeople(1);
@@ -221,7 +220,7 @@ export default function FMWExamPage() {
       <AcknowledgementPage
         finNumber={watchedValues.helperDetails.fin}
         helperName={watchedValues.helperDetails.helperName}
-        referenceNumber={submissionId} // Replace with actual reference number if available
+        referenceNumber={submissionId}
         submissionDateTime={new Date().toLocaleString()} // Current date and time for submission
       />
     );
