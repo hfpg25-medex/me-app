@@ -156,9 +156,13 @@ export function HelperDetails({
             setFinTouched(true);
             setVisitDateTouched(true);
             const isFinValid = await trigger("helperDetails.fin");
-            const isDateValid = await trigger("helperDetails.visitDate");
+            // const isDateValid = await trigger("helperDetails.visitDate");
 
-            if (isFinValid && isDateValid) {
+            console.log("isFinValid=", isFinValid);
+            // console.log("isDateValid=", isDateValid);
+            console.log(watchedValues.helperDetails);
+
+            if (isFinValid) {
               handleContinue(isSummaryActive ? "summary" : nextStep);
             }
           }}

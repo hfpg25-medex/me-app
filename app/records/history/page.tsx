@@ -41,6 +41,7 @@ type Record = {
   name: string;
   status: string;
   pending: string;
+  draftSubmissionId?: string;
 };
 
 type RecordsResponse = {
@@ -402,12 +403,19 @@ export default function ExaminationRecords() {
                         onClick={() => {
                           if (record.status === "For Review") {
                             // Handle review action
+                          } else if (record.status === "Draft" && 'draftSubmissionId' in record) {
+                            // For draft records, redirect to FME form with draft ID
+                            router.push(`/medical-exam/fme?draftId=${record.draftSubmissionId}`);
                           } else {
                             router.push(`/records/${record.id}`);
                           }
                         }}
                       >
-                        {record.status === "For Review" ? "Review" : "View"}
+                        {record.status === "For Review"
+                          ? "Review"
+                          : record.status === "Draft"
+                            ? "Continue"
+                            : "View"}
                       </Button>
                       {/* <DropdownMenu>
                         <DropdownMenuTrigger asChild>

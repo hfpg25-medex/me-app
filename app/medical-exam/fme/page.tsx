@@ -19,6 +19,7 @@ import { examTitles } from "@/constants/exam-titles";
 import { STEPS, StepType } from "@/constants/steps";
 import { FormDataWP, formSchemaWP } from "@/lib/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
 
@@ -52,7 +53,6 @@ const mockApiCall = async (fin: string) => {
   // Simulate API delay
   await new Promise((resolve) => setTimeout(resolve, 1000));
 
-  // Find person by FIN
   const person = samplePerson.find((p) => p.fin === fin);
 
   if (person) {
@@ -86,11 +86,40 @@ export default function WPExamPage() {
   const [expandedAccordion, setExpandedAccordion] = useState<
     string | undefined
   >("clinic-doctor");
+  const searchParams = useSearchParams();
+  const draftId = searchParams.get("draftId");
 
-  // This effect runs once after hydration
+  // Load draft data if draftId is provided
   React.useEffect(() => {
+    const loadDraft = async () => {
+      if (draftId) {
+        setIsLoading(true);
+        setIsPendingMe(true);
+        try {
+          const response = await fetch(`/api/drafts/${draftId}`);
+          const data = await response.json();
+          if (data.success) {
+            const visitDate = new Date(data.data.helperDetails.visitDate);
+            data.data = {
+              ...data.data,
+              helperDetails: {
+                ...data.data.helperDetails,
+                visitDate,
+              },
+            };
+            methods.reset(data.data);
+          }
+        } catch (error) {
+          console.error("Error loading draft:", error);
+        } finally {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    loadDraft();
     setIsClient(true);
-  }, []);
+  }, [draftId]);
 
   const [isHelperDetailsEnabled, setIsHelperDetailsEnabled] = useState(false);
   const [isMedicalHistoryEnabled, setIsMedicalHistoryEnabled] = useState(false);
@@ -211,6 +240,10 @@ export default function WPExamPage() {
   };
 
   const validateAndFetchHelperDetails = async (fin: string) => {
+    if (draftId?.length) {
+      setIsPendingMe(true);
+      return;
+    }
     // Set initial state before API call
     setIsLoading(true);
     setIsPendingMe(true);
@@ -294,6 +327,8 @@ export default function WPExamPage() {
       case "medical-history":
         isValid = await trigger("helperDetails");
         console.log(watchedValues);
+        console.log("isValid2=", isValid);
+
         if (isValid) {
           setIsMedicalHistoryEnabled(true);
           setExpandedAccordion("medical-history");
@@ -548,7 +583,11 @@ export default function WPExamPage() {
                   nextStep="medical-history"
                   requireVisitDate={true}
                   defaultToday={false}
-                  sampleFin={samplePerson[0].fin}
+                  sampleFin={
+                    draftId
+                      ? watchedValues.helperDetails.fin
+                      : samplePerson[0].fin
+                  }
                   isLoading={isLoading}
                 />
               </AccordionItem>
