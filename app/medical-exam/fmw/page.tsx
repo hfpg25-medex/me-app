@@ -22,6 +22,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
+const submissionId = generateSubmissionId("FMW");
+
 const clinics = [
   {
     id: "1",
@@ -91,8 +93,6 @@ export default function FMWExamPage() {
   const [isPendingMe, setIsPendingMe] = useState(false);
   /* eslint-disable @typescript-eslint/no-unused-vars */
   const [isSubmitting, setIsSubmitting] = useState(false);
-  /* eslint-disable @typescript-eslint/no-unused-vars */
-  const [submissionId, setSubmissionId] = useState("");
 
   //To remove
   console.log(isSubmitting);
@@ -189,7 +189,6 @@ export default function FMWExamPage() {
 
   const onSubmit = async (data: FormDataMW) => {
     try {
-      const submissionId = generateSubmissionId("FMW");
       const userId = getCurrentUserId();
 
       const result = await createSubmissionAndRecord({
