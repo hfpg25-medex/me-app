@@ -79,6 +79,7 @@ const mockApiCall = async (fin: string) => {
 export default function MDWExamPage() {
   const [isClient, setIsClient] = useState(false);
   const [step, setStep] = useState<StepType>(STEPS.SUBMISSION);
+  const [isLoading, setIsLoading] = useState(false);
   const [expandedAccordion, setExpandedAccordion] = useState<
     string | undefined
   >("clinic-doctor");
@@ -164,6 +165,7 @@ export default function MDWExamPage() {
 
   const validateAndFetchHelperDetails = async (fin: string) => {
     // Set initial state before API call
+    setIsLoading(true);
     setIsPendingMe(true);
     setValue("helperDetails.helperName", "");
     setTestTypes([]);
@@ -186,6 +188,8 @@ export default function MDWExamPage() {
     } catch (error) {
       console.error("Error fetching helper details:", error);
       setIsPendingMe(false);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -407,6 +411,7 @@ export default function MDWExamPage() {
                     requireVisitDate={true}
                     defaultToday={false}
                     sampleFin={samplePerson[0].fin}
+                    isLoading={isLoading}
                   />
                 </AccordionItem>
                 <AccordionItem

@@ -21,6 +21,7 @@ interface HelperDetailsProps {
   requireVisitDate?: boolean;
   defaultToday?: boolean;
   sampleFin?: string;
+  isLoading: boolean;
 }
 
 export function HelperDetails({
@@ -36,6 +37,7 @@ export function HelperDetails({
   requireVisitDate = true,
   defaultToday = false,
   sampleFin,
+  isLoading = false,
 }: HelperDetailsProps) {
   const {
     register,
@@ -87,13 +89,21 @@ export function HelperDetails({
         <div>
           <Label htmlFor="fin">FIN</Label>
           <span className="text-blue-500"> (Test FIN: {sampleFin})</span>
-          <Input
-            className="w-[200px] mt-1"
-            id="fin"
-            {...register("helperDetails.fin")}
-            onBlur={handleFinBlur}
-            onChange={() => {}}
-          />
+          <div className="relative">
+            <Input
+              className="w-[200px] mt-1"
+              id="fin"
+              {...register("helperDetails.fin")}
+              onBlur={handleFinBlur}
+              onChange={() => {}}
+              disabled={isLoading}
+            />
+            {isLoading && (
+              <div className="absolute right-3 top-[60%] transform -translate-y-1/2">
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-900"></div>
+              </div>
+            )}
+          </div>
           {finTouched && !isValidating && errors.helperDetails?.fin && (
             <p className="text-red-500 text-sm mt-1">
               Please enter a valid FIN

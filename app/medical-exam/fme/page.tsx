@@ -79,6 +79,7 @@ const mockApiCall = async (fin: string) => {
 export default function WPExamPage() {
   const [isClient, setIsClient] = useState(false);
   const [step, setStep] = useState<StepType>(STEPS.SUBMISSION);
+  const [isLoading, setIsLoading] = useState(false);
   const [expandedAccordion, setExpandedAccordion] = useState<
     string | undefined
   >("clinic-doctor");
@@ -168,6 +169,7 @@ export default function WPExamPage() {
 
   const validateAndFetchHelperDetails = async (fin: string) => {
     // Set initial state before API call
+    setIsLoading(true);
     setIsPendingMe(true);
     setValue("helperDetails.helperName", "");
 
@@ -182,6 +184,8 @@ export default function WPExamPage() {
     } catch (error) {
       console.error("Error fetching helper details:", error);
       setIsPendingMe(false);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -441,6 +445,7 @@ export default function WPExamPage() {
                   requireVisitDate={true}
                   defaultToday={false}
                   sampleFin={samplePerson[0].fin}
+                  isLoading={isLoading}
                 />
               </AccordionItem>
               <AccordionItem value="medical-history">
