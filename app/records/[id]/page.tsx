@@ -49,16 +49,19 @@ export default function RecordView() {
     );
   }
 
+  /* eslint-disable @typescript-eslint/no-explicit-any */
   const formData = record?.submission?.formData as any;
   // as unknown as
   //   | FormDataMW
   //   | FormDataWP
   //   | FormDataMDW;
+
   const clinic = clinics.find(
-    (c: { id: any }) => c.id === formData?.clinicDoctor?.clinic
+    (c: { id: string }) => c.id === formData?.clinicDoctor?.clinic
   );
+
   const doctor = doctors.find(
-    (d: { id: any }) => d.id === formData?.clinicDoctor?.doctor
+    (d: { id: string }) => d.id === formData?.clinicDoctor?.doctor
   );
 
   const clinicDetails =
