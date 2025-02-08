@@ -16,6 +16,7 @@ export async function getDraft(draftSubmissionId: string) {
 
     return {
       success: true,
+      /* eslint-disable @typescript-eslint/no-explicit-any */
       data: draft.formData as any,
     };
   } catch (error) {
