@@ -6,6 +6,7 @@ import { revalidatePath } from "next/cache";
 export async function createSubmissionAndRecord(data: {
   userId: string;
   examType: string;
+  /* eslint-disable @typescript-eslint/no-explicit-any */
   formData: any;
   submissionId: string;
   clinicId?: string;

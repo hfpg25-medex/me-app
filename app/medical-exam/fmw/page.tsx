@@ -1,5 +1,6 @@
 "use client";
 
+import { createSubmissionAndRecord } from "@/app/actions/records";
 import { AcknowledgementPage } from "@/components/AcknowledgementPage";
 import { FinChangeModal } from "@/components/FinChangeModal";
 import { ClinicDoctorDetails } from "@/components/medical-exam/ClinicDoctorDetails";
@@ -14,7 +15,9 @@ import {
 import { StepIndicator } from "@/components/ui/step-indicator";
 import { examTitles } from "@/constants/exam-titles";
 import { STEPS, StepType } from "@/constants/steps";
+import { getCurrentUserId } from "@/lib/auth";
 import { FormDataMW, formSchemaMW } from "@/lib/schemas";
+import { generateSubmissionId } from "@/lib/utils/submission";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -185,47 +188,33 @@ export default function FMWExamPage() {
   };
 
   const onSubmit = async (data: FormDataMW) => {
-    setIsSubmitted(true);
-    // try {
-    //   // Show loading state
-    //   setIsSubmitting(true)
+    try {
+      const submissionId = generateSubmissionId("FMW");
+      const userId = getCurrentUserId();
 
-    //   // Prepare the submission data
-    //   const submission = {
-    //     type: 'FMW',
-    //     data,
-    //     createdAt: new Date().toISOString(),
-    //     status: 'completed'
-    //   }
+      const result = await createSubmissionAndRecord({
+        userId,
+        examType: "FMW",
+        formData: data,
+        submissionId,
+        clinicId: data.clinicDoctor.clinic,
+        doctorId: data.clinicDoctor.doctor,
+        foreignerId: data.helperDetails.fin,
+        agency: "MOM",
+        type: "Medical Examination for Female Migrant Worker",
+        name: data.helperDetails.helperName,
+      });
 
-    //   // Call the API endpoint
-    //   const response = await fetch('/api/submissions', {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //     },
-    //     body: JSON.stringify(submission),
-    //   })
-
-    //   const result = await response.json()
-
-    //   if (!result.success) {
-    //     throw new Error(result.message || 'Failed to save submission')
-    //   }
-
-    //   // Show success message
-    //   toast.success('Form submitted successfully')
-
-    //   // Update submission ID and move to acknowledgment page
-    //   setSubmissionId(result.submissionId)
-    //   setIsSubmitted(true);
-    // } catch (error) {
-    //   // Show error message
-    //   toast.error('Failed to submit form. Please try again.')
-    //   console.error('Submission error:', error)
-    // } finally {
-    //   setIsSubmitting(false)
-    // }
+      if (result.success) {
+        setIsSubmitted(true);
+      } else {
+        console.error("Failed to submit form:", result.error);
+        alert("Failed to submit form. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      alert("An error occurred while submitting the form. Please try again.");
+    }
   };
 
   if (isSubmitted) {
