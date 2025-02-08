@@ -22,6 +22,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
+const submissionId = generateSubmissionId("PR");
+
+console.log(submissionId);
+
 const clinics = [
   {
     id: "1",
@@ -177,9 +181,7 @@ export default function PRExamPage() {
 
   const onSubmit = async (data: FormDataMW) => {
     try {
-      const submissionId = generateSubmissionId("PR");
       const userId = getCurrentUserId();
-
       const result = await createSubmissionAndRecord({
         userId,
         examType: "PR",
@@ -211,7 +213,7 @@ export default function PRExamPage() {
       <AcknowledgementPage
         finNumber={watchedValues.helperDetails.fin}
         helperName={watchedValues.helperDetails.helperName}
-        referenceNumber="6ME2108120002" // Replace with actual reference number if available
+        referenceNumber={submissionId} // Replace with actual reference number if available
         submissionDateTime={new Date().toLocaleString()} // Current date and time for submission
       />
     );

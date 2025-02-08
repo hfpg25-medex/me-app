@@ -1,7 +1,6 @@
 import { Check } from "lucide-react";
 import Link from "next/link";
 import { useEffect } from "react";
-import { v4 as uuidv4 } from "uuid";
 
 interface SubmissionDetailsProps {
   finNumber: string;
@@ -13,6 +12,7 @@ interface SubmissionDetailsProps {
 export function AcknowledgementPage({
   finNumber,
   helperName,
+  referenceNumber,
 }: SubmissionDetailsProps) {
   useEffect(() => {
     window.scrollTo(0, 0); // Scroll to the top of the page
@@ -29,12 +29,6 @@ export function AcknowledgementPage({
     })
     .replace(",", "")
     .replace(" ", " ");
-
-  function generateReferenceNumber(): string {
-    return uuidv4(); // Generates a new UUID
-  }
-
-  const referenceNumber = generateReferenceNumber();
 
   return (
     <div className="container mx-auto grid gap-6 md:grid-cols-[2fr,1fr] px-3 w-full pt-4 pb-16">
