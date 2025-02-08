@@ -108,6 +108,7 @@ export default function FMWExamPage() {
       clinicDoctor: { clinic: "", doctor: "" },
       helperDetails: { fin: "", helperName: "", visitDate: undefined },
       examinationDetails: {
+        testTypes: [],
         positiveTests: [],
         remarks: "",
       },
@@ -139,6 +140,7 @@ export default function FMWExamPage() {
       const result = await mockApiCall(fin);
       if (result) {
         setValue("helperDetails.helperName", result.name);
+        setValue("examinationDetails.testTypes", result.testTypes);
         setTestTypes(result.testTypes);
         // Keep isPendingMe true if we found a result
       } else {
@@ -259,7 +261,7 @@ export default function FMWExamPage() {
           }}
           helperDetails={{
             fin: watchedValues.helperDetails.fin,
-            name: watchedValues.helperDetails.helperName,
+            helperName: watchedValues.helperDetails.helperName,
             visitDate: watchedValues.helperDetails.visitDate || null,
           }}
           examinationDetails={{

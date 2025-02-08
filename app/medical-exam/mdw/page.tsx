@@ -123,6 +123,7 @@ export default function MDWExamPage() {
         weight: "", // Changed from 0 to an empty string
         height: 0,
         bmi: 0,
+        testTypes: [],
         positiveTests: [],
         suspiciousInjuries: false,
         unintentionalWeightLoss: false,
@@ -178,6 +179,7 @@ export default function MDWExamPage() {
       const result = await mockApiCall(fin);
       if (result) {
         setValue("helperDetails.helperName", result.name);
+        setValue("examinationDetails.testTypes", result.testTypes);
         setTestTypes(result.testTypes);
         setLastRecordedWeight(result.lastRecordedWeight);
         setLastRecordedHeight(result.lastRecordedHeight);
@@ -302,7 +304,7 @@ export default function MDWExamPage() {
           }}
           helperDetails={{
             fin: watchedValues.helperDetails.fin,
-            name: watchedValues.helperDetails.helperName,
+            helperName: watchedValues.helperDetails.helperName,
             visitDate: watchedValues.helperDetails.visitDate || null,
           }}
           examinationDetails={{
