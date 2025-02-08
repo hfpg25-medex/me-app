@@ -24,7 +24,7 @@ export function StepIndicator({ steps, className }: StepIndicatorProps) {
             <div
               className={cn(
                 "w-5 h-5 rounded-full flex items-center justify-center text-xs font-medium",
-                step.isActive ? "bg-blue-500 text-white" : "bg-gray-200"
+                step.isActive ? "bg-gray-900 text-white" : "bg-gray-200"
               )}
             >
               {step.number}
