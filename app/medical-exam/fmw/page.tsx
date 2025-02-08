@@ -129,15 +129,22 @@ export default function FMWExamPage() {
   };
 
   const validateAndFetchHelperDetails = async (fin: string) => {
-    // trigger('helperDetails')
-    const result = await mockApiCall(fin);
-    if (result) {
-      setValue("helperDetails.helperName", result.name);
-      setTestTypes(result.testTypes);
-      setIsPendingMe(true);
-    } else {
-      setValue("helperDetails.helperName", "");
-      setTestTypes([]);
+    // Set initial state before API call
+    setIsPendingMe(true);
+    setValue("helperDetails.helperName", "");
+    setTestTypes([]);
+
+    try {
+      const result = await mockApiCall(fin);
+      if (result) {
+        setValue("helperDetails.helperName", result.name);
+        setTestTypes(result.testTypes);
+        // Keep isPendingMe true if we found a result
+      } else {
+        setIsPendingMe(false);
+      }
+    } catch (error) {
+      console.error("Error fetching helper details:", error);
       setIsPendingMe(false);
     }
   };
