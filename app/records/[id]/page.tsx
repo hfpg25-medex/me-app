@@ -75,9 +75,9 @@ export default function RecordView() {
         }
       : undefined;
 
-  const testTypes = formData.examinationDetails.testTypes;
+  const testTypes = formData.examinationDetails?.testTypes;
 
-  const testResults = testTypes.map((test: any) => ({
+  const testResults = testTypes?.map((test: any) => ({
     name: test,
     result: formData.examinationDetails.positiveTests.includes(test)
       ? "Positive/Reactive"

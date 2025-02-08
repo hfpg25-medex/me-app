@@ -52,13 +52,13 @@ interface SummaryProps {
 
 const TITLES = {
   MDW: "Six-monthly Medical Examination for Migrant Domestic Worker (MOM)",
-  MW: "Six-monthly Medical Examination for Female Migrant Worker (MOM)",
+  FMW: "Six-monthly Medical Examination for Female Migrant Worker (MOM)",
   PR: "Medical Examination for PR Application (ICA)",
 };
 
 const HELPER_SECTION_TITLES = {
   MDW: "Helper details",
-  MW: "Migrant worker details",
+  FMW: "Migrant worker details",
   PR: "Personal details",
 };
 
@@ -270,29 +270,29 @@ export function Summary({
               <div className="space-y-4">
                 <div>
                   <div className="text-gray-500 text-sm">Clinic name</div>
-                  <div>{clinicDetails.clinic}</div>
+                  <div>{clinicDetails?.clinic}</div>
                 </div>
                 <div>
                   <div className="text-gray-500 text-sm">HCI code</div>
-                  <div>{clinicDetails.hciCode}</div>
+                  <div>{clinicDetails?.hciCode}</div>
                 </div>
                 <div>
                   <div className="text-gray-500 text-sm">Contact number</div>
-                  <div>{clinicDetails.contactNumber}</div>
+                  <div>{clinicDetails?.contactNumber}</div>
                 </div>
               </div>
               <div className="space-y-4 mt-6">
                 <div>
                   <div className="text-gray-500 text-sm">Doctor name</div>
                   <div className="flex items-center gap-2">
-                    <span>{clinicDetails.doctor}</span>
+                    <span>{clinicDetails?.doctor}</span>
                   </div>
                 </div>
                 <div>
                   <div className="text-gray-500 text-sm">
                     Medical Registration (MCR) no.
                   </div>
-                  <div>{clinicDetails.mcrNumber}</div>
+                  <div>{clinicDetails?.mcrNumber}</div>
                 </div>
               </div>
             </div>

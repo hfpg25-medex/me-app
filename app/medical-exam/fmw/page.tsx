@@ -276,7 +276,7 @@ export default function FMWExamPage() {
             })),
             remarks: watchedValues.examinationDetails.remarks,
           }}
-          type="MW"
+          type="FMW"
           onEdit={handleEdit}
           onSubmit={handleSubmit(onSubmit)}
           isSubmitting={isSubmitting}

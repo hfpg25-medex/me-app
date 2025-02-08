@@ -1,20 +1,22 @@
 import { prisma } from "@/lib/prisma";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
+export async function GET(request: NextRequest) {
   try {
-    const id = params.id;
+    const id = request.nextUrl.pathname.split("/").pop(); // Extract `id` from the URL
+
+    if (!id) {
+      return NextResponse.json(
+        { error: "Missing ID parameter" },
+        { status: 400 }
+      );
+    }
 
     // Fetch both record and submission data in parallel
     const [record, submission] = await Promise.all([
-      // Get record details
       prisma.record.findUnique({
         where: { id },
       }),
-      // Get submission details
       prisma.submission.findFirst({
         where: { record: { id } },
         select: {
@@ -32,10 +34,7 @@ export async function GET(
       return NextResponse.json({ error: "Record not found" }, { status: 404 });
     }
 
-    return NextResponse.json({
-      ...record,
-      submission,
-    });
+    return NextResponse.json({ ...record, submission });
   } catch (error) {
     console.error("Error fetching record:", error);
     return NextResponse.json(
