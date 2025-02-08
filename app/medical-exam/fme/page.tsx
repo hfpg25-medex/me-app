@@ -167,13 +167,20 @@ export default function WPExamPage() {
   };
 
   const validateAndFetchHelperDetails = async (fin: string) => {
-    // trigger('helperDetails')
-    const result = await mockApiCall(fin);
-    if (result) {
-      setValue("helperDetails.helperName", result.name);
-      setIsPendingMe(true);
-    } else {
-      setValue("helperDetails.helperName", "");
+    // Set initial state before API call
+    setIsPendingMe(true);
+    setValue("helperDetails.helperName", "");
+
+    try {
+      const result = await mockApiCall(fin);
+      if (result) {
+        setValue("helperDetails.helperName", result.name);
+        // Keep isPendingMe true if we found a result
+      } else {
+        setIsPendingMe(false);
+      }
+    } catch (error) {
+      console.error("Error fetching helper details:", error);
       setIsPendingMe(false);
     }
   };

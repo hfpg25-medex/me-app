@@ -163,22 +163,28 @@ export default function MDWExamPage() {
   };
 
   const validateAndFetchHelperDetails = async (fin: string) => {
-    // trigger('helperDetails')
+    // Set initial state before API call
+    setIsPendingMe(true);
+    setValue("helperDetails.helperName", "");
+    setTestTypes([]);
+    setLastRecordedWeight(null);
+    setLastRecordedHeight(null);
+    setValue("examinationDetails.height", 0);
 
-    const result = await mockApiCall(fin);
-    if (result) {
-      setValue("helperDetails.helperName", result.name);
-      setTestTypes(result.testTypes);
-      setLastRecordedWeight(result.lastRecordedWeight);
-      setLastRecordedHeight(result.lastRecordedHeight);
-      setValue("examinationDetails.height", result.lastRecordedHeight);
-      setIsPendingMe(true);
-    } else {
-      setValue("helperDetails.helperName", "");
-      setTestTypes([]);
-      setLastRecordedWeight(null);
-      setLastRecordedHeight(null);
-      setValue("examinationDetails.height", 0);
+    try {
+      const result = await mockApiCall(fin);
+      if (result) {
+        setValue("helperDetails.helperName", result.name);
+        setTestTypes(result.testTypes);
+        setLastRecordedWeight(result.lastRecordedWeight);
+        setLastRecordedHeight(result.lastRecordedHeight);
+        setValue("examinationDetails.height", result.lastRecordedHeight);
+        // Keep isPendingMe true if we found a result
+      } else {
+        setIsPendingMe(false);
+      }
+    } catch (error) {
+      console.error("Error fetching helper details:", error);
       setIsPendingMe(false);
     }
   };
