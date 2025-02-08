@@ -20,7 +20,7 @@ import { STEPS, StepType } from "@/constants/steps";
 import { FormDataWP, formSchemaWP } from "@/lib/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSearchParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
 
 const clinics = [
@@ -79,6 +79,14 @@ const mockApiCall = async (fin: string) => {
 };
 
 export default function WPExamPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <WPExamPageContent />
+    </Suspense>
+  );
+}
+
+function WPExamPageContent() {
   const [isClient, setIsClient] = useState(false);
   const [step, setStep] = useState<StepType>(STEPS.SUBMISSION);
   const [isLoading, setIsLoading] = useState(false);
