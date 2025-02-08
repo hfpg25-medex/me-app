@@ -72,6 +72,7 @@ export const examinationDetailsMDWSchema = z.object({
     .min(90, "Height must be at least 90cm")
     .max(250, "Height must be at most 250cm"),
   bmi: z.number(),
+  testTypes: z.array(z.string()),
   positiveTests: z.array(z.string()),
   suspiciousInjuries: z.boolean(),
   unintentionalWeightLoss: z.boolean(),
@@ -145,6 +146,7 @@ export const testsSchema = z.object({
 // });
 
 export const examinationDetailsMWSchema = z.object({
+  testTypes: z.array(z.string()),
   positiveTests: z.array(z.string()),
   remarks: z.string().max(500, "Remarks must be at most 500 characters"),
 });

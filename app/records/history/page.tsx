@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -97,6 +98,7 @@ const formatDate = (dateString: string) => {
 };
 
 export default function ExaminationRecords() {
+  const router = useRouter();
   const [selectedDate, setSelectedDate] = useState<
     [Date | undefined, Date | undefined]
   >([undefined, undefined]);
@@ -410,8 +412,18 @@ export default function ExaminationRecords() {
                   <TableCell>{record.pending}</TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end items-center gap-2">
-                      <Button variant="outline" size="sm">
-                        Review
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        onClick={() => {
+                          if (record.status === "For Review") {
+                            // Handle review action
+                          } else {
+                            router.push(`/records/${record.id}`);
+                          }
+                        }}
+                      >
+                        {record.status === "For Review" ? "Review" : "View"}
                       </Button>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -424,7 +436,6 @@ export default function ExaminationRecords() {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuItem>View details</DropdownMenuItem>
                           <DropdownMenuItem>Download</DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>

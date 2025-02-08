@@ -11,9 +11,14 @@ import { SectionHeader } from "./ui/section-header";
 import { StepIndicator } from "./ui/step-indicator";
 
 interface SummaryProps {
-  type: "MDW" | "MW" | "PR";
+  type: "MDW" | "FMW" | "PR";
   isSubmitting?: boolean;
-  clinicDetails: {
+  showTitle?: boolean;
+  showStepIndicator?: boolean;
+  allowEdit?: boolean;
+  showDeclaration?: boolean;
+  allowSubmit?: boolean;
+  clinicDetails?: {
     clinic: string;
     doctor: string;
     hciCode: string;
@@ -22,7 +27,7 @@ interface SummaryProps {
   };
   helperDetails: {
     fin: string;
-    name: string;
+    helperName: string;
     visitDate: Date | null;
   };
   examinationDetails: {
@@ -65,6 +70,11 @@ export function Summary({
   onEdit,
   onSubmit,
   isSubmitting = false,
+  showTitle = true,
+  showStepIndicator = true,
+  allowEdit = true,
+  showDeclaration = true,
+  allowSubmit = true,
 }: SummaryProps) {
   const [declarationChecked, setDeclarationChecked] = useState(false);
 
@@ -74,25 +84,29 @@ export function Summary({
 
   return (
     <div className="container mx-auto space-y-6">
-      <h1 className="text-2xl font-semibold mb-6">{TITLES[type]}</h1>
+      {showTitle && (
+        <h1 className="text-2xl font-semibold mb-6">{TITLES[type]}</h1>
+      )}
 
-      <StepIndicator
-        className="mb-6"
-        steps={[
-          {
-            number: 1,
-            label: "Submission",
-            isActive: false,
-            isEnabled: true,
-          },
-          {
-            number: 2,
-            label: "Summary",
-            isActive: true,
-            isEnabled: true,
-          },
-        ]}
-      />
+      {showStepIndicator && (
+        <StepIndicator
+          className="mb-6"
+          steps={[
+            {
+              number: 1,
+              label: "Submission",
+              isActive: false,
+              isEnabled: true,
+            },
+            {
+              number: 2,
+              label: "Summary",
+              isActive: true,
+              isEnabled: true,
+            },
+          ]}
+        />
+      )}
 
       <div className="grid gap-6 md:grid-cols-[2fr,1fr]">
         <div className="space-y-6">
@@ -101,6 +115,7 @@ export function Summary({
             <SectionHeader
               title={HELPER_SECTION_TITLES[type]}
               onEdit={() => onEdit("helper-details")}
+              allowEdit={allowEdit}
             />
             <div className="grid gap-3 text-md">
               <div className="grid grid-cols-2 gap-4">
@@ -110,7 +125,7 @@ export function Summary({
                 </div>
                 <div>
                   <div className="text-gray-500 text-sm">Name</div>
-                  <div>{helperDetails.name}</div>
+                  <div>{helperDetails.helperName}</div>
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-4">
@@ -135,6 +150,7 @@ export function Summary({
             <SectionHeader
               title="Examination details"
               onEdit={() => onEdit("examination-details")}
+              allowEdit={allowEdit}
             />
             <div className="space-y-3 text-md">
               {/* Physical Measurements (MDW only) */}
@@ -246,6 +262,7 @@ export function Summary({
             <SectionHeader
               title="Clinic & doctor details"
               onEdit={() => onEdit("clinic-doctor")}
+              allowEdit={allowEdit}
             />
 
             {/* Clinic Details Section */}
@@ -284,55 +301,59 @@ export function Summary({
       </div>
 
       {/* Declaration Section */}
-      <div className="grid gap-6 md:grid-cols-[2fr,1fr]">
-        <Card className="bg-blue-50 p-4 text-sm border-2 border-blue-100 shadow-md hover:shadow-lg transition-shadow rounded-md">
-          <SectionHeader title="Declaration" />
-          <p className="mb-4">Please read and acknowledge the following:</p>
-          <ul className="list-disc pl-5 space-y-2 mb-4">
-            <li>
-              I am authorised by the clinic to submit the results and make the
-              declarations in this form on its behalf.
-            </li>
-            <li>
-              By submitting this form, I understand that the information given
-              will be submitted to the Controller or an authorised officer who
-              may act on the information given by me. I further declare that the
-              information provided by me is true to the best of my knowledge and
-              belief.
-            </li>
-          </ul>
-          <div className="flex items-center space-x-2">
-            <Checkbox
-              id="declaration"
-              checked={declarationChecked}
-              onCheckedChange={(checked) =>
-                setDeclarationChecked(checked as boolean)
-              }
-            />
-            <Label htmlFor="declaration">
-              I declare that all of the above is true.
-            </Label>
-          </div>
-        </Card>
-      </div>
-      <div className="flex justify-start mt-4">
-        <Button
-          onClick={onSubmit}
-          disabled={!declarationChecked || isSubmitting}
-          className="relative min-w-[100px]"
-        >
-          {isSubmitting ? (
-            <>
-              <span className="opacity-0">Submit</span>
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-              </div>
-            </>
-          ) : (
-            "Submit"
-          )}
-        </Button>
-      </div>
+      {showDeclaration && (
+        <div className="grid gap-6 md:grid-cols-[2fr,1fr]">
+          <Card className="bg-blue-50 p-4 text-sm border-2 border-blue-100 shadow-md hover:shadow-lg transition-shadow rounded-md">
+            <SectionHeader title="Declaration" />
+            <p className="mb-4">Please read and acknowledge the following:</p>
+            <ul className="list-disc pl-5 space-y-2 mb-4">
+              <li>
+                I am authorised by the clinic to submit the results and make the
+                declarations in this form on its behalf.
+              </li>
+              <li>
+                By submitting this form, I understand that the information given
+                will be submitted to the Controller or an authorised officer who
+                may act on the information given by me. I further declare that
+                the information provided by me is true to the best of my
+                knowledge and belief.
+              </li>
+            </ul>
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="declaration"
+                checked={declarationChecked}
+                onCheckedChange={(checked) =>
+                  setDeclarationChecked(checked as boolean)
+                }
+              />
+              <Label htmlFor="declaration">
+                I declare that all of the above is true.
+              </Label>
+            </div>
+          </Card>
+        </div>
+      )}
+      {allowSubmit && (
+        <div className="flex justify-start mt-4">
+          <Button
+            onClick={onSubmit}
+            disabled={!declarationChecked || isSubmitting}
+            className="relative min-w-[100px]"
+          >
+            {isSubmitting ? (
+              <>
+                <span className="opacity-0">Submit</span>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                </div>
+              </>
+            ) : (
+              "Submit"
+            )}
+          </Button>
+        </div>
+      )}
     </div>
   );
 }
