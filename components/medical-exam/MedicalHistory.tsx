@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { FormDataWP } from "@/lib/schemas";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { AccordionContent } from "../ui/accordion";
 
@@ -85,16 +85,28 @@ export function MedicalHistory({
 }: MedicalHistoryProps) {
   const {
     setValue,
+    watch,
     formState: { errors },
   } = useFormContext<FormDataWP>();
 
+  const formMedicalHistory = watch("medicalHistory");
+
   const [medicalHistory, setMedicalHistory] = useState<HistoryItem[]>(
-    medicalHistoryItems.map((item) => ({
-      condition: item.text,
-      hasCondition: false,
-      details: "",
-    }))
+    formMedicalHistory?.length
+      ? formMedicalHistory
+      : medicalHistoryItems.map((item) => ({
+          condition: item.text,
+          hasCondition: false,
+          details: "",
+        }))
   );
+
+  // Update local state when form values change (e.g., when draft is loaded)
+  useEffect(() => {
+    if (formMedicalHistory?.length) {
+      setMedicalHistory(formMedicalHistory);
+    }
+  }, [formMedicalHistory]);
 
   const handleToggle = (index: number) => {
     const updatedHistory = medicalHistory.map((item, i) =>
