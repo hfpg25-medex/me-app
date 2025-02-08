@@ -95,6 +95,7 @@ export default function ExaminationRecords() {
   const [selectedDate, setSelectedDate] = useState<
     [Date | undefined, Date | undefined]
   >([undefined, undefined]);
+  /* eslint-disable @typescript-eslint/no-unused-vars */
   const [selectedRecords, setSelectedRecords] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
