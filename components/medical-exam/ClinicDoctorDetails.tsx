@@ -60,10 +60,8 @@ export function ClinicDoctorDetails({
   return (
     <AccordionContent>
       <div className="space-y-4 w-full">
-        <div>
-          <Label className="mb-2" htmlFor="clinic">
-            Clinic
-          </Label>
+        <div className="w-[280px]">
+          <Label htmlFor="clinic">Clinic</Label>
           <Select
             onValueChange={(value) => setValue("clinicDoctor.clinic", value)}
             value={watchedValues.clinicDoctor.clinic}
@@ -85,10 +83,8 @@ export function ClinicDoctorDetails({
             </p>
           )}
         </div>
-        <div>
-          <Label className="mb-2" htmlFor="doctor">
-            Doctor
-          </Label>
+        <div className="w-[280px]">
+          <Label htmlFor="doctor">Doctor</Label>
           <Select
             onValueChange={(value) => setValue("clinicDoctor.doctor", value)}
             value={watchedValues.clinicDoctor.doctor}
