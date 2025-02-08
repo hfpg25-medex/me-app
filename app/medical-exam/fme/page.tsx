@@ -80,6 +80,7 @@ export default function WPExamPage() {
   const [isClient, setIsClient] = useState(false);
   const [step, setStep] = useState<StepType>(STEPS.SUBMISSION);
   const [isLoading, setIsLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [expandedAccordion, setExpandedAccordion] = useState<
     string | undefined
   >("clinic-doctor");
@@ -283,9 +284,16 @@ export default function WPExamPage() {
     setExpandedAccordion(section);
   };
 
-  const onSubmit = (data: FormDataWP) => {
-    console.log("Form submitted!", data);
-    setIsSubmitted(true);
+  const onSubmit = async (data: FormDataWP) => {
+    setIsSubmitting(true);
+    try {
+      console.log("Form submitted!", data);
+      setIsSubmitted(true);
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (isSubmitted) {
@@ -366,6 +374,7 @@ export default function WPExamPage() {
             urineGlucose: watchedValues.tests.urineGlucose,
             pregnancyTest: watchedValues.tests.pregnancyTest,
           }}
+          isSubmitting={isSubmitting}
           onEdit={handleEdit}
           onSubmit={handleSubmit(onSubmit)}
         />

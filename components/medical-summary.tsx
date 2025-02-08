@@ -67,6 +67,7 @@ interface SummaryProps {
     hba1c?: string;
     lipids?: string;
   };
+  isSubmitting?: boolean;
   onEdit: (
     section:
       | "clinic-doctor"
@@ -86,6 +87,7 @@ export function MedicalSummary({
   tests,
   onEdit,
   onSubmit,
+  isSubmitting = false,
 }: SummaryProps) {
   const [declarationChecked, setDeclarationChecked] = useState(false);
   const [fitnessAssessment, setFitnessAssessment] = useState<
@@ -790,9 +792,22 @@ export function MedicalSummary({
       <div className="flex justify-start mt-6">
         <Button
           onClick={onSubmit}
-          disabled={!declarationChecked || !fitnessAssessment}
+          disabled={!declarationChecked || !fitnessAssessment || isSubmitting}
         >
-          {isNurse ? "Submit for review" : "Submit report"}
+          {isSubmitting ? (
+            <>
+              <span className="opacity-0">
+                {isNurse ? "Submit for review" : "Submit report"}
+              </span>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+              </div>
+            </>
+          ) : (
+            <>
+              <span>{isNurse ? "Submit for review" : "Submit report"}</span>
+            </>
+          )}
         </Button>
       </div>
     </div>

@@ -73,6 +73,7 @@ export default function FMWExamPage() {
   const [isClient, setIsClient] = useState(false);
   const [step, setStep] = useState<StepType>(STEPS.SUBMISSION);
   const [isLoading, setIsLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [expandedAccordion, setExpandedAccordion] = useState<
     string | undefined
   >("clinic-doctor");
@@ -91,8 +92,6 @@ export default function FMWExamPage() {
   const [visitDateTouched, setVisitDateTouched] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isPendingMe, setIsPendingMe] = useState(false);
-  /* eslint-disable @typescript-eslint/no-unused-vars */
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   //To remove
   console.log(isSubmitting);
@@ -198,6 +197,7 @@ export default function FMWExamPage() {
   };
 
   const onSubmit = async (data: FormDataMW) => {
+    setIsSubmitting(true);
     try {
       const userId = getCurrentUserId();
 
@@ -223,6 +223,8 @@ export default function FMWExamPage() {
     } catch (error) {
       console.error("Error submitting form:", error);
       alert("An error occurred while submitting the form. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -275,6 +277,7 @@ export default function FMWExamPage() {
           type="MW"
           onEdit={handleEdit}
           onSubmit={handleSubmit(onSubmit)}
+          isSubmitting={isSubmitting}
         />
       </div>
     );

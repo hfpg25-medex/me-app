@@ -69,6 +69,7 @@ export default function PRExamPage() {
   const [isClient, setIsClient] = useState(false);
   const [step, setStep] = useState<StepType>(STEPS.SUBMISSION);
   const [isLoading, setIsLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [expandedAccordion, setExpandedAccordion] = useState<
     string | undefined
   >("clinic-doctor");
@@ -214,6 +215,8 @@ export default function PRExamPage() {
     } catch (error) {
       console.error("Error submitting form:", error);
       alert("An error occurred while submitting the form. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -264,6 +267,7 @@ export default function PRExamPage() {
             remarks: watchedValues.examinationDetails.remarks,
           }}
           type="PR"
+          isSubmitting={isSubmitting}
           onEdit={handleEdit}
           onSubmit={handleSubmit(onSubmit)}
         />

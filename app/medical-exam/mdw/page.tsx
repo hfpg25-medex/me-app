@@ -80,6 +80,7 @@ export default function MDWExamPage() {
   const [isClient, setIsClient] = useState(false);
   const [step, setStep] = useState<StepType>(STEPS.SUBMISSION);
   const [isLoading, setIsLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [expandedAccordion, setExpandedAccordion] = useState<
     string | undefined
   >("clinic-doctor");
@@ -238,6 +239,7 @@ export default function MDWExamPage() {
   };
 
   const onSubmit = async (data: FormDataMDW) => {
+    setIsSubmitting(true);
     try {
       const userId = getCurrentUserId();
 
@@ -263,6 +265,8 @@ export default function MDWExamPage() {
     } catch (error) {
       console.error("Error submitting form:", error);
       alert("An error occurred while submitting the form. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -324,6 +328,7 @@ export default function MDWExamPage() {
             policeReport: watchedValues.examinationDetails.policeReport,
             remarks: watchedValues.examinationDetails.remarks,
           }}
+          isSubmitting={isSubmitting}
           onEdit={handleEdit}
           onSubmit={handleSubmit(onSubmit)}
         />

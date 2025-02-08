@@ -12,6 +12,7 @@ import { StepIndicator } from "./ui/step-indicator";
 
 interface SummaryProps {
   type: "MDW" | "MW" | "PR";
+  isSubmitting?: boolean;
   clinicDetails: {
     clinic: string;
     doctor: string;
@@ -63,6 +64,7 @@ export function Summary({
   examinationDetails,
   onEdit,
   onSubmit,
+  isSubmitting = false,
 }: SummaryProps) {
   const [declarationChecked, setDeclarationChecked] = useState(false);
 
@@ -314,8 +316,21 @@ export function Summary({
         </Card>
       </div>
       <div className="flex justify-start mt-4">
-        <Button onClick={onSubmit} disabled={!declarationChecked}>
-          Submit
+        <Button
+          onClick={onSubmit}
+          disabled={!declarationChecked || isSubmitting}
+          className="relative min-w-[100px]"
+        >
+          {isSubmitting ? (
+            <>
+              <span className="opacity-0">Submit</span>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+              </div>
+            </>
+          ) : (
+            "Submit"
+          )}
         </Button>
       </div>
     </div>
