@@ -32,8 +32,6 @@ export function ClinicalExamination({
     formState: { errors },
     watch,
     trigger,
-    setError,
-    clearErrors,
   } = useFormContext<FormDataWP>();
   const watchedValues = watch();
 
@@ -99,8 +97,11 @@ export function ClinicalExamination({
                     },
                     validate: (value) => {
                       if (value === undefined) return true;
-                      return (value >= 15 && value <= 200) || "Weight must be between 15kg and 200kg";
-                    }
+                      return (
+                        (value >= 15 && value <= 200) ||
+                        "Weight must be between 15kg and 200kg"
+                      );
+                    },
                   })}
                   className="mr-2 mt-1 w-[216px]"
                   onBlur={() => trigger("clinicalExamination.weight")}
@@ -111,7 +112,8 @@ export function ClinicalExamination({
               </div>
               {errors.clinicalExamination?.weight && (
                 <p className="text-red-500 text-sm mt-1">
-                  {errors.clinicalExamination?.weight?.message === "Expected number, received nan" 
+                  {errors.clinicalExamination?.weight?.message ===
+                  "Expected number, received nan"
                     ? "Please provide valid input"
                     : errors.clinicalExamination?.weight?.message}
                 </p>
@@ -131,8 +133,11 @@ export function ClinicalExamination({
                     },
                     validate: (value) => {
                       if (value === undefined) return true;
-                      return (value >= 90 && value <= 250) || "Height must be between 90cm and 250cm";
-                    }
+                      return (
+                        (value >= 90 && value <= 250) ||
+                        "Height must be between 90cm and 250cm"
+                      );
+                    },
                   })}
                   className="mr-2 mt-1 w-[216px]"
                   onBlur={() => trigger("clinicalExamination.height")}
@@ -143,7 +148,8 @@ export function ClinicalExamination({
               </div>
               {errors.clinicalExamination?.height && (
                 <p className="text-red-500 text-sm mt-1">
-                  {errors.clinicalExamination?.height?.message === "Expected number, received nan" 
+                  {errors.clinicalExamination?.height?.message ===
+                  "Expected number, received nan"
                     ? "Please provide valid input"
                     : errors.clinicalExamination?.height?.message}
                 </p>
@@ -174,7 +180,8 @@ export function ClinicalExamination({
                     },
                     validate: (value, formValues) => {
                       if (value === undefined) return true;
-                      const unit = formValues.clinicalExamination?.waistUnit || "cm";
+                      const unit =
+                        formValues.clinicalExamination?.waistUnit || "cm";
                       const cmValue = unit === "inch" ? value * 2.54 : value;
                       return (
                         (cmValue >= 50 && cmValue <= 200) ||
@@ -182,7 +189,7 @@ export function ClinicalExamination({
                           unit === "cm" ? "50-200 cm" : "20-79 inches"
                         }`
                       );
-                    }
+                    },
                   })}
                   className="mr-2 mt-1 w-[216px]"
                 />
