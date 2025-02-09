@@ -32,6 +32,8 @@ export function ClinicalExamination({
     formState: { errors },
     watch,
     trigger,
+    setError,
+    clearErrors,
   } = useFormContext<FormDataWP>();
   const watchedValues = watch();
 
@@ -90,10 +92,14 @@ export function ClinicalExamination({
                   id="weight"
                   type="number"
                   {...register("clinicalExamination.weight", {
+                    setValueAs: (value: string) => {
+                      if (value === "") return undefined;
+                      const num = Number(value);
+                      return isNaN(num) ? undefined : num;
+                    },
                     validate: (value) => {
-                      if (!value && value !== 0) return true;
-                      const numValue = Number(value);
-                      return (numValue >= 15 && numValue <= 200) || "Weight must be between 15kg and 200kg";
+                      if (value === undefined) return true;
+                      return (value >= 15 && value <= 200) || "Weight must be between 15kg and 200kg";
                     }
                   })}
                   className="mr-2 mt-1 w-[216px]"
@@ -118,10 +124,14 @@ export function ClinicalExamination({
                   id="height"
                   type="number"
                   {...register("clinicalExamination.height", {
+                    setValueAs: (value: string) => {
+                      if (value === "") return undefined;
+                      const num = Number(value);
+                      return isNaN(num) ? undefined : num;
+                    },
                     validate: (value) => {
-                      if (!value && value !== 0) return true;
-                      const numValue = Number(value);
-                      return (numValue >= 90 && numValue <= 250) || "Height must be between 90cm and 250cm";
+                      if (value === undefined) return true;
+                      return (value >= 90 && value <= 250) || "Height must be between 90cm and 250cm";
                     }
                   })}
                   className="mr-2 mt-1 w-[216px]"
@@ -157,11 +167,14 @@ export function ClinicalExamination({
                   type="number"
                   step="0.1"
                   {...register("clinicalExamination.waistCircumference", {
-                    valueAsNumber: true,
+                    setValueAs: (value: string) => {
+                      if (value === "") return undefined;
+                      const num = Number(value);
+                      return isNaN(num) ? undefined : num;
+                    },
                     validate: (value, formValues) => {
-                      if (!value) return true;
-                      const unit =
-                        formValues.clinicalExamination?.waistUnit || "cm";
+                      if (value === undefined) return true;
+                      const unit = formValues.clinicalExamination?.waistUnit || "cm";
                       const cmValue = unit === "inch" ? value * 2.54 : value;
                       return (
                         (cmValue >= 50 && cmValue <= 200) ||
@@ -169,7 +182,7 @@ export function ClinicalExamination({
                           unit === "cm" ? "50-200 cm" : "20-79 inches"
                         }`
                       );
-                    },
+                    }
                   })}
                   className="mr-2 mt-1 w-[216px]"
                 />
