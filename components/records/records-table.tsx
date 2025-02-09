@@ -174,10 +174,10 @@ export default function RecordsTable({
   };
 
   // Reset date range
-  const clearDateRange = () => {
-    setSelectedDate([undefined, undefined]);
-    setCurrentPage(1);
-  };
+  // const clearDateRange = () => {
+  //   setSelectedDate([undefined, undefined]);
+  //   setCurrentPage(1);
+  // };
 
   const handleEditRecord = (record: Record) => {
     if (record.draftSubmissionId) {
@@ -362,80 +362,78 @@ export default function RecordsTable({
         </Table>
       </div>
 
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between px-4 py-4 border-t gap-4">
-          <div className="text-sm text-gray-500">
-            {records.length} of {totalRecords} row(s)
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between px-4 py-4 border-t gap-4">
+        <div className="text-sm text-gray-500">
+          {records.length} of {totalRecords} row(s)
+        </div>
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full sm:w-auto">
+          <div className="flex items-center gap-2 w-full sm:w-auto">
+            <span className="text-sm whitespace-nowrap">Rows per page</span>
+            <Select
+              value={rowsPerPage.toString()}
+              onValueChange={(value) => {
+                setRowsPerPage(Number.parseInt(value));
+                setCurrentPage(1);
+              }}
+              disabled={isLoading}
+            >
+              <SelectTrigger className="w-[70px]">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="10">10</SelectItem>
+                <SelectItem value="20">20</SelectItem>
+                <SelectItem value="50">50</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full sm:w-auto">
-            <div className="flex items-center gap-2 w-full sm:w-auto">
-              <span className="text-sm whitespace-nowrap">Rows per page</span>
-              <Select
-                value={rowsPerPage.toString()}
-                onValueChange={(value) => {
-                  setRowsPerPage(Number.parseInt(value));
-                  setCurrentPage(1);
-                }}
-                disabled={isLoading}
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 w-full sm:w-auto">
+            <span className="text-sm whitespace-nowrap">
+              Page {currentPage} of {totalPages}
+            </span>
+            <div className="flex gap-1">
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-8 w-8"
+                onClick={() => setCurrentPage(1)}
+                disabled={currentPage === 1 || isLoading}
               >
-                <SelectTrigger className="w-[70px]">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="10">10</SelectItem>
-                  <SelectItem value="20">20</SelectItem>
-                  <SelectItem value="50">50</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 w-full sm:w-auto">
-              <span className="text-sm whitespace-nowrap">
-                Page {currentPage} of {totalPages}
-              </span>
-              <div className="flex gap-1">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="h-8 w-8"
-                  onClick={() => setCurrentPage(1)}
-                  disabled={currentPage === 1 || isLoading}
-                >
-                  {"<<"}
-                </Button>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="h-8 w-8"
-                  onClick={() =>
-                    setCurrentPage((curr) => Math.max(1, curr - 1))
-                  }
-                  disabled={currentPage === 1 || isLoading}
-                >
-                  {"<"}
-                </Button>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="h-8 w-8"
-                  onClick={() =>
-                    setCurrentPage((curr) => Math.min(totalPages, curr + 1))
-                  }
-                  disabled={currentPage === totalPages || isLoading}
-                >
-                  {">"}
-                </Button>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="h-8 w-8"
-                  onClick={() => setCurrentPage(totalPages)}
-                  disabled={currentPage === totalPages || isLoading}
-                >
-                  {">>"}
-                </Button>
-              </div>
+                {"<<"}
+              </Button>
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-8 w-8"
+                onClick={() => setCurrentPage((curr) => Math.max(1, curr - 1))}
+                disabled={currentPage === 1 || isLoading}
+              >
+                {"<"}
+              </Button>
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-8 w-8"
+                onClick={() =>
+                  setCurrentPage((curr) => Math.min(totalPages, curr + 1))
+                }
+                disabled={currentPage === totalPages || isLoading}
+              >
+                {">"}
+              </Button>
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-8 w-8"
+                onClick={() => setCurrentPage(totalPages)}
+                disabled={currentPage === totalPages || isLoading}
+              >
+                {">>"}
+              </Button>
             </div>
           </div>
         </div>
+      </div>
     </div>
   );
 }
