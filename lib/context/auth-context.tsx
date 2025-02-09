@@ -3,7 +3,7 @@
 import { authenticate } from "@/lib/auth/mock-users";
 import { User } from "@/lib/types/user";
 import Cookies from "js-cookie";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
 
 interface AuthContextType {
@@ -18,23 +18,30 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
 
+  const pathname = usePathname();
+
   useEffect(() => {
     const authStatus = Cookies.get("authStatus") === "true";
     const storedUser = Cookies.get("user");
     if (authStatus && storedUser) {
       setUser(JSON.parse(storedUser));
+    } else {
+      // If no valid auth, redirect to login
+      if (pathname !== "/login" && pathname !== "/") {
+        router.push("/login");
+      }
     }
-  }, []);
+  }, [router, pathname]);
 
   const login = async (uen: string, corpPassId: string) => {
     try {
       const authenticatedUser = await authenticate({ uen, corpPassId });
       if (authenticatedUser) {
-        // Set cookies to expire in 24 hours
+        // Set cookies to expire in 1 hour
         const cookieOptions = {
           expires: 1 / 24, // 1 hour
-          secure: true, // Only send over HTTPS
-          sameSite: "strict" as const, // Protect against CSRF
+          secure: process.env.NODE_ENV === "production", // Only HTTPS in prod
+          sameSite: "lax" as const, // Allow redirect from login
         };
 
         Cookies.set("user", JSON.stringify(authenticatedUser), cookieOptions);

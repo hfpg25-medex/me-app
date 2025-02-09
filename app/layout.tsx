@@ -7,6 +7,7 @@ import { UserProvider } from "@/lib/context/user-context";
 import { SgdsMasthead } from "@govtechsg/sgds-masthead-react";
 import "@govtechsg/sgds-masthead/dist/sgds-masthead/sgds-masthead.css";
 import { Inter } from "next/font/google";
+import { usePathname } from "next/navigation";
 import { Toaster } from "sonner";
 import "./globals.css";
 
@@ -17,19 +18,23 @@ const inter = Inter({
 
 function MainLayout({ children }: { children: React.ReactNode }) {
   const { user } = useAuth();
+  const pathname = usePathname();
+  const isLoginPage = pathname === "/login";
 
   return (
     <div className="min-h-screen flex flex-col">
-      <SgdsMasthead
-        placeholder={undefined}
-        onPointerEnterCapture={undefined}
-        onPointerLeaveCapture={undefined}
-      />
-      {user && (
+      {!isLoginPage && (
+        <SgdsMasthead
+          placeholder={undefined}
+          onPointerEnterCapture={undefined}
+          onPointerLeaveCapture={undefined}
+        />
+      )}
+      {user && !isLoginPage && (
         <NavBar
-          userName={user.name}
           userUen={user.uen}
           corpPassId={user.corpPassId}
+          userName={user.name}
         />
       )}
       <UserProvider initialUser={user}>
