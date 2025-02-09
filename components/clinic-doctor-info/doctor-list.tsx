@@ -60,16 +60,16 @@ export function DoctorList() {
     loadDoctors();
   }, [toast]);
 
-  const addDoctor = () => {
-    const newDoctor: Doctor = {
-      id: Math.random().toString(36).substr(2, 9),
-      name: "",
-      mcr: "",
-    };
-    setDoctors([...doctors, newDoctor]);
-    setEditingId(newDoctor.id);
-    setIsAddingNew(true);
-  };
+  // const addDoctor = () => {
+  //   const newDoctor: Doctor = {
+  //     id: Math.random().toString(36).substr(2, 9),
+  //     name: "",
+  //     mcr: "",
+  //   };
+  //   setDoctors([...doctors, newDoctor]);
+  //   setEditingId(newDoctor.id);
+  //   setIsAddingNew(true);
+  // };
 
   // const validateDoctor = (doctor: Doctor) => {
   //   try {
@@ -216,11 +216,11 @@ export function DoctorList() {
     }
   };
 
-  const getFieldError = (doctorId: string, field: string) => {
-    if (!validationErrors[doctorId]) return null;
-    const errors = validationErrors[doctorId][field];
-    return errors ? errors[0] : null;
-  };
+  // const getFieldError = (doctorId: string, field: string) => {
+  //   if (!validationErrors[doctorId]) return null;
+  //   const errors = validationErrors[doctorId][field];
+  //   return errors ? errors[0] : null;
+  // };
 
   return (
     <div className="grid gap-6 md:grid-cols-[2fr,1fr]">

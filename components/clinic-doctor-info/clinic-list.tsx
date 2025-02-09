@@ -61,18 +61,18 @@ export function ClinicList() {
     loadClinics();
   }, [toast]);
 
-  const addClinic = () => {
-    const newClinic: Clinic = {
-      id: Math.random().toString(36).substr(2, 9),
-      name: "",
-      hci: "",
-      contactNumber: "",
-      address: "",
-    };
-    setClinics([...clinics, newClinic]);
-    setEditingId(newClinic.id);
-    setValidationErrors({ ...validationErrors, [newClinic.id]: {} });
-  };
+  // const addClinic = () => {
+  //   const newClinic: Clinic = {
+  //     id: Math.random().toString(36).substr(2, 9),
+  //     name: "",
+  //     hci: "",
+  //     contactNumber: "",
+  //     address: "",
+  //   };
+  //   setClinics([...clinics, newClinic]);
+  //   setEditingId(newClinic.id);
+  //   setValidationErrors({ ...validationErrors, [newClinic.id]: {} });
+  // };
 
   // const validateClinic = (clinic: Clinic) => {
   //   try {
