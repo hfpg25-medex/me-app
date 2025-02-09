@@ -35,7 +35,7 @@ export function HelperDetails({
   isPendingMe,
   nextStep,
   requireVisitDate = true,
-  defaultToday = false,
+  // defaultToday = false,
   sampleFin,
   isLoading = false,
 }: HelperDetailsProps) {
