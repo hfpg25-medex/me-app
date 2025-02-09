@@ -4,12 +4,12 @@ const prisma = new PrismaClient();
 
 async function deleteOldRecords() {
   try {
-    // Get the 50 earliest records
+    // Get the 200 earliest records
     const oldRecords = await prisma.record.findMany({
       orderBy: {
         dateCreated: "asc",
       },
-      take: 50,
+      take: 200,
       include: {
         submission: true,
         draftSubmission: true,
