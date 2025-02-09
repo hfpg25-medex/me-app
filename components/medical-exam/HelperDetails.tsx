@@ -93,6 +93,7 @@ export function HelperDetails({
             <Input
               className="w-[200px] mt-1"
               id="fin"
+              maxLength={9}
               {...register("helperDetails.fin")}
               onBlur={handleFinBlur}
               onChange={() => {}}

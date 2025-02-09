@@ -89,6 +89,7 @@ export function ClinicalExamination({
                 <Input
                   id="weight"
                   type="number"
+                  maxLength={3}
                   {...register("clinicalExamination.weight", {
                     setValueAs: (value: string) => {
                       if (value === "") return undefined;
@@ -125,6 +126,7 @@ export function ClinicalExamination({
                 <Input
                   id="height"
                   type="number"
+                  maxLength={3}
                   {...register("clinicalExamination.height", {
                     setValueAs: (value: string) => {
                       if (value === "") return undefined;
@@ -171,6 +173,7 @@ export function ClinicalExamination({
                 <Input
                   id="waistCircumference"
                   type="number"
+                  maxLength={3}
                   {...register("clinicalExamination.waistCircumference", {
                     setValueAs: (value: string) => {
                       if (value === "") return undefined;
@@ -244,6 +247,7 @@ export function ClinicalExamination({
                 <Input
                   id="systolicBP"
                   type="number"
+                  maxLength={3}
                   {...register("clinicalExamination.systolicBP", {
                     setValueAs: (value: string) => {
                       if (value === "") return undefined;
@@ -281,6 +285,7 @@ export function ClinicalExamination({
                 <Input
                   id="diastolicBP"
                   type="number"
+                  maxLength={3}
                   {...register("clinicalExamination.diastolicBP", {
                     setValueAs: (value: string) => {
                       if (value === "") return undefined;
@@ -367,10 +372,12 @@ export function ClinicalExamination({
               Indicate <b>abnormal</b> or <b>positive/reactive</b> test results:
             </p>
             <div className="grid grid-cols-[210px,1fr] gap-x-8 gap-y-4 mt-4">
-              <Label htmlFor="hearing">Cardiovascular System</Label>
+              <Label htmlFor="cardiovascularSystem">
+                Cardiovascular System
+              </Label>
               <div className="flex items-center gap-2">
                 <Checkbox
-                  id="hearing"
+                  id="cardiovascularSystem"
                   checked={
                     watchedValues.clinicalExamination?.cardiovascularSystem ===
                     "abnormal"
