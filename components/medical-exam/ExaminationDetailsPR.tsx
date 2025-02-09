@@ -23,6 +23,8 @@ export function ExaminationDetails({
     setValue,
     formState: { errors },
     watch,
+    trigger,
+    clearErrors,
   } = useFormContext<FormDataMW>();
   const watchedValues = watch();
 
@@ -99,6 +101,9 @@ export function ExaminationDetails({
                 checked={watchedValues.examinationDetails.remarks !== ""}
                 onCheckedChange={(checked) => {
                   setValue("examinationDetails.remarks", checked ? " " : "");
+                  if (!checked) {
+                    clearErrors("examinationDetails.remarks");
+                  }
                 }}
                 className={cn("border-2", "border-primary")}
               />
@@ -112,7 +117,14 @@ export function ExaminationDetails({
                 <Textarea
                   placeholder="Enter any additional remarks here"
                   className="w-full"
-                  {...register("examinationDetails.remarks")}
+                  {...register("examinationDetails.remarks", {
+                    onChange: (e) => {
+                      if (e.target.value === "") {
+                        setValue("examinationDetails.remarks", " ");
+                      }
+                    },
+                    onBlur: () => trigger("examinationDetails.remarks")
+                  })}
                   maxLength={500}
                 />
                 <p className="text-sm text-muted-foreground">
@@ -131,7 +143,14 @@ export function ExaminationDetails({
           )}
         </div>
       </div>
-      <Button className="mt-4" onClick={() => handleContinue("summary")}>
+      <Button 
+        className="mt-4" 
+        onClick={async (e) => {
+          e.preventDefault();
+          const isValid = await trigger("examinationDetails.remarks");
+          if (!isValid) return;
+          handleContinue("summary");
+        }}>
         {isSummaryActive ? "Continue to Summary" : "Continue"}
       </Button>
     </AccordionContent>
