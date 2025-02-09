@@ -30,8 +30,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const authenticatedUser = await authenticate({ uen, corpPassId });
       if (authenticatedUser) {
-        Cookies.set("user", JSON.stringify(authenticatedUser));
-        Cookies.set("authStatus", "true");
+        // Set cookies to expire in 24 hours
+        const cookieOptions = {
+          expires: 1 / 24, // 1 hour
+          secure: true, // Only send over HTTPS
+          sameSite: "strict" as const, // Protect against CSRF
+        };
+
+        Cookies.set("user", JSON.stringify(authenticatedUser), cookieOptions);
+        Cookies.set("authStatus", "true", cookieOptions);
         setUser(authenticatedUser);
         router.push("/dashboard");
       } else {
