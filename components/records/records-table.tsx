@@ -64,7 +64,7 @@ const getStatusBadgeColor = (status: string) => {
     case "pending":
       return "bg-blue-100 text-blue-800 hover:bg-blue-100/80";
     case "draft":
-      return "bg-blue-100 text-blue-800 hover:bg-blue-100/80";
+      return "bg-violet-100 text-violet-800 hover:bg-violet-100/80";
     default:
       return "bg-gray-100 text-gray-800 hover:bg-gray-100/80";
   }
@@ -207,7 +207,7 @@ export default function RecordsTable({
           <SelectContent>
             <SelectItem value="all">All Statuses</SelectItem>
             {statuses.map((status) => (
-              <SelectItem key={status} value={status.toLowerCase()}>
+              <SelectItem key={status} value={status}>
                 {status}
               </SelectItem>
             ))}
