@@ -171,7 +171,6 @@ export function ClinicalExamination({
                 <Input
                   id="waistCircumference"
                   type="number"
-                  step="0.1"
                   {...register("clinicalExamination.waistCircumference", {
                     setValueAs: (value: string) => {
                       if (value === "") return undefined;
@@ -192,6 +191,9 @@ export function ClinicalExamination({
                     },
                   })}
                   className="mr-2 mt-1 w-[216px]"
+                  onBlur={() =>
+                    trigger("clinicalExamination.waistCircumference")
+                  }
                 />
               </div>
               <Select
@@ -227,7 +229,10 @@ export function ClinicalExamination({
             </div>
             {errors.clinicalExamination?.waistCircumference && (
               <p className="text-red-500 text-sm mt-1">
-                {errors.clinicalExamination.waistCircumference.message}
+                {errors.clinicalExamination?.waistCircumference?.message ===
+                "Expected number, received nan"
+                  ? "Please provide valid input"
+                  : errors.clinicalExamination?.waistCircumference?.message}
               </p>
             )}
           </div>
@@ -240,14 +245,35 @@ export function ClinicalExamination({
                   id="systolicBP"
                   type="number"
                   {...register("clinicalExamination.systolicBP", {
+                    setValueAs: (value: string) => {
+                      if (value === "") return undefined;
+                      const num = Number(value);
+                      return isNaN(num) ? undefined : num;
+                    },
+                    validate: (value) => {
+                      if (value === undefined) return true;
+                      return (
+                        (value >= 30 && value <= 300) ||
+                        "Systolic BP must be between 30 and 300"
+                      );
+                    },
                     valueAsNumber: true,
                   })}
                   className="mr-2 mt-1 w-[216px]"
+                  onBlur={() => trigger("clinicalExamination.systolicBP")}
                 />
                 <span className="absolute right-8 top-1/2 -translate-y-1/2 text-gray-500">
                   mmHg
                 </span>
               </div>
+              {errors.clinicalExamination?.systolicBP && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.clinicalExamination?.systolicBP?.message ===
+                  "Expected number, received nan"
+                    ? "Please provide valid input"
+                    : errors.clinicalExamination?.systolicBP?.message}
+                </p>
+              )}
             </div>
             <div>
               <Label htmlFor="diastolicBP">Diastolic BP</Label>
@@ -256,14 +282,35 @@ export function ClinicalExamination({
                   id="diastolicBP"
                   type="number"
                   {...register("clinicalExamination.diastolicBP", {
+                    setValueAs: (value: string) => {
+                      if (value === "") return undefined;
+                      const num = Number(value);
+                      return isNaN(num) ? undefined : num;
+                    },
+                    validate: (value) => {
+                      if (value === undefined) return true;
+                      return (
+                        (value >= 30 && value <= 300) ||
+                        "Diastolic BP must be between 30 and 300"
+                      );
+                    },
                     valueAsNumber: true,
                   })}
                   className="mr-2 mt-1 w-[216px]"
+                  onBlur={() => trigger("clinicalExamination.diastolicBP")}
                 />
                 <span className="absolute right-8 top-1/2 -translate-y-1/2 text-gray-500">
                   mmHg
                 </span>
               </div>
+              {errors.clinicalExamination?.diastolicBP && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.clinicalExamination?.diastolicBP?.message ===
+                  "Expected number, received nan"
+                    ? "Please provide valid input"
+                    : errors.clinicalExamination?.diastolicBP?.message}
+                </p>
+              )}
             </div>
           </div>
 

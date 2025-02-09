@@ -109,10 +109,17 @@ export const clinicalExaminationSchema = z.object({
   bmi: z.number(),
   waistCircumference: z
     .number()
-    .min(0, "Please input a valid waist circumference"),
+    .min(60, "Please input a valid waist circumference")
+    .max(200, "Please input a valid waist circumference"),
   waistUnit: z.enum(["cm", "inch"]).default("cm"),
-  systolicBP: z.number().min(0, "Please input a valid systolic BP"),
-  diastolicBP: z.number().min(0, "Please input a valid diastolic BP"),
+  systolicBP: z
+    .number()
+    .min(30, "Please input a valid systolic BP")
+    .max(300, "Please input a valid systolic BP"),
+  diastolicBP: z
+    .number()
+    .min(10, "Please input a valid diastolic BP")
+    .max(300, "Please input a valid diastolic BP"),
   rightEyeVision: z.string({ required_error: "Right eye vision is required" }),
   leftEyeVision: z.string({ required_error: "Left eye vision is required" }),
   colorVision: z.string().default("normal"),
