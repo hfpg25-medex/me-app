@@ -250,37 +250,39 @@ export default function FMWExamPage() {
 
   if (step === STEPS.SUMMARY) {
     return (
-      <div className="container mx-auto px-3 w-full pt-8 pb-16">
-        <Summary
-          clinicDetails={{
-            clinic: selectedClinicDetails?.name || "",
-            doctor: selectedDoctorDetails?.name || "",
-            hciCode: selectedClinicDetails?.hciCode || "",
-            contactNumber: selectedClinicDetails?.contactNumber || "",
-            mcrNumber: selectedDoctorDetails?.mcrNumber || "",
-          }}
-          helperDetails={{
-            fin: watchedValues.helperDetails.fin,
-            helperName: watchedValues.helperDetails.helperName,
-            visitDate: watchedValues.helperDetails.visitDate || null,
-          }}
-          examinationDetails={{
-            positiveTests: watchedValues.examinationDetails.positiveTests,
-            testResults: testTypes.map((test) => ({
-              name: test,
-              result: watchedValues.examinationDetails.positiveTests.includes(
-                test
-              )
-                ? "Positive/Reactive"
-                : "Negative/Non-reactive",
-            })),
-            remarks: watchedValues.examinationDetails.remarks,
-          }}
-          type="FMW"
-          onEdit={handleEdit}
-          onSubmit={handleSubmit(onSubmit)}
-          isSubmitting={isSubmitting}
-        />
+      <div className="min-h-screen bg-gray-100">
+        <div className="container mx-auto px-3 w-full pt-8 pb-16">
+          <Summary
+            clinicDetails={{
+              clinic: selectedClinicDetails?.name || "",
+              doctor: selectedDoctorDetails?.name || "",
+              hciCode: selectedClinicDetails?.hciCode || "",
+              contactNumber: selectedClinicDetails?.contactNumber || "",
+              mcrNumber: selectedDoctorDetails?.mcrNumber || "",
+            }}
+            helperDetails={{
+              fin: watchedValues.helperDetails.fin,
+              helperName: watchedValues.helperDetails.helperName,
+              visitDate: watchedValues.helperDetails.visitDate || null,
+            }}
+            examinationDetails={{
+              positiveTests: watchedValues.examinationDetails.positiveTests,
+              testResults: testTypes.map((test) => ({
+                name: test,
+                result: watchedValues.examinationDetails.positiveTests.includes(
+                  test
+                )
+                  ? "Positive/Reactive"
+                  : "Negative/Non-reactive",
+              })),
+              remarks: watchedValues.examinationDetails.remarks,
+            }}
+            type="FMW"
+            onEdit={handleEdit}
+            onSubmit={handleSubmit(onSubmit)}
+            isSubmitting={isSubmitting}
+          />
+        </div>
       </div>
     );
   }
@@ -288,116 +290,120 @@ export default function FMWExamPage() {
   // Don't render form content until after hydration
   if (!isClient) {
     return (
-      <div className="container mx-auto px-3 w-full pt-8 pb-16">
-        <div className="flex justify-center items-center min-h-[200px]">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+      <div className="min-h-screen bg-gray-100">
+        <div className="container mx-auto px-3 w-full pt-8 pb-16">
+          <div className="flex justify-center items-center min-h-[200px]">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto grid gap-6 md:grid-cols-[2fr,1fr] px-3 w-full pt-8 pb-16">
-      <div className="my-6">
-        <h1 className="text-2xl font-bold mb-6">{examTitles.fmw}</h1>
-        <StepIndicator
-          className="mb-6"
-          steps={[
-            {
-              number: 1,
-              label: "Submission",
-              isActive: step === STEPS.SUBMISSION,
-              isEnabled: true,
-            },
-            {
-              number: 2,
-              label: "Summary",
-              // @ts-expect-error to fix STEPS.SUMMARY error
-              isActive: step === STEPS.SUMMARY,
-              isEnabled: isSummaryActive,
-            },
-          ]}
-        />
-        <div className="border border-gray-300 px-8 py-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-          <FormProvider {...methods}>
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <Accordion
-                type="single"
-                value={expandedAccordion}
-                onValueChange={setExpandedAccordion}
-                collapsible
-              >
-                <AccordionItem value="clinic-doctor">
-                  <AccordionTrigger
-                    className="text-lg font-bold"
-                    isCompleted={isClinicDoctorCompleted}
-                  >
-                    Clinic and doctor details
-                  </AccordionTrigger>
-                  <ClinicDoctorDetails
-                    isSummaryActive={isSummaryActive}
-                    handleContinue={handleContinue}
-                    clinics={clinics}
-                    doctors={doctors}
-                  />
-                </AccordionItem>
-                <AccordionItem
-                  value="helper-details"
-                  className={!isHelperDetailsEnabled ? "opacity-50" : ""}
+    <div className="min-h-screen bg-gray-100">
+      <div className="container mx-auto grid gap-6 md:grid-cols-[2fr,1fr] px-3 w-full pt-8 pb-16">
+        <div className="my-6">
+          <h1 className="text-2xl font-bold mb-6">{examTitles.fmw}</h1>
+          <StepIndicator
+            className="mb-6"
+            steps={[
+              {
+                number: 1,
+                label: "Submission",
+                isActive: step === STEPS.SUBMISSION,
+                isEnabled: true,
+              },
+              {
+                number: 2,
+                label: "Summary",
+                // @ts-expect-error to fix STEPS.SUMMARY error
+                isActive: step === STEPS.SUMMARY,
+                isEnabled: isSummaryActive,
+              },
+            ]}
+          />
+          <div className="bg-white border border-gray-300 px-8 py-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+            <FormProvider {...methods}>
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <Accordion
+                  type="single"
+                  value={expandedAccordion}
+                  onValueChange={setExpandedAccordion}
+                  collapsible
                 >
-                  <AccordionTrigger
-                    className="text-lg font-bold"
-                    disabled={!isHelperDetailsEnabled}
-                    isCompleted={isHelperDetailsCompleted}
+                  <AccordionItem value="clinic-doctor">
+                    <AccordionTrigger
+                      className="text-lg font-bold"
+                      isCompleted={isClinicDoctorCompleted}
+                    >
+                      Clinic and doctor details
+                    </AccordionTrigger>
+                    <ClinicDoctorDetails
+                      isSummaryActive={isSummaryActive}
+                      handleContinue={handleContinue}
+                      clinics={clinics}
+                      doctors={doctors}
+                    />
+                  </AccordionItem>
+                  <AccordionItem
+                    value="helper-details"
+                    className={!isHelperDetailsEnabled ? "opacity-50" : ""}
                   >
-                    Migrant worker details
-                  </AccordionTrigger>
-                  <HelperDetails
-                    isSummaryActive={isSummaryActive}
-                    handleContinue={handleContinue}
-                    handleFinChange={handleFinChange}
-                    setFinTouched={setFinTouched}
-                    setVisitDateTouched={setVisitDateTouched}
-                    finTouched={finTouched}
-                    visitDateTouched={visitDateTouched}
-                    isPendingMe={isPendingMe}
-                    nextStep="examination-details"
-                    requireVisitDate={true}
-                    defaultToday={false}
-                    sampleFin={samplePerson[0].fin}
-                    isLoading={isLoading}
-                  />
-                </AccordionItem>
-                <AccordionItem
-                  value="examination-details"
-                  className={
-                    !isExaminationEnabled
-                      ? "opacity-50 pointer-events-none"
-                      : ""
-                  }
-                >
-                  <AccordionTrigger
-                    className="text-lg font-bold"
-                    disabled={!isExaminationEnabled}
-                    isCompleted={isExaminationCompleted}
+                    <AccordionTrigger
+                      className="text-lg font-bold"
+                      disabled={!isHelperDetailsEnabled}
+                      isCompleted={isHelperDetailsCompleted}
+                    >
+                      Migrant worker details
+                    </AccordionTrigger>
+                    <HelperDetails
+                      isSummaryActive={isSummaryActive}
+                      handleContinue={handleContinue}
+                      handleFinChange={handleFinChange}
+                      setFinTouched={setFinTouched}
+                      setVisitDateTouched={setVisitDateTouched}
+                      finTouched={finTouched}
+                      visitDateTouched={visitDateTouched}
+                      isPendingMe={isPendingMe}
+                      nextStep="examination-details"
+                      requireVisitDate={true}
+                      defaultToday={false}
+                      sampleFin={samplePerson[0].fin}
+                      isLoading={isLoading}
+                    />
+                  </AccordionItem>
+                  <AccordionItem
+                    value="examination-details"
+                    className={
+                      !isExaminationEnabled
+                        ? "opacity-50 pointer-events-none"
+                        : ""
+                    }
                   >
-                    Examination details
-                  </AccordionTrigger>
-                  <ExaminationDetails
-                    isSummaryActive={isSummaryActive}
-                    handleContinue={handleContinue}
-                    testTypes={testTypes}
-                  />
-                </AccordionItem>
-              </Accordion>
-            </form>
-          </FormProvider>
+                    <AccordionTrigger
+                      className="text-lg font-bold"
+                      disabled={!isExaminationEnabled}
+                      isCompleted={isExaminationCompleted}
+                    >
+                      Examination details
+                    </AccordionTrigger>
+                    <ExaminationDetails
+                      isSummaryActive={isSummaryActive}
+                      handleContinue={handleContinue}
+                      testTypes={testTypes}
+                    />
+                  </AccordionItem>
+                </Accordion>
+              </form>
+            </FormProvider>
+          </div>
+          <FinChangeModal
+            isOpen={isFinChangeModalOpen}
+            onClose={() => setIsFinChangeModalOpen(false)}
+            onConfirm={confirmFinChange}
+          />
         </div>
-        <FinChangeModal
-          isOpen={isFinChangeModalOpen}
-          onClose={() => setIsFinChangeModalOpen(false)}
-          onConfirm={confirmFinChange}
-        />
       </div>
     </div>
   );
