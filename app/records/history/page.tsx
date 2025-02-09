@@ -103,6 +103,7 @@ export default function ExaminationRecords() {
         page: currentPage.toString(),
         limit: rowsPerPage.toString(),
         search: searchQuery,
+        excludeDrafts: "true", // Exclude records with Draft status
       });
 
       if (statusFilter !== "all") {

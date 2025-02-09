@@ -10,6 +10,7 @@ export async function GET(request: Request) {
     const status = searchParams.get("status") || undefined;
     const dateRange = searchParams.get("dateRange") || undefined;
     const isDraft = searchParams.get("isDraft") === "true";
+    const excludeDrafts = searchParams.get("excludeDrafts") === "true";
 
     const skip = (page - 1) * limit;
 
@@ -32,6 +33,9 @@ export async function GET(request: Request) {
     if (isDraft) {
       where.draftSubmissionId = { not: null };
       where.status = { not: "Submitted" };
+    } else if (excludeDrafts) {
+      // For history view, exclude records with Draft status
+      where.status = { not: "Draft" };
     }
 
     if (dateRange) {
