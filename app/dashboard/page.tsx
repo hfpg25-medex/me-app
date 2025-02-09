@@ -126,7 +126,7 @@ export default function HomePage() {
         </div>
 
         <div className="mt-8">
-          <RecordsTable title="All Medical Examination Records" excludeDrafts={false} />
+          <RecordsTable title="Examination Records" excludeDrafts={false} />
         </div>
       </div>
     </div>
