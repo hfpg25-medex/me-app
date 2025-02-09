@@ -1,6 +1,6 @@
 "use client";
 
-import ExaminationRecords from "@/app/records/history/page";
+import RecordsTable from "@/components/records/records-table";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -125,7 +125,9 @@ export default function HomePage() {
           </Card>
         </div>
 
-        <ExaminationRecords />
+        <div className="mt-8">
+          <RecordsTable title="All Medical Examination Records" excludeDrafts={false} />
+        </div>
       </div>
     </div>
   );
