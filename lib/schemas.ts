@@ -189,6 +189,7 @@ export const formSchemaWP = z.object({
   medicalHistory: medicalHistorySchema,
   clinicalExamination: clinicalExaminationSchema,
   tests: testsSchema,
+  fitnessAssessment: z.string(),
 });
 
 export type FormDataWP = z.infer<typeof formSchemaWP>;

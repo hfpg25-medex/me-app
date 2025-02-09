@@ -16,9 +16,63 @@ export async function createSubmissionAndRecord(data: {
   type: string;
   name: string;
 }) {
+  // Validate required fields
+  if (!data?.userId) {
+    return { success: false, error: "User ID is required" };
+  }
+  if (!data?.examType) {
+    return { success: false, error: "Exam type is required" };
+  }
+  if (!data?.formData) {
+    return { success: false, error: "Form data is required" };
+  }
+  if (!data?.submissionId) {
+    return { success: false, error: "Submission ID is required" };
+  }
+  if (!data?.foreignerId) {
+    return { success: false, error: "FIN/WP number is required" };
+  }
+  if (!data?.agency) {
+    return { success: false, error: "Agency is required" };
+  }
+  if (!data?.type) {
+    return { success: false, error: "Type is required" };
+  }
+  if (!data?.name) {
+    return { success: false, error: "Name is required" };
+  }
+
   try {
     // Create submission and record in a transaction
     const result = await prisma.$transaction(async (tx) => {
+      // Find existing draft for this user, exam type, and FIN
+      const existingDraft = await tx.draftSubmission.findFirst({
+        where: {
+          userId: data.userId,
+          examType: data.examType,
+          foreignerId: data.foreignerId,
+        },
+      });
+
+      console.log("Existing draft:", existingDraft);
+      console.log("Data:", data);
+
+      if (existingDraft) {
+        // Delete the record associated with the draft
+        await tx.record.deleteMany({
+          where: {
+            draftSubmissionId: existingDraft.id,
+          },
+        });
+
+        // Delete the draft itself
+        await tx.draftSubmission.delete({
+          where: {
+            id: existingDraft.id,
+          },
+        });
+      }
+
       // Create the submission first
       const submission = await tx.submission.create({
         data: {
@@ -31,6 +85,8 @@ export async function createSubmissionAndRecord(data: {
           status: "completed",
         },
       });
+
+      console.log("Submission:", submission);
 
       // Create the record linked to the submission
       const record = await tx.record.create({
@@ -45,6 +101,8 @@ export async function createSubmissionAndRecord(data: {
         },
       });
 
+      console.log("Record:", record);
+
       return { submission, record };
     });
 
@@ -54,6 +112,10 @@ export async function createSubmissionAndRecord(data: {
     return { success: true, data: result };
   } catch (error) {
     console.error("Error creating submission and record:", error);
-    return { success: false, error: "Failed to create submission and record" };
+    const errorMessage =
+      error instanceof Error
+        ? error.message
+        : "Failed to create submission and record";
+    return { success: false, error: errorMessage };
   }
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { saveDraft } from "@/app/actions/draft";
+import { createSubmissionAndRecord } from "@/app/actions/records";
 import { AcknowledgementPage } from "@/components/AcknowledgementPage";
 import { FinChangeModal } from "@/components/FinChangeModal";
 import { ClinicalExamination } from "@/components/medical-exam/ClinicalExamination";
@@ -17,11 +18,15 @@ import {
 import { StepIndicator } from "@/components/ui/step-indicator";
 import { examTitles } from "@/constants/exam-titles";
 import { STEPS, StepType } from "@/constants/steps";
+import { getCurrentUserId } from "@/lib/auth";
 import { FormDataWP, formSchemaWP } from "@/lib/schemas";
+import { generateSubmissionId } from "@/lib/utils/submission";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSearchParams } from "next/navigation";
 import React, { Suspense, useEffect, useState } from "react";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
+
+const submissionId = generateSubmissionId("FME");
 
 const clinics = [
   {
@@ -156,6 +161,7 @@ function WPExamPageContent() {
   const methods = useForm<FormDataWP>({
     resolver: zodResolver(formSchemaWP),
     defaultValues: {
+      fitnessAssessment: "",
       clinicDoctor: { clinic: "", doctor: "" },
       helperDetails: { fin: "", helperName: "", visitDate: undefined },
       medicalHistory: [],
@@ -410,10 +416,65 @@ function WPExamPageContent() {
   const onSubmit = async (data: FormDataWP) => {
     setIsSubmitting(true);
     try {
-      console.log("Form submitted!", data);
-      setIsSubmitted(true);
+      // Validate required fields
+      if (!data?.clinicDoctor?.clinic || !data?.clinicDoctor?.doctor) {
+        throw new Error("Clinic and doctor details are required");
+      }
+      if (!data?.helperDetails?.fin || !data?.helperDetails?.helperName) {
+        throw new Error("Helper details are required");
+      }
+
+      const userId = await getCurrentUserId();
+      console.log("User ID:", userId);
+      if (!userId) {
+        throw new Error("User ID is required");
+      }
+
+      // Ensure all required data is present
+      const formData = {
+        clinicDoctor: {
+          clinic: data.clinicDoctor.clinic,
+          doctor: data.clinicDoctor.doctor,
+        },
+        helperDetails: {
+          fin: data.helperDetails.fin,
+          helperName: data.helperDetails.helperName,
+          visitDate: data.helperDetails.visitDate,
+        },
+        medicalHistory: data.medicalHistory || [],
+        clinicalExamination: data.clinicalExamination || {},
+        tests: data.tests || {},
+      };
+
+      const submissionData = {
+        userId,
+        examType: "FME",
+        formData,
+        submissionId,
+        clinicId: data.clinicDoctor.clinic,
+        doctorId: data.clinicDoctor.doctor,
+        foreignerId: data.helperDetails.fin,
+        agency: "MOM",
+        type: "Full Medical Examination for Foreign Worker",
+        name: data.helperDetails.helperName,
+      };
+
+      console.log("Submitting data:", submissionData);
+      const result = await createSubmissionAndRecord(submissionData);
+
+      if (result.success) {
+        setIsSubmitted(true);
+      } else {
+        console.error("Failed to submit form:", result.error);
+        alert(result.error || "Failed to submit form. Please try again.");
+      }
     } catch (error) {
       console.error("Error submitting form:", error);
+      const message =
+        error instanceof Error
+          ? error.message
+          : "An error occurred while submitting the form";
+      alert(message + ". Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -424,8 +485,8 @@ function WPExamPageContent() {
       <AcknowledgementPage
         finNumber={watchedValues.helperDetails.fin}
         helperName={watchedValues.helperDetails.helperName}
-        referenceNumber="6ME2108120002" // Replace with actual reference number if available
-        submissionDateTime={new Date().toLocaleString()} // Current date and time for submission
+        referenceNumber={submissionId}
+        submissionDateTime={new Date().toLocaleString()}
       />
     );
   }
@@ -450,10 +511,16 @@ function WPExamPageContent() {
           }}
           helperDetails={{
             fin: watchedValues.helperDetails.fin,
-            name: watchedValues.helperDetails.helperName,
+            helperName: watchedValues.helperDetails.helperName,
             visitDate: watchedValues.helperDetails.visitDate,
           }}
           medicalHistory={watchedValues.medicalHistory}
+          fitnessAssessment={
+            watchedValues.fitnessAssessment as "fit" | "unfit" | undefined
+          }
+          onFitnessAssessmentChange={(value) => {
+            methods.setValue("fitnessAssessment", value);
+          }}
           clinicalExamination={{
             weight: watchedValues.clinicalExamination.weight,
             height: watchedValues.clinicalExamination.height,

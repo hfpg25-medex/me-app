@@ -3,8 +3,6 @@ import { Card } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { SectionHeader } from "@/components/ui/section-header";
-import { Separator } from "@/components/ui/separator";
-import { StatusBadge } from "@/components/ui/status-badge";
 import { StepIndicator } from "@/components/ui/step-indicator";
 import { examTitles } from "@/constants/exam-titles";
 import { useAuth } from "@/lib/context/auth-context";
@@ -14,7 +12,7 @@ import { useEffect, useState } from "react";
 import { Label } from "./ui/label";
 
 interface SummaryProps {
-  clinicDetails: {
+  clinicDetails?: {
     clinic: string;
     doctor: string;
     hciCode: string;
@@ -23,7 +21,7 @@ interface SummaryProps {
   };
   helperDetails: {
     fin: string;
-    name: string;
+    helperName: string;
     visitDate: Date;
   };
   medicalHistory: Array<{
@@ -67,7 +65,13 @@ interface SummaryProps {
     hba1c?: string;
     lipids?: string;
   };
+  fitnessAssessment?: "fit" | "unfit";
   isSubmitting?: boolean;
+  showStepIndicator?: boolean;
+  allowEdit?: boolean;
+  showTitle?: boolean;
+  showDeclaration?: boolean;
+  allowSubmit?: boolean;
   onEdit: (
     section:
       | "clinic-doctor"
@@ -77,6 +81,7 @@ interface SummaryProps {
       | "tests"
   ) => void;
   onSubmit: () => void;
+  onFitnessAssessmentChange?: (value: "fit" | "unfit") => void;
 }
 
 export function MedicalSummary({
@@ -87,12 +92,19 @@ export function MedicalSummary({
   tests,
   onEdit,
   onSubmit,
+  onFitnessAssessmentChange,
+  fitnessAssessment,
   isSubmitting = false,
+  showStepIndicator = true,
+  allowEdit = true,
+  showTitle = true,
+  showDeclaration = true,
+  allowSubmit = true,
 }: SummaryProps) {
   const [declarationChecked, setDeclarationChecked] = useState(false);
-  const [fitnessAssessment, setFitnessAssessment] = useState<
+  const [localFitnessAssessment, setLocalFitnessAssessment] = useState<
     "fit" | "unfit" | null
-  >(null);
+  >(fitnessAssessment || null);
   const { canEditSection, canSubmitReport } = usePermissions();
   const { user } = useAuth();
   const isNurse = user?.role === "nurse";
@@ -119,31 +131,36 @@ export function MedicalSummary({
 
   return (
     <div className="container mx-auto space-y-6">
-      <h1 className="text-2xl font-semibold mb-6">{examTitles.fme}</h1>
+      {showTitle && (
+        <h1 className="text-2xl font-semibold mb-6">{examTitles.fme}</h1>
+      )}
 
-      <StepIndicator
-        className="mb-6"
-        steps={[
-          {
-            number: 1,
-            label: "Submission",
-            isActive: false,
-            isEnabled: true,
-          },
-          {
-            number: 2,
-            label: "Summary",
-            isActive: true,
-            isEnabled: true,
-          },
-        ]}
-      />
+      {showStepIndicator && (
+        <StepIndicator
+          className="mb-6"
+          steps={[
+            {
+              number: 1,
+              label: "Submission",
+              isActive: false,
+              isEnabled: true,
+            },
+            {
+              number: 2,
+              label: "Summary",
+              isActive: true,
+              isEnabled: true,
+            },
+          ]}
+        />
+      )}
       <div className="grid gap-6 md:grid-cols-[2fr,1fr]">
         <div className="space-y-6">
           {/* Personal Details Section */}
           <Card className="p-4 shadow-md hover:shadow-lg transition-shadow rounded-md">
             <SectionHeader
               title="Personal details"
+              allowEdit={allowEdit}
               onEdit={
                 canEditSection("helper-details")
                   ? () => handleEdit("helper-details")
@@ -158,7 +175,7 @@ export function MedicalSummary({
                 </div>
                 <div>
                   <div className="text-gray-500 text-sm">Name</div>
-                  <div>{helperDetails.name}</div>
+                  <div>{helperDetails.helperName}</div>
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-4">
@@ -182,6 +199,7 @@ export function MedicalSummary({
           <Card className="p-4 shadow-md hover:shadow-lg transition-shadow rounded-md">
             <SectionHeader
               title="Medical history"
+              allowEdit={allowEdit}
               onEdit={() => handleEdit("medical-history")}
             />
             <div className="space-y-3 text-md">
@@ -213,6 +231,7 @@ export function MedicalSummary({
           <Card className="p-4 shadow-md hover:shadow-lg transition-shadow rounded-md">
             <SectionHeader
               title="Clinical examination"
+              allowEdit={allowEdit}
               onEdit={
                 canEditSection("clinical-examination")
                   ? () => handleEdit("clinical-examination")
@@ -496,6 +515,7 @@ export function MedicalSummary({
           <Card className="p-4 shadow-md hover:shadow-lg transition-shadow rounded-md">
             <SectionHeader
               title="Tests"
+              allowEdit={allowEdit}
               onEdit={
                 canEditSection("tests") ? () => handleEdit("tests") : undefined
               }
@@ -598,7 +618,7 @@ export function MedicalSummary({
           {/* Lab Tests Section */}
           <Card className="p-4 shadow-md hover:shadow-lg transition-shadow rounded-md">
             <div className="space-y-6">
-              <div>
+              {/* <div>
                 <StatusBadge status="pending">Pending</StatusBadge>
                 <h2 className="text-lg font-semibold mt-4 mb-6">
                   Lab tests & specialists
@@ -620,42 +640,43 @@ export function MedicalSummary({
                   </div>
                 </RadioGroup>
               </div>
-              <Separator />
+              <Separator /> */}
               {/* Clinic Details Section */}
               <div>
                 <div className="flex items-center justify-between mb-4"></div>
                 <div className="space-y-4">
                   <SectionHeader
+                    allowEdit={allowEdit}
                     title="Clinic & doctor details"
                     onEdit={() => handleEdit("clinic-doctor")}
                   />
                   <div>
                     <div className="text-gray-500 text-sm">Clinic name</div>
-                    <div>{clinicDetails.clinic}</div>
+                    <div>{clinicDetails?.clinic}</div>
                   </div>
                   <div>
                     <div className="text-gray-500 text-sm">HCI code</div>
-                    <div>{clinicDetails.hciCode}</div>
+                    <div>{clinicDetails?.hciCode}</div>
                   </div>
                   <div>
                     <div className="text-gray-500 text-sm">Contact number</div>
-                    <div>{clinicDetails.contactNumber}</div>
+                    <div>{clinicDetails?.contactNumber}</div>
                   </div>
                 </div>
                 <div className="space-y-4 mt-6">
                   <div>
                     <div className="text-gray-500 text-sm">Doctor name</div>
                     <div className="flex items-center gap-2">
-                      <span>{clinicDetails.doctor}</span>
+                      <span>{clinicDetails?.doctor}</span>
                     </div>
                   </div>
                   <div>
                     <div className="text-gray-500 text-sm">
                       Medical Registration (MCR) no.
                     </div>
-                    <div>{clinicDetails.mcrNumber}</div>
+                    <div>{clinicDetails?.mcrNumber}</div>
                   </div>
-                  <div className="space-y-2 pt-4">
+                  {/* <div className="space-y-2 pt-4">
                     <div className="flex items-center gap-2 text-sm">
                       <div className="h-2 w-2 rounded-full bg-gray-300" />
                       <div className="flex-1">
@@ -677,15 +698,16 @@ export function MedicalSummary({
                         <div className="text-gray-500">2025-01-27 5:11pm</div>
                       </div>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>
           </Card>
 
           {/* Lab Tests Table */}
-          <Card className="p-4 shadow-md hover:shadow-lg transition-shadow rounded-md">
+          {/* <Card className="p-4 shadow-md hover:shadow-lg transition-shadow rounded-md">
             <SectionHeader
+              allowEdit={allowEdit}
               title="Lab tests & specialist referrals"
               onEdit={() => {}}
             />
@@ -723,7 +745,7 @@ export function MedicalSummary({
                 </tbody>
               </table>
             </div>
-          </Card>
+          </Card> */}
         </div>
       </div>
 
@@ -733,9 +755,10 @@ export function MedicalSummary({
           <SectionHeader title="Fitness Assessment" />
           <div className="space-y-4">
             <RadioGroup
-              value={fitnessAssessment as string | undefined}
+              value={localFitnessAssessment as string | undefined}
               onValueChange={(value: "fit" | "unfit") => {
-                setFitnessAssessment(value);
+                setLocalFitnessAssessment(value);
+                onFitnessAssessmentChange?.(value);
               }}
               className="flex space-x-6"
             >
@@ -752,64 +775,70 @@ export function MedicalSummary({
         </Card>
 
         {/* Declaration Section */}
-        <Card className="bg-blue-50 p-6 text-sm shadow-md hover:shadow-lg transition-shadow rounded-md border-2 border-blue-100">
-          <SectionHeader title="Declaration" />
-          <p className="mb-2">Please read and acknowledge the following:</p>
-          <ul className="list-disc pl-4 mb-4 space-y-2">
-            <li>
-              I am authorised by the clinic to submit the results and make the
-              declarations in this form on its behalf.
-            </li>
-            <li>
-              I hereby declare that I have examined the person named above and
-              that the results shown above are my findings.
-            </li>
-            <li>
-              By submitting this form, I understand that the information given
-              will be submitted to the Controller or an authorised officer who
-              may act on the information given by me.
-            </li>
-            <li>
-              I further declare that the information provided by me is true to
-              the best of my knowledge and belief.
-            </li>
-          </ul>
-          <div className="flex items-center space-x-2">
-            <Checkbox
-              id="declaration"
-              checked={declarationChecked}
-              onCheckedChange={(checked) => {
-                setDeclarationChecked(checked as boolean);
-              }}
-            />
-            <Label htmlFor="declaration" className="font-medium">
-              I declare that all of the above is true.
-            </Label>
-          </div>
-        </Card>
+        {showDeclaration && (
+          <Card className="bg-blue-50 p-6 text-sm shadow-md hover:shadow-lg transition-shadow rounded-md border-2 border-blue-100">
+            <SectionHeader title="Declaration" />
+            <p className="mb-2">Please read and acknowledge the following:</p>
+            <ul className="list-disc pl-4 mb-4 space-y-2">
+              <li>
+                I am authorised by the clinic to submit the results and make the
+                declarations in this form on its behalf.
+              </li>
+              <li>
+                I hereby declare that I have examined the person named above and
+                that the results shown above are my findings.
+              </li>
+              <li>
+                By submitting this form, I understand that the information given
+                will be submitted to the Controller or an authorised officer who
+                may act on the information given by me.
+              </li>
+              <li>
+                I further declare that the information provided by me is true to
+                the best of my knowledge and belief.
+              </li>
+            </ul>
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="declaration"
+                checked={declarationChecked}
+                onCheckedChange={(checked) => {
+                  setDeclarationChecked(checked as boolean);
+                }}
+              />
+              <Label htmlFor="declaration" className="font-medium">
+                I declare that all of the above is true.
+              </Label>
+            </div>
+          </Card>
+        )}
       </div>
 
-      <div className="flex justify-start mt-6">
-        <Button
-          onClick={onSubmit}
-          disabled={!declarationChecked || !fitnessAssessment || isSubmitting}
-        >
-          {isSubmitting ? (
-            <>
-              <span className="opacity-0">
-                {isNurse ? "Submit for review" : "Submit report"}
-              </span>
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-              </div>
-            </>
-          ) : (
-            <>
-              <span>{isNurse ? "Submit for review" : "Submit report"}</span>
-            </>
-          )}
-        </Button>
-      </div>
+      {allowSubmit && (
+        <div className="flex justify-start mt-6">
+          <Button
+            onClick={onSubmit}
+            disabled={
+              !declarationChecked || !localFitnessAssessment || isSubmitting
+            }
+          >
+            {isSubmitting ? (
+              <>
+                <span className="opacity-0">
+                  {isNurse ? "Submit for review" : "Submit report"}
+                </span>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                </div>
+              </>
+            ) : (
+              <>
+                <span>{isNurse ? "Submit for review" : "Submit report"}</span>
+              </>
+            )}
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

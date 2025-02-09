@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 
 import { getRecordById, type RecordWithSubmission } from "@/app/actions/record";
 import { Summary } from "@/components/Summary";
+import { MedicalSummary } from "@/components/medical-summary";
 import { clinics } from "@/constants/clinics";
 import { doctors } from "@/constants/doctors";
 
@@ -56,6 +57,10 @@ export default function RecordView() {
   //   | FormDataWP
   //   | FormDataMDW;
 
+  const type = record?.submission?.examType;
+  console.log("exam type", type);
+  console.log("record", record);
+
   const clinic = clinics.find(
     (c: { id: string }) => c.id === formData?.clinicDoctor?.clinic
   );
@@ -85,9 +90,14 @@ export default function RecordView() {
   }));
 
   const examinationDetails = {
-    ...formData.examinationDetails,
+    ...formData?.examinationDetails,
     testResults,
   };
+
+  const tests = formData?.tests;
+  const clinicalExamination = formData?.clinicalExamination;
+  const medicalHistory = formData?.medicalHistory;
+  const fitnessAssessment = formData?.fitnessAssessment;
 
   return (
     <div className="container mx-auto py-6">
@@ -117,8 +127,12 @@ export default function RecordView() {
               <p>{record.foreignerId}</p>
             </div> */}
             <div>
-              <p className="text-sm text-gray-500">Type</p>
+              <p className="text-sm text-gray-500">Exam Name</p>
               <p>{record.type}</p>
+            </div>
+            <div>
+              <p className="text-sm text-gray-500">Type Code</p>
+              <p>{record.submission?.examType}</p>
             </div>
             <div>
               <p className="text-sm text-gray-500">Date Created</p>
@@ -130,9 +144,27 @@ export default function RecordView() {
             </div>
           </div>
 
-          {record.submission ? (
-            <Summary
-              type={record.submission.examType as "FMW" | "MDW" | "PR"}
+          {record.submission &&
+            (record.submission.examType === "FMW" ||
+              record.submission.examType === "MDW" ||
+              record.submission.examType === "PR") && (
+              <Summary
+                type={record.submission.examType as "FMW" | "MDW" | "PR"}
+                showStepIndicator={false}
+                allowEdit={false}
+                showTitle={false}
+                showDeclaration={false}
+                allowSubmit={false}
+                clinicDetails={clinicDetails}
+                helperDetails={formData.helperDetails}
+                examinationDetails={examinationDetails}
+                isSubmitting={false}
+                onEdit={() => {}}
+                onSubmit={() => {}}
+              />
+            )}
+          {record.submission && record.submission.examType === "FME" && (
+            <MedicalSummary
               showStepIndicator={false}
               allowEdit={false}
               showTitle={false}
@@ -140,12 +172,16 @@ export default function RecordView() {
               allowSubmit={false}
               clinicDetails={clinicDetails}
               helperDetails={formData.helperDetails}
-              examinationDetails={examinationDetails}
+              clinicalExamination={clinicalExamination}
+              medicalHistory={medicalHistory}
+              tests={tests}
+              fitnessAssessment={fitnessAssessment}
               isSubmitting={false}
               onEdit={() => {}}
               onSubmit={() => {}}
             />
-          ) : (
+          )}
+          {!record.submission && (
             <div className="text-center py-8 text-gray-500">
               No submission details found
             </div>
