@@ -52,7 +52,8 @@ type RecordsResponse = {
 };
 
 // Available statuses
-const statuses = ["For Review", "Submitted", "Pending"];
+// const statuses = ["For Review", "Submitted", "Pending"];
+const statuses = ["Submitted"];
 
 // Helper function to get badge color based on status
 // const getStatusBadgeColor = (status: string) => {
