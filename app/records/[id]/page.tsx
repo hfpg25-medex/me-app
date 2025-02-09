@@ -52,6 +52,7 @@ export default function RecordView() {
 
   /* eslint-disable @typescript-eslint/no-explicit-any */
   const formData = record?.submission?.formData as any;
+  console.log("Form data from submission:", formData);
   // as unknown as
   //   | FormDataMW
   //   | FormDataWP

@@ -444,12 +444,16 @@ function WPExamPageContent() {
         medicalHistory: data.medicalHistory || [],
         clinicalExamination: data.clinicalExamination || {},
         tests: data.tests || {},
+        fitnessAssessment: data.fitnessAssessment,
       };
 
       const submissionData = {
         userId,
         examType: "FME",
-        formData,
+        formData: {
+          ...formData,
+          fitnessAssessment: data.fitnessAssessment,
+        },
         submissionId,
         clinicId: data.clinicDoctor.clinic,
         doctorId: data.clinicDoctor.doctor,
@@ -459,6 +463,8 @@ function WPExamPageContent() {
         name: data.helperDetails.helperName,
       };
 
+      console.log("Form data:", data);
+      console.log("Formatted form data:", formData);
       console.log("Submitting data:", submissionData);
       const result = await createSubmissionAndRecord(submissionData);
 
