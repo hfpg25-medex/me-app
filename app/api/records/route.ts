@@ -9,6 +9,7 @@ export async function GET(request: Request) {
     const search = searchParams.get("search") || "";
     const status = searchParams.get("status") || undefined;
     const dateRange = searchParams.get("dateRange") || undefined;
+    const isDraft = searchParams.get("isDraft") === "true";
 
     const skip = (page - 1) * limit;
 
@@ -25,6 +26,12 @@ export async function GET(request: Request) {
 
     if (status) {
       where.status = status;
+    }
+
+    // Filter draft records
+    if (isDraft) {
+      where.draftSubmissionId = { not: null };
+      where.status = { not: "Submitted" };
     }
 
     if (dateRange) {
