@@ -9,7 +9,7 @@ async function deleteOldRecords() {
       orderBy: {
         dateCreated: "asc",
       },
-      take: 200,
+      take: 50,
       include: {
         submission: true,
         draftSubmission: true,
