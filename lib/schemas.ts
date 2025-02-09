@@ -109,7 +109,7 @@ export const clinicalExaminationSchema = z.object({
   bmi: z.number(),
   waistCircumference: z
     .number()
-    .min(60, "Please input a valid waist circumference")
+    .min(5, "Please input a valid waist circumference")
     .max(200, "Please input a valid waist circumference"),
   waistUnit: z.enum(["cm", "inch"]).default("cm"),
   systolicBP: z
