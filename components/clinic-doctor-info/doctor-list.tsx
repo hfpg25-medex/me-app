@@ -327,6 +327,7 @@ export function DoctorList() {
                   <Label htmlFor={`name-${doctor.id}`}>Doctor Name</Label>
                   <Input
                     id={`name-${doctor.id}`}
+                    maxLength={66}
                     value={doctor.name}
                     onChange={(e) =>
                       setDoctors(
@@ -350,6 +351,7 @@ export function DoctorList() {
                   <Label htmlFor={`mcr-${doctor.id}`}>MCR Number</Label>
                   <Input
                     id={`mcr-${doctor.id}`}
+                    maxLength={7}
                     value={doctor.mcr}
                     onChange={(e) =>
                       setDoctors(

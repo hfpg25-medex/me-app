@@ -279,6 +279,7 @@ export function ClinicList() {
                   <Label htmlFor={`name-${clinic.id}`}>Clinic Name</Label>
                   <Input
                     id={`name-${clinic.id}`}
+                    maxLength={100}
                     value={clinic.name}
                     onChange={(e) =>
                       setClinics(
@@ -302,6 +303,7 @@ export function ClinicList() {
                   <Label htmlFor={`hci-${clinic.id}`}>HCI Code</Label>
                   <Input
                     id={`hci-${clinic.id}`}
+                    maxLength={7}
                     value={clinic.hci}
                     onChange={(e) =>
                       setClinics(
@@ -325,6 +327,7 @@ export function ClinicList() {
                   </Label>
                   <Input
                     id={`contactNumber-${clinic.id}`}
+                    maxLength={8}
                     value={clinic.contactNumber}
                     onChange={(e) =>
                       setClinics(
@@ -348,6 +351,7 @@ export function ClinicList() {
                   <Label htmlFor={`address-${clinic.id}`}>Address</Label>
                   <Input
                     id={`address-${clinic.id}`}
+                    maxLength={100}
                     value={clinic.address}
                     onChange={(e) =>
                       setClinics(
