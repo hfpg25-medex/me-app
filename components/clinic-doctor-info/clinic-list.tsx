@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { getClinicList, updateClinic } from "@/lib/actions/clinic";
 import { clinicSchema } from "@/lib/validations/clinicDoctorSchemas";
-import { Building2, Loader2, Pencil, Plus, Trash2 } from "lucide-react";
+import { Building2, Loader2 } from "lucide-react";
 import * as React from "react";
 import { z } from "zod";
 
@@ -207,7 +207,7 @@ export function ClinicList() {
             <Building2 className="h-5 w-5" />
             <h2 className="text-lg font-semibold">Clinic Information</h2>
           </div>
-          <Button
+          {/* <Button
             onClick={addClinic}
             variant="outline"
             size="sm"
@@ -215,7 +215,7 @@ export function ClinicList() {
           >
             <Plus className="mr-2 h-4 w-4" />
             Add Clinic
-          </Button>
+          </Button> */}
         </div>
 
         {isLoading === "loading" ? (
@@ -254,11 +254,11 @@ export function ClinicList() {
                     onClick={() => setEditingId(clinic.id)}
                     className="text-blue-600"
                   >
-                    <Pencil className="h-4 w-4" />
+                    {/* <Pencil className="h-4 w-4" /> */}
                     Edit
                   </Button>
                 )}
-                <Button
+                {/* <Button
                   type="button"
                   variant="outline"
                   size="sm"
@@ -271,7 +271,7 @@ export function ClinicList() {
                 >
                   <Trash2 className="h-4 w-4 mr-2" />
                   Remove
-                </Button>
+                </Button> */}
               </div>
 
               <div className="grid gap-4 mt-4">

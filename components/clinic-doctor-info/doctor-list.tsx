@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { getDoctorList, updateDoctor } from "@/lib/actions/doctor";
 import { doctorSchema } from "@/lib/validations/clinicDoctorSchemas";
-import { Loader2, Pencil, Plus, Stethoscope, Trash2 } from "lucide-react";
+import { Loader2, Stethoscope } from "lucide-react";
 import * as React from "react";
 import { z } from "zod";
 
@@ -24,6 +24,7 @@ interface ValidationErrors {
 export function DoctorList() {
   const [doctors, setDoctors] = React.useState<Doctor[]>([]);
   const [editingId, setEditingId] = React.useState<string | null>(null);
+  const [isAddingNew, setIsAddingNew] = React.useState(false);
   const [validationErrors, setValidationErrors] = React.useState<
     Record<string, ValidationErrors>
   >({});
@@ -67,7 +68,7 @@ export function DoctorList() {
     };
     setDoctors([...doctors, newDoctor]);
     setEditingId(newDoctor.id);
-    setValidationErrors({ ...validationErrors, [newDoctor.id]: {} });
+    setIsAddingNew(true);
   };
 
   // const validateDoctor = (doctor: Doctor) => {
@@ -235,7 +236,7 @@ export function DoctorList() {
             <Stethoscope className="h-5 w-5" />
             <h2 className="text-lg font-semibold">Doctor Information</h2>
           </div>
-          <Button
+          {/* <Button
             onClick={addDoctor}
             variant="outline"
             size="sm"
@@ -243,7 +244,7 @@ export function DoctorList() {
           >
             <Plus className="mr-2 h-4 w-4" />
             Add Doctor
-          </Button>
+          </Button> */}
         </div>
 
         {isLoading === "loading" ? (
@@ -261,45 +262,64 @@ export function DoctorList() {
             <CardContent className="pt-6">
               <div className="absolute top-4 right-4 flex items-center space-x-2">
                 {editingId === doctor.id ? (
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleSubmit(doctor)}
-                    disabled={isLoading === doctor.id}
-                  >
-                    {isLoading === doctor.id ? (
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                    ) : (
-                      "Save"
-                    )}
-                  </Button>
+                  <div className="flex gap-2">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleSubmit(doctor)}
+                      disabled={isLoading === doctor.id}
+                    >
+                      {isLoading === doctor.id ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : (
+                        "Save"
+                      )}
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        setEditingId(null);
+                        setIsAddingNew(false);
+                        // Remove if it's a new unsaved doctor
+                        if (!doctor.name && !doctor.mcr) {
+                          setDoctors(doctors.filter((d) => d.id !== doctor.id));
+                        }
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                  </div>
                 ) : (
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setEditingId(doctor.id)}
-                    className="text-blue-600"
-                  >
-                    <Pencil className="h-4 w-4" />
-                    Edit
-                  </Button>
+                  !isAddingNew && (
+                    <div className="flex gap-2">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setEditingId(doctor.id)}
+                        className="text-blue-600"
+                      >
+                        Edit
+                      </Button>
+                      {/* <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          setDoctors(doctors.filter((d) => d.id !== doctor.id));
+                          const newValidationErrors = { ...validationErrors };
+                          delete newValidationErrors[doctor.id];
+                          setValidationErrors(newValidationErrors);
+                        }}
+                      >
+                        Remove
+                      </Button> */}
+                    </div>
+                  )
                 )}
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={() => {
-                    setDoctors(doctors.filter((d) => d.id !== doctor.id));
-                    const newValidationErrors = { ...validationErrors };
-                    delete newValidationErrors[doctor.id];
-                    setValidationErrors(newValidationErrors);
-                  }}
-                >
-                  <Trash2 className="h-4 w-4 mr-2" />
-                  Remove
-                </Button>
               </div>
 
               <div className="grid gap-4 mt-4">
@@ -319,9 +339,9 @@ export function DoctorList() {
                     }
                     disabled={editingId !== doctor.id}
                   />
-                  {getFieldError(doctor.id, "name") && (
+                  {validationErrors[doctor.id]?.name && (
                     <p className="text-sm text-red-500">
-                      {getFieldError(doctor.id, "name")}
+                      {validationErrors[doctor.id].name[0]}
                     </p>
                   )}
                 </div>
@@ -340,9 +360,9 @@ export function DoctorList() {
                     }
                     disabled={editingId !== doctor.id}
                   />
-                  {getFieldError(doctor.id, "mcr") && (
+                  {validationErrors[doctor.id]?.mcr && (
                     <p className="text-sm text-red-500">
-                      {getFieldError(doctor.id, "mcr")}
+                      {validationErrors[doctor.id].mcr[0]}
                     </p>
                   )}
                 </div>
