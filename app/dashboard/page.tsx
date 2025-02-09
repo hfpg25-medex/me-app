@@ -83,10 +83,10 @@ export default function HomePage() {
                   <FileEdit className="h-6 w-6 text-primary" />
                 </div>
                 <CardTitle className="font-inter text-[20px] font-semibold leading-[28px] tracking-[-0.005em] text-left underline-offset-[from-font] decoration-skip-ink-none text-[#09090B]">
-                  Update Records
+                  Update Drafts
                 </CardTitle>
                 <CardDescription className="font-inter text-[14px] font-normal leading-[20px] text-left underline-offset-[from-font] decoration-skip-ink-none text-[#71717A]">
-                  Modify existing medical examination records
+                  Modify medical examination drafts and submit record
                 </CardDescription>
               </div>
               <div className="flex justify-start">
@@ -94,7 +94,7 @@ export default function HomePage() {
                   asChild
                   className="h-[36px] px-4 py-2 gap-2 shadow-[0px_1px_2px_0px_#0000000D] hover:text-white"
                 >
-                  <Link href="/records/edit">Update Records</Link>
+                  <Link href="/records/edit">Update Drafts</Link>
                 </Button>
               </div>
             </CardHeader>
