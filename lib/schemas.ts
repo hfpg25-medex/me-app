@@ -76,7 +76,12 @@ export const examinationDetailsMDWSchema = z.object({
   suspiciousInjuries: z.boolean(),
   unintentionalWeightLoss: z.boolean(),
   policeReport: z.enum(["yes", "no"]).nullable(),
-  remarks: z.string().max(500, "Remarks must be at most 500 characters"),
+  remarks: z.string()
+    .max(500, "Remarks must be at most 500 characters")
+    .refine(
+      (val) => val === "" || val.trim().length > 0,
+      { message: "Please enter your remarks" }
+    ),
 });
 
 export const clinicalExaminationSchema = z.object({
@@ -147,7 +152,12 @@ export const testsSchema = z.object({
 export const examinationDetailsMWSchema = z.object({
   testTypes: z.array(z.string()),
   positiveTests: z.array(z.string()),
-  remarks: z.string().max(500, "Remarks must be at most 500 characters"),
+  remarks: z.string()
+    .max(500, "Remarks must be at most 500 characters")
+    .refine(
+      (val) => val === "" || val.trim().length > 0,
+      { message: "Please enter your remarks" }
+    ),
 });
 
 // export const medicalHistoryItemsSchema = z.array(z.object({
