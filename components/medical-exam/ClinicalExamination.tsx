@@ -89,7 +89,11 @@ export function ClinicalExamination({
                 <Input
                   id="weight"
                   type="number"
-                  maxLength={3}
+                  onInput={(e) => {
+                    if (e.currentTarget.value.length > 3) {
+                      e.currentTarget.value = e.currentTarget.value.slice(0, 3);
+                    }
+                  }}
                   {...register("clinicalExamination.weight", {
                     setValueAs: (value: string) => {
                       if (value === "") return undefined;
@@ -126,7 +130,11 @@ export function ClinicalExamination({
                 <Input
                   id="height"
                   type="number"
-                  maxLength={3}
+                  onInput={(e) => {
+                    if (e.currentTarget.value.length > 3) {
+                      e.currentTarget.value = e.currentTarget.value.slice(0, 3);
+                    }
+                  }}
                   {...register("clinicalExamination.height", {
                     setValueAs: (value: string) => {
                       if (value === "") return undefined;
@@ -173,7 +181,11 @@ export function ClinicalExamination({
                 <Input
                   id="waistCircumference"
                   type="number"
-                  maxLength={3}
+                  onInput={(e) => {
+                    if (e.currentTarget.value.length > 3) {
+                      e.currentTarget.value = e.currentTarget.value.slice(0, 3);
+                    }
+                  }}
                   {...register("clinicalExamination.waistCircumference", {
                     setValueAs: (value: string) => {
                       if (value === "") return undefined;
@@ -247,7 +259,11 @@ export function ClinicalExamination({
                 <Input
                   id="systolicBP"
                   type="number"
-                  maxLength={3}
+                  onInput={(e) => {
+                    if (e.currentTarget.value.length > 3) {
+                      e.currentTarget.value = e.currentTarget.value.slice(0, 3);
+                    }
+                  }}
                   {...register("clinicalExamination.systolicBP", {
                     setValueAs: (value: string) => {
                       if (value === "") return undefined;
@@ -285,7 +301,11 @@ export function ClinicalExamination({
                 <Input
                   id="diastolicBP"
                   type="number"
-                  maxLength={3}
+                  onInput={(e) => {
+                    if (e.currentTarget.value.length > 3) {
+                      e.currentTarget.value = e.currentTarget.value.slice(0, 3);
+                    }
+                  }}
                   {...register("clinicalExamination.diastolicBP", {
                     setValueAs: (value: string) => {
                       if (value === "") return undefined;
