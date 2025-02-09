@@ -55,6 +55,7 @@ export function ExaminationDetails({
                 <Input
                   id="weight"
                   type="number"
+                  maxLength={3}
                   {...register("examinationDetails.weight")}
                   onBlur={async (e) => {
                     const value = parseFloat(e.target.value);
@@ -112,6 +113,7 @@ export function ExaminationDetails({
               <div className="flex items-center mt-1">
                 <Input
                   id="height"
+                  maxLength={3}
                   type="number"
                   {...register("examinationDetails.height")}
                   placeholder="Enter height"
