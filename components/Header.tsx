@@ -1,7 +1,8 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Menu, Stethoscope } from "lucide-react";
+import { Menu } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
@@ -33,9 +34,18 @@ export default function Header() {
     <header className="bg-white shadow-sm sticky top-0 z-10">
       <div className="container mx-auto px-3 w-full">
         <div className="flex items-center justify-between h-16">
-          <Link href="/" className="flex items-center space-x-2">
+          {/* <Link href="/" className="flex items-center space-x-2">
             <Stethoscope className="h-8 w-8 text-blue-600" />
-            <span className="text-2xl font-bold text-blue-600">MEPortal</span>
+            <span className="text-2xl font-bold text-blue-600">CheckUp</span>
+          </Link> */}
+          <Link href="/" className="flex items-center">
+            <Image
+              src="/checkup-logo.svg"
+              alt="CheckUp Logo"
+              width={120}
+              height={40}
+              priority
+            />
           </Link>
 
           {/* Mobile menu button */}
