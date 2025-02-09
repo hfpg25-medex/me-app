@@ -508,7 +508,7 @@ function WPExamPageContent() {
   // Don't render form content until after hydration
   if (!isClient) {
     return (
-      <div className="container mx-auto px-4 w-full max-w-5xl py-8">
+      <div className="container mx-auto px-4 w-full py-8">
         <div className="flex justify-center items-center min-h-[200px]">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
         </div>
@@ -517,28 +517,13 @@ function WPExamPageContent() {
   }
 
   return (
-    <div className="container mx-auto grid gap-6 md:grid-cols-[2fr,1fr] px-4 w-full max-w-7xl py-8">
-      <div className="bg-white rounded-lg shadow-md p-8">
+    <div className="container mx-auto grid gap-6 md:grid-cols-[2fr,1fr] px-0 w-full py-8">
+      <div className="bg-gray-100 p-4">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold">{examTitles.fme}</h1>
         </div>
-        <div className="flex items-center justify-end gap-4">
-          {lastSaved && (
-            <p className="text-sm text-gray-500">
-              Last saved at {formatDate(lastSaved)}
-            </p>
-          )}
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleManualSave}
-            disabled={isSaving || isSubmitted || !formValues.helperDetails?.fin}
-          >
-            {isSaving ? "Saving..." : "Save draft"}
-          </Button>
-        </div>
         <StepIndicator
-          className="mb-6"
+          className="mb-0"
           steps={[
             {
               number: 1,
@@ -555,7 +540,23 @@ function WPExamPageContent() {
             },
           ]}
         />
-        <div className="bg-white border border-gray-300 px-8 py-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+        <div className="flex items-center justify-end gap-4 mb-1">
+          {lastSaved && (
+            <p className="text-sm text-gray-500">
+              Last saved at {formatDate(lastSaved)}
+            </p>
+          )}
+          <Button
+            variant="outline"
+            size="sm"
+            className="bg-white"
+            onClick={handleManualSave}
+            disabled={isSaving || isSubmitted || !formValues.helperDetails?.fin}
+          >
+            {isSaving ? "Saving..." : "Save draft"}
+          </Button>
+        </div>
+        <div className="bg-white border border-gray-300 px-8 py-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
           <FormProvider {...methods}>
             <Accordion
               type="single"
