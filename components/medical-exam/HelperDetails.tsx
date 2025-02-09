@@ -31,7 +31,7 @@ export function HelperDetails({
   setFinTouched,
   setVisitDateTouched,
   finTouched,
-  // visitDateTouched,
+  visitDateTouched,
   isPendingMe,
   nextStep,
   requireVisitDate = true,
@@ -135,8 +135,9 @@ export function HelperDetails({
                   date={watchedValues.helperDetails.visitDate}
                   onSelect={(date) => {
                     setValue("helperDetails.visitDate", date as Date);
-                    setVisitDateTouched(true);
-                    trigger("helperDetails.visitDate");
+                    if (errors.helperDetails?.visitDate) {
+                      trigger("helperDetails.visitDate");
+                    }
                   }}
                   disabled={(date) =>
                     date > new Date() ||
@@ -144,7 +145,7 @@ export function HelperDetails({
                       new Date(new Date().setDate(new Date().getDate() - 90))
                   }
                 />
-                {errors.helperDetails?.visitDate && (
+                {visitDateTouched && errors.helperDetails?.visitDate && (
                   <p className="text-sm font-medium text-red-500">
                     {errors.helperDetails.visitDate.message}
                   </p>
