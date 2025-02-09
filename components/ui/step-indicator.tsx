@@ -20,11 +20,11 @@ export function StepIndicator({ steps, className }: StepIndicatorProps) {
       <div className="flex items-center">
         {steps.map((step, index) => (
           <React.Fragment key={step.number}>
-            {index > 0 && <div className="h-[1px] w-24 bg-gray-300" />}
+            {index > 0 && <div className="h-[1px] w-24 bg-gray-400" />}
             <div
               className={cn(
                 "w-5 h-5 rounded-full flex items-center justify-center text-xs font-medium",
-                step.isActive ? "bg-gray-900 text-white" : "bg-gray-200"
+                step.isActive ? "bg-gray-900 text-white" : "bg-gray-300"
               )}
             >
               {step.number}
@@ -42,8 +42,8 @@ export function StepIndicator({ steps, className }: StepIndicatorProps) {
               <span
                 className={cn(
                   "text-sm",
-                  step.isActive ? "text-primary" : "text-muted-foreground",
-                  !step.isEnabled && "opacity-50"
+                  step.isActive ? "text-primary" : "text-gray-500",
+                  !step.isEnabled && "opacity-80"
                 )}
               >
                 {step.label}
