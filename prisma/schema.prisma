@@ -52,15 +52,17 @@ model DraftSubmission {
   id          String   @id @default(cuid())
   userId      String   // ID of the user who created the draft
   examType    String   // Type of medical exam (e.g., 'FME', 'MDW', etc.)
+  foreignerId String   // FIN/WP number of the helper
   formData    Json     // The actual form data stored as JSON
   status      String   @default("draft") // Status of the submission (draft, submitted, etc.)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   record      Record?  // One-to-one relation with Record
   
-  @@unique([userId, examType], name: "userId_examType")
+  @@unique([userId, examType, foreignerId], name: "userId_examType_foreignerId")
   @@index([userId])
   @@index([examType])
+  @@index([foreignerId])
 }
 
 model Submission {

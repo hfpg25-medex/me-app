@@ -7,9 +7,10 @@ export async function POST(request: Request) {
   try {
     const draft = await prisma.draftSubmission.upsert({
       where: {
-        userId_examType: {
+        userId_examType_foreignerId: {
           userId: data.userId,
           examType: data.examType,
+          foreignerId: data.helperDetails.fin,
         },
       },
       update: {
@@ -20,6 +21,7 @@ export async function POST(request: Request) {
       create: {
         userId: data.userId,
         examType: data.examType,
+        foreignerId: data.helperDetails.fin,
         formData: data.formData,
         status: data.status || "draft",
       },
@@ -38,10 +40,13 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const userId = searchParams.get("userId");
   const examType = searchParams.get("examType");
+  const foreignerId = searchParams.get("foreignerId");
 
-  if (!userId || !examType) {
+  if (!userId || !examType || !foreignerId) {
     return NextResponse.json(
-      { error: "Missing required parameters: userId and examType" },
+      {
+        error: "Missing required parameters: userId, examType, and foreignerId",
+      },
       { status: 400 }
     );
   }
@@ -49,9 +54,10 @@ export async function GET(request: Request) {
   try {
     const draft = await prisma.draftSubmission.findUnique({
       where: {
-        userId_examType: {
+        userId_examType_foreignerId: {
           userId,
           examType,
+          foreignerId,
         },
       },
     });

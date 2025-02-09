@@ -29,9 +29,10 @@ export async function saveDraft(data: FormDataWP, userId: string) {
         console.log("Attempting to save draft submission...");
         const draft = await tx.draftSubmission.upsert({
           where: {
-            userId_examType: {
+            userId_examType_foreignerId: {
               userId,
               examType: "FME",
+              foreignerId: data.helperDetails.fin,
             },
           },
           update: {
@@ -42,6 +43,7 @@ export async function saveDraft(data: FormDataWP, userId: string) {
           create: {
             userId,
             examType: "FME",
+            foreignerId: data.helperDetails.fin,
             /* eslint-disable @typescript-eslint/no-explicit-any */
             formData: data as any,
             status: "draft",
