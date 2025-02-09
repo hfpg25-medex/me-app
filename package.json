@@ -13,7 +13,7 @@
     "shadcn": "shadcn-ui",
     "format": "npx prettier . --write",
     "prisma:seed": "tsx prisma/seed.ts",
-    "delete-old-records": "node --loader ts-node/esm scripts/delete-old-records.ts"
+    "delete-old-records": "tsx scripts/delete-old-records.ts"
   },
   "dependencies": {
     "@govtechsg/sgds": "^2.3.6",

@@ -1,27 +1,22 @@
-import { PrismaClient } from '@prisma/client'
-import { fileURLToPath } from 'url'
-import { dirname } from 'path'
+import { PrismaClient } from "@prisma/client";
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
-
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
 async function deleteOldRecords() {
   try {
     // Get the 50 earliest records
     const oldRecords = await prisma.record.findMany({
       orderBy: {
-        dateCreated: 'asc',
+        dateCreated: "asc",
       },
       take: 50,
       include: {
         submission: true,
         draftSubmission: true,
       },
-    })
+    });
 
-    console.log(`Found ${oldRecords.length} records to delete`)
+    console.log(`Found ${oldRecords.length} records to delete`);
 
     // Delete records and their associated submissions
     for (const record of oldRecords) {
@@ -30,7 +25,7 @@ async function deleteOldRecords() {
         where: {
           id: record.id,
         },
-      })
+      });
 
       // Delete associated submission if it exists
       if (record.submissionId) {
@@ -38,7 +33,7 @@ async function deleteOldRecords() {
           where: {
             id: record.submissionId,
           },
-        })
+        });
       }
 
       // Delete associated draft submission if it exists
@@ -47,18 +42,18 @@ async function deleteOldRecords() {
           where: {
             id: record.draftSubmissionId,
           },
-        })
+        });
       }
 
-      console.log(`Deleted record ${record.id} and its associated submissions`)
+      console.log(`Deleted record ${record.id} and its associated submissions`);
     }
 
-    console.log('Successfully deleted old records and their submissions')
+    console.log("Successfully deleted old records and their submissions");
   } catch (error) {
-    console.error('Error deleting records:', error)
+    console.error("Error deleting records:", error);
   } finally {
-    await prisma.$disconnect()
+    await prisma.$disconnect();
   }
 }
 
-deleteOldRecords()
+deleteOldRecords();
