@@ -129,22 +129,27 @@ export function HelperDetails({
               </div>
             </div>
             {requireVisitDate && (
-              <Datepicker
-                label="Date person visits the clinic"
-                date={
-                  watchedValues.helperDetails.visitDate ||
-                  (defaultToday ? new Date() : undefined)
-                }
-                onSelect={(date) => {
-                  setValue("helperDetails.visitDate", date as Date);
-                  setVisitDateTouched(true);
-                  trigger("helperDetails.visitDate");
-                }}
-                disabled={(date) =>
-                  date > new Date() ||
-                  date < new Date(new Date().setDate(new Date().getDate() - 90))
-                }
-              />
+              <div className="space-y-1">
+                <Datepicker
+                  label="Date person visits the clinic"
+                  date={watchedValues.helperDetails.visitDate}
+                  onSelect={(date) => {
+                    setValue("helperDetails.visitDate", date as Date);
+                    setVisitDateTouched(true);
+                    trigger("helperDetails.visitDate");
+                  }}
+                  disabled={(date) =>
+                    date > new Date() ||
+                    date <
+                      new Date(new Date().setDate(new Date().getDate() - 90))
+                  }
+                />
+                {errors.helperDetails?.visitDate && (
+                  <p className="text-sm font-medium text-red-500">
+                    {errors.helperDetails.visitDate.message}
+                  </p>
+                )}
+              </div>
             )}
           </>
         )}
@@ -156,13 +161,11 @@ export function HelperDetails({
             setFinTouched(true);
             setVisitDateTouched(true);
             const isFinValid = await trigger("helperDetails.fin");
-            // const isDateValid = await trigger("helperDetails.visitDate");
+            const isDateValid = requireVisitDate
+              ? await trigger("helperDetails.visitDate")
+              : true;
 
-            console.log("isFinValid=", isFinValid);
-            // console.log("isDateValid=", isDateValid);
-            console.log(watchedValues.helperDetails);
-
-            if (isFinValid) {
+            if (isFinValid && isDateValid) {
               handleContinue(isSummaryActive ? "summary" : nextStep);
             }
           }}
