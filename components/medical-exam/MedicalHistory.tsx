@@ -203,6 +203,7 @@ function HistoryItemComponent({
         <div className="mt-2 w-full">
           <Textarea
             value={item.details}
+            maxLength={500}
             onChange={(e) => onDetailsChange(e.target.value)}
             placeholder={medicalHistoryItems[index].placeholder}
             className="w-full min-h-[100px]"
