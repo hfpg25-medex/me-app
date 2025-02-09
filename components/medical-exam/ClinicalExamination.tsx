@@ -31,6 +31,7 @@ export function ClinicalExamination({
     setValue,
     formState: { errors },
     watch,
+    trigger,
   } = useFormContext<FormDataWP>();
   const watchedValues = watch();
 
@@ -89,13 +90,14 @@ export function ClinicalExamination({
                   id="weight"
                   type="number"
                   {...register("clinicalExamination.weight", {
-                    valueAsNumber: true,
-                    validate: (value) =>
-                      !value ||
-                      (value >= 15 && value <= 200) ||
-                      "Weight must be between 15kg and 200kg",
+                    validate: (value) => {
+                      if (!value && value !== 0) return true;
+                      const numValue = Number(value);
+                      return (numValue >= 15 && numValue <= 200) || "Weight must be between 15kg and 200kg";
+                    }
                   })}
                   className="mr-2 mt-1 w-[216px]"
+                  onBlur={() => trigger("clinicalExamination.weight")}
                 />
                 <span className="absolute right-8 top-1/2 -translate-y-1/2 text-gray-500">
                   kg
@@ -103,7 +105,9 @@ export function ClinicalExamination({
               </div>
               {errors.clinicalExamination?.weight && (
                 <p className="text-red-500 text-sm mt-1">
-                  {errors.clinicalExamination?.weight?.message}
+                  {errors.clinicalExamination?.weight?.message === "Expected number, received nan" 
+                    ? "Please provide valid input"
+                    : errors.clinicalExamination?.weight?.message}
                 </p>
               )}
             </div>
@@ -114,14 +118,26 @@ export function ClinicalExamination({
                   id="height"
                   type="number"
                   {...register("clinicalExamination.height", {
-                    valueAsNumber: true,
+                    validate: (value) => {
+                      if (!value && value !== 0) return true;
+                      const numValue = Number(value);
+                      return (numValue >= 90 && numValue <= 250) || "Height must be between 90cm and 250cm";
+                    }
                   })}
                   className="mr-2 mt-1 w-[216px]"
+                  onBlur={() => trigger("clinicalExamination.height")}
                 />
                 <span className="absolute right-8 top-1/2 -translate-y-1/2 text-gray-500">
                   cm
                 </span>
               </div>
+              {errors.clinicalExamination?.height && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.clinicalExamination?.height?.message === "Expected number, received nan" 
+                    ? "Please provide valid input"
+                    : errors.clinicalExamination?.height?.message}
+                </p>
+              )}
             </div>
           </div>
 

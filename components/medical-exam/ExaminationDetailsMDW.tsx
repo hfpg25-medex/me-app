@@ -397,12 +397,15 @@ export function ExaminationDetails({
           )}
         </div>
       </div>
-      <Button className="mt-4" onClick={async () => {
-        const isValid = await trigger("examinationDetails");
-        if (isValid) {
-          handleContinue("summary");
-        }
-      }}>
+      <Button
+        className="mt-4"
+        onClick={async () => {
+          const isValid = await trigger("examinationDetails");
+          if (isValid) {
+            handleContinue("summary");
+          }
+        }}
+      >
         {isSummaryActive ? "Continue to Summary" : "Continue"}
       </Button>
     </AccordionContent>

@@ -57,22 +57,31 @@ export function validateNRIC(str: string) {
 }
 
 export const examinationDetailsMDWSchema = z.object({
-  weight: z.number({
-    required_error: "Please provide weight.",
-    invalid_type_error: "Please input a valid weight",
-  }).min(15, "Please input a valid weight").max(200, "Please input a valid weight").optional().refine((val) => val === undefined || (val >= 15 && val <= 200), {
-    message: "Please input a valid weight"
-  }),
-  height: z.string()
+  weight: z
+    .number({
+      required_error: "Please provide weight.",
+      invalid_type_error: "Please input a valid weight",
+    })
+    .min(15, "Please input a valid weight")
+    .max(200, "Please input a valid weight")
+    .optional()
+    .refine((val) => val === undefined || (val >= 15 && val <= 200), {
+      message: "Please input a valid weight",
+    }),
+  height: z
+    .string()
     .refine((val) => val !== "", {
-      message: "Please provide height."
+      message: "Please provide height.",
     })
-    .refine((val) => {
-      const num = Number(val);
-      return !isNaN(num) && num >= 90 && num <= 250;
-    }, {
-      message: "Please input a valid height"
-    })
+    .refine(
+      (val) => {
+        const num = Number(val);
+        return !isNaN(num) && num >= 90 && num <= 250;
+      },
+      {
+        message: "Please input a valid height",
+      }
+    )
     .transform((val) => Number(val)),
   bmi: z.number(),
   testTypes: z.array(z.string()),
