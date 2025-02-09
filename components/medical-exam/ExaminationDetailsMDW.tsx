@@ -55,30 +55,20 @@ export function ExaminationDetails({
                 <Input
                   id="weight"
                   type="number"
-                  {...register("examinationDetails.weight", {
-                    valueAsNumber: true,
-                    validate: (value) =>
-                      !value ||
-                      (value >= 15 && value <= 200) ||
-                      "Weight must be between 15kg and 200kg",
-                  })}
+                  {...register("examinationDetails.weight")}
                   onBlur={async (e) => {
-                    const newWeight = parseFloat(e.target.value);
-                    setValue("examinationDetails.weight", newWeight);
-                    setWeightTouched(true);
-                    const hasError = !(await trigger(
-                      "examinationDetails.weight"
-                    ));
-
-                    if (hasError) {
-                      setShowWeightWarning(false);
-                    } else if (lastRecordedWeight && newWeight) {
-                      setShowWeightWarning(
-                        newWeight <= 0.9 * lastRecordedWeight
-                      );
-                    } else {
-                      setShowWeightWarning(false);
+                    const value = parseFloat(e.target.value);
+                    if (!isNaN(value)) {
+                      setValue("examinationDetails.weight", value);
+                      if (lastRecordedWeight && value >= 15) {
+                        setShowWeightWarning(value <= 0.9 * lastRecordedWeight);
+                      } else {
+                        setShowWeightWarning(false);
+                      }
+                      // Clear error if value is valid
+                      await trigger("examinationDetails.weight");
                     }
+                    setWeightTouched(true);
                   }}
                   onChange={() => {}}
                   // onBlur={() => {
@@ -123,9 +113,7 @@ export function ExaminationDetails({
                 <Input
                   id="height"
                   type="number"
-                  {...register("examinationDetails.height", {
-                    valueAsNumber: true,
-                  })}
+                  {...register("examinationDetails.height")}
                   placeholder="Enter height"
                   className="mr-2 w-40"
                 />
@@ -409,7 +397,12 @@ export function ExaminationDetails({
           )}
         </div>
       </div>
-      <Button className="mt-4" onClick={() => handleContinue("summary")}>
+      <Button className="mt-4" onClick={async () => {
+        const isValid = await trigger("examinationDetails");
+        if (isValid) {
+          handleContinue("summary");
+        }
+      }}>
         {isSummaryActive ? "Continue to Summary" : "Continue"}
       </Button>
     </AccordionContent>

@@ -116,11 +116,12 @@ export default function MDWExamPage() {
 
   const methods = useForm<FormDataMDW>({
     resolver: zodResolver(formSchemaMDW),
+    mode: "onSubmit",
     defaultValues: {
       clinicDoctor: { clinic: "", doctor: "" },
       helperDetails: { fin: "", helperName: "", visitDate: undefined },
       examinationDetails: {
-        weight: "", // Changed from 0 to an empty string
+        weight: undefined,
         height: 0,
         bmi: 0,
         testTypes: [],
@@ -311,7 +312,7 @@ export default function MDWExamPage() {
             examinationDetails={{
               weight:
                 watchedValues.examinationDetails.weight !== null
-                  ? watchedValues.examinationDetails.weight.toString()
+                  ? watchedValues.examinationDetails?.weight?.toString()
                   : "",
               height: watchedValues.examinationDetails.height.toString(),
               bmi: watchedValues.examinationDetails.bmi,

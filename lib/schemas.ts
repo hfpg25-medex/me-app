@@ -11,11 +11,10 @@ export const helperDetailsSchema = z.object({
     .string()
     .refine((val) => validateNRIC(val), "Please enter a valid FIN"),
   helperName: z.string().min(1, "Helper name is required"),
-  visitDate: z
-    .date({
-      required_error: "Please select a visit date",
-      invalid_type_error: "That's not a valid date",
-    })
+  visitDate: z.date({
+    required_error: "Please select a visit date",
+    invalid_type_error: "That's not a valid date",
+  }),
 });
 
 export function validateNRIC(str: string) {
@@ -58,30 +57,35 @@ export function validateNRIC(str: string) {
 }
 
 export const examinationDetailsMDWSchema = z.object({
-  weight: z.union([
-    z.string().refine((val) => val === "", { message: "Weight is required" }),
-    z
-      .number()
-      .min(15, "Please input a valid weight")
-      .max(200, "Please input a valid weight"),
-    z.null(),
-  ]),
-  height: z
-    .number()
-    .min(90, "Height must be at least 90cm")
-    .max(250, "Height must be at most 250cm"),
+  weight: z.number({
+    required_error: "Please provide weight.",
+    invalid_type_error: "Please input a valid weight",
+  }).min(15, "Please input a valid weight").max(200, "Please input a valid weight").optional().refine((val) => val === undefined || (val >= 15 && val <= 200), {
+    message: "Please input a valid weight"
+  }),
+  height: z.string()
+    .refine((val) => val !== "", {
+      message: "Please provide height."
+    })
+    .refine((val) => {
+      const num = Number(val);
+      return !isNaN(num) && num >= 90 && num <= 250;
+    }, {
+      message: "Please input a valid height"
+    })
+    .transform((val) => Number(val)),
   bmi: z.number(),
   testTypes: z.array(z.string()),
   positiveTests: z.array(z.string()),
   suspiciousInjuries: z.boolean(),
   unintentionalWeightLoss: z.boolean(),
   policeReport: z.enum(["yes", "no"]).nullable(),
-  remarks: z.string()
+  remarks: z
+    .string()
     .max(500, "Remarks must be at most 500 characters")
-    .refine(
-      (val) => val === "" || val.trim().length > 0,
-      { message: "Please enter your remarks" }
-    ),
+    .refine((val) => val === "" || val.trim().length > 0, {
+      message: "Please enter your remarks",
+    }),
 });
 
 export const clinicalExaminationSchema = z.object({
@@ -133,31 +137,15 @@ export const testsSchema = z.object({
   lipids: z.string().nullable(),
 });
 
-// export const clinicalExaminationSchema = z.object({
-//   weight: z.number().min(15, "Weight must be at least 15kg").max(200, "Weight must be at most 200kg"),
-//   height: z.number().min(90, "Height must be at least 90cm").max(250, "Height must be at most 250cm"),
-//   bmi: z.number(),
-//   waistCircumference: z.number(),
-//   systolicBP: z.number(),
-//   diastolicBP: z.number(),
-//   rightEyeVision: z.enum(["6/5", "6/6", "6/9", "6/12", "6/18", "6/24", "6/36", "blind"]),
-//   leftEyeVision: z.enum(["6/5", "6/6", "6/9", "6/12", "6/18", "6/24", "6/36", "blind"]),
-//   urineAlbumin: z.enum(["normal", "abnormal"]),
-//   urineGlucose: z.enum(["normal", "abnormal"]),
-//   pregnancyTest: z.enum(["negative", "positive"]),
-//   colorVision: z.enum(["normal", "abnormal"]),
-//   hearing: z.enum(["normal", "abnormal"])
-// });
-
 export const examinationDetailsMWSchema = z.object({
   testTypes: z.array(z.string()),
   positiveTests: z.array(z.string()),
-  remarks: z.string()
+  remarks: z
+    .string()
     .max(500, "Remarks must be at most 500 characters")
-    .refine(
-      (val) => val === "" || val.trim().length > 0,
-      { message: "Please enter your remarks" }
-    ),
+    .refine((val) => val === "" || val.trim().length > 0, {
+      message: "Please enter your remarks",
+    }),
 });
 
 // export const medicalHistoryItemsSchema = z.array(z.object({
