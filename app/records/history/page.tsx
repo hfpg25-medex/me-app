@@ -287,9 +287,9 @@ export default function ExaminationRecords() {
             >
               <CalendarIcon className="mr-2 h-4 w-4" />
               {selectedDate[0] && selectedDate[1]
-                ? `${format(selectedDate[0], "MM/dd/yy")} - ${format(
+                ? `${format(selectedDate[0], "dd/MM/yy")} - ${format(
                     selectedDate[1],
-                    "MM/dd/yy"
+                    "dd/MM/yy"
                   )}`
                 : "Custom range"}
             </Button>
@@ -404,9 +404,14 @@ export default function ExaminationRecords() {
                         onClick={() => {
                           if (record.status === "For Review") {
                             // Handle review action
-                          } else if (record.status === "Draft" && 'draftSubmissionId' in record) {
+                          } else if (
+                            record.status === "Draft" &&
+                            "draftSubmissionId" in record
+                          ) {
                             // For draft records, redirect to FME form with draft ID
-                            router.push(`/medical-exam/fme?draftId=${record.draftSubmissionId}`);
+                            router.push(
+                              `/medical-exam/fme?draftId=${record.draftSubmissionId}`
+                            );
                           } else {
                             router.push(`/records/${record.id}`);
                           }

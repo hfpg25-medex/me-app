@@ -271,9 +271,9 @@ export default function RecordsTable({
             >
               <CalendarIcon className="mr-2 h-4 w-4" />
               {selectedDate[0] && selectedDate[1]
-                ? `${format(selectedDate[0], "MM/dd/yy")} - ${format(
+                ? `${format(selectedDate[0], "dd/MM/yy")} - ${format(
                     selectedDate[1],
-                    "MM/dd/yy"
+                    "dd/MM/yy"
                   )}`
                 : "Custom range"}
             </Button>
