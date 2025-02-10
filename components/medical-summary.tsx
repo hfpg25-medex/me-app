@@ -9,6 +9,7 @@ import { useAuth } from "@/lib/context/auth-context";
 import { usePermissions } from "@/lib/hooks/use-permissions";
 import { format } from "date-fns";
 import { useEffect, useState } from "react";
+import { LoadingOverlay } from "./LoadingOverlay";
 import { Label } from "./ui/label";
 
 interface SummaryProps {
@@ -837,6 +838,7 @@ export function MedicalSummary({
               </>
             )}
           </Button>
+          <LoadingOverlay isLoading={isSubmitting} message="Processing..." />
         </div>
       )}
     </div>
