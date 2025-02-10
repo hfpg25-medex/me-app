@@ -825,7 +825,7 @@ export function MedicalSummary({
             {isSubmitting ? (
               <>
                 <span className="opacity-0">
-                  {isNurse ? "Submit for review" : "Submit report"}
+                  {isNurse ? "Submit report" : "Submit report"}
                 </span>
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
@@ -833,7 +833,7 @@ export function MedicalSummary({
               </>
             ) : (
               <>
-                <span>{isNurse ? "Submit for review" : "Submit report"}</span>
+                <span>{isNurse ? "Submit report" : "Submit report"}</span>
               </>
             )}
           </Button>
