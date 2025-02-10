@@ -1,5 +1,6 @@
 "use client";
 
+import { LoadingOverlay } from "@/components/LoadingOverlay";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
@@ -352,6 +353,7 @@ export function Summary({
               "Submit"
             )}
           </Button>
+          <LoadingOverlay isLoading={isSubmitting} message="Processing..." />
         </div>
       )}
     </div>
