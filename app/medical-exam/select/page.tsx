@@ -90,9 +90,9 @@ export default function SelectExamPage() {
               <option value="LTA">LTA</option>
               <option value="ICA">ICA</option>
             </select>
-            <Button onClick={() => setFilter("")} className="w-full sm:w-auto">
+            {/* <Button onClick={() => setFilter("")} className="w-full sm:w-auto">
               Clear Filter
-            </Button>
+            </Button> */}
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 md:gap-6 xl:gap-8">
