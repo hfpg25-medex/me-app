@@ -192,6 +192,7 @@ export default function PRExamPage() {
   };
 
   const onSubmit = async (data: FormDataMW) => {
+    setIsSubmitting(true);
     try {
       const userId = getCurrentUserId();
       const result = await createSubmissionAndRecord({
