@@ -10,13 +10,11 @@ import { useFormContext } from "react-hook-form";
 interface ExaminationDetailsProps {
   isSummaryActive: boolean;
   handleContinue: (nextStep: string) => void;
-  testTypes: string[];
 }
 
 export function ExaminationDetails({
   isSummaryActive,
   handleContinue,
-  testTypes,
 }: ExaminationDetailsProps) {
   const {
     register,
@@ -27,6 +25,8 @@ export function ExaminationDetails({
     clearErrors,
   } = useFormContext<FormDataMW>();
   const watchedValues = watch();
+
+  const testTypes: string[] = ["HIV", "Chest X-ray to screen for TB"];
 
   return (
     <AccordionContent>
@@ -123,7 +123,7 @@ export function ExaminationDetails({
                         setValue("examinationDetails.remarks", " ");
                       }
                     },
-                    onBlur: () => trigger("examinationDetails.remarks")
+                    onBlur: () => trigger("examinationDetails.remarks"),
                   })}
                   maxLength={500}
                 />
@@ -143,14 +143,15 @@ export function ExaminationDetails({
           )}
         </div>
       </div>
-      <Button 
-        className="mt-4" 
+      <Button
+        className="mt-4"
         onClick={async (e) => {
           e.preventDefault();
           const isValid = await trigger("examinationDetails.remarks");
           if (!isValid) return;
           handleContinue("summary");
-        }}>
+        }}
+      >
         {isSummaryActive ? "Continue to Summary" : "Continue"}
       </Button>
     </AccordionContent>

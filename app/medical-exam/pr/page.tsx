@@ -2,10 +2,9 @@
 
 import { createSubmissionAndRecord } from "@/app/actions/records";
 import { AcknowledgementPage } from "@/components/AcknowledgementPage";
-import { FinChangeModal } from "@/components/FinChangeModal";
 import { ClinicDoctorDetails } from "@/components/medical-exam/ClinicDoctorDetails";
 import { ExaminationDetails } from "@/components/medical-exam/ExaminationDetailsPR";
-import { HelperDetails } from "@/components/medical-exam/HelperDetails";
+import { PersonDetails } from "@/components/medical-exam/PersonDetails";
 import { Summary } from "@/components/Summary";
 import {
   Accordion,
@@ -16,7 +15,7 @@ import { StepIndicator } from "@/components/ui/step-indicator";
 import { examTitles } from "@/constants/exam-titles";
 import { STEPS, StepType } from "@/constants/steps";
 import { getCurrentUserId } from "@/lib/auth";
-import { FormDataMW, formSchemaMW } from "@/lib/schemas";
+import { FormDataPR, formSchemaPR } from "@/lib/schemas";
 import { generateSubmissionId } from "@/lib/utils/submission";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useState } from "react";
@@ -43,32 +42,11 @@ const doctors = [
   { id: "2", name: "Dr. Sarah Chen", mcrNumber: "M67890B" },
 ];
 
-import { generateSamplePeople } from "@/lib/utils/sample-data";
-
-// Generate sample data
-const samplePerson = generateSamplePeople(1);
-
-// Mock API call
-const mockApiCall = async (fin: string) => {
-  // Simulate API delay
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-
-  // Find person by FIN
-  const person = samplePerson.find((p) => p.fin === fin);
-
-  if (person) {
-    return {
-      name: person.name,
-      testTypes: ["HIV", "Chest X-ray to screen for TB"],
-    };
-  }
-  return null;
-};
+const testTypes: string[] = ["HIV", "Chest X-ray to screen for TB"];
 
 export default function PRExamPage() {
   const [isClient, setIsClient] = useState(false);
   const [step, setStep] = useState<StepType>(STEPS.SUBMISSION);
-  const [isLoading, setIsLoading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [expandedAccordion, setExpandedAccordion] = useState<
     string | undefined
@@ -78,80 +56,33 @@ export default function PRExamPage() {
   React.useEffect(() => {
     setIsClient(true);
   }, []);
-  const [isHelperDetailsEnabled, setIsHelperDetailsEnabled] = useState(false);
+  const [isPersonDetailsEnabled, setIsPersonDetailsEnabled] = useState(false);
   const [isExaminationEnabled, setIsExaminationEnabled] = useState(false);
   const [isSummaryActive, setIsSummaryActive] = useState(false);
-  const [isFinChangeModalOpen, setIsFinChangeModalOpen] = useState(false);
-  const [tempFin, setTempFin] = useState("");
-  const [testTypes, setTestTypes] = useState<string[]>([]);
-  const [finTouched, setFinTouched] = useState(false);
-  const [visitDateTouched, setVisitDateTouched] = useState(false);
+
   const [isSubmitted, setIsSubmitted] = useState(false); // New state to track submission
-  const [isPendingMe, setIsPendingMe] = useState(true);
 
   // Add completion state for each section
   const [isClinicDoctorCompleted, setIsClinicDoctorCompleted] = useState(false);
-  const [isHelperDetailsCompleted, setIsHelperDetailsCompleted] =
+  const [isPersonDetailsCompleted, setIsPersonDetailsCompleted] =
     useState(false);
   const [isExaminationCompleted, setIsExaminationCompleted] = useState(false);
 
-  const methods = useForm<FormDataMW>({
-    resolver: zodResolver(formSchemaMW),
+  const methods = useForm<FormDataPR>({
+    resolver: zodResolver(formSchemaPR),
     defaultValues: {
       clinicDoctor: { clinic: "", doctor: "" },
       helperDetails: { fin: "", helperName: "", visitDate: undefined },
       examinationDetails: {
-        testTypes: [],
+        testTypes: ["HIV", "Chest X-ray to screen for TB"],
         positiveTests: [],
         remarks: "",
       },
     },
   });
 
-  const { setValue, watch, trigger, handleSubmit } = methods;
+  const { watch, trigger, handleSubmit } = methods;
   const watchedValues = watch();
-
-  const handleFinChange = async (value: string) => {
-    if (isSummaryActive && value !== watchedValues.helperDetails.fin) {
-      setTempFin(value);
-      setIsFinChangeModalOpen(true);
-    } else {
-      setValue("helperDetails.fin", value);
-      setFinTouched(false); // Reset the touched state
-      await validateAndFetchHelperDetails(value);
-    }
-  };
-
-  const validateAndFetchHelperDetails = async (fin: string) => {
-    // Set initial state before API call
-    setIsLoading(true);
-    setIsPendingMe(true);
-    setValue("helperDetails.helperName", "");
-    setTestTypes([]);
-
-    try {
-      const result = await mockApiCall(fin);
-      if (result) {
-        setValue("helperDetails.helperName", result.name);
-        setValue("examinationDetails.testTypes", result.testTypes);
-        setTestTypes(result.testTypes);
-        // Keep isPendingMe true if we found a result
-      } else {
-        setIsPendingMe(false);
-      }
-    } catch (error) {
-      console.error("Error fetching helper details:", error);
-      setIsPendingMe(false);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const confirmFinChange = async () => {
-    setValue("helperDetails.fin", tempFin);
-    setIsFinChangeModalOpen(false);
-    await validateAndFetchHelperDetails(tempFin);
-  };
 
   const handleContinue = async (nextStep: string) => {
     let isValid = false;
@@ -160,16 +91,18 @@ export default function PRExamPage() {
       case "helper-details":
         isValid = await trigger("clinicDoctor");
         if (isValid) {
-          setIsHelperDetailsEnabled(true);
+          setIsPersonDetailsEnabled(true);
           setIsClinicDoctorCompleted(true);
           setExpandedAccordion("helper-details");
         }
         break;
       case "examination-details":
         isValid = await trigger("helperDetails");
+        console.log(watchedValues);
+        console.log("isValidX=", isValid);
         if (isValid) {
           setIsExaminationEnabled(true);
-          setIsHelperDetailsCompleted(true);
+          setIsPersonDetailsCompleted(true);
           setExpandedAccordion("examination-details");
         }
         break;
@@ -191,7 +124,7 @@ export default function PRExamPage() {
     setExpandedAccordion(section);
   };
 
-  const onSubmit = async (data: FormDataMW) => {
+  const onSubmit = async (data: FormDataPR) => {
     setIsSubmitting(true);
     try {
       const userId = getCurrentUserId();
@@ -326,7 +259,7 @@ export default function PRExamPage() {
                   <AccordionItem value="clinic-doctor">
                     <AccordionTrigger
                       className="text-lg font-bold"
-                      data-completed={isClinicDoctorCompleted}
+                      isCompleted={isClinicDoctorCompleted}
                     >
                       Clinic and doctor details
                     </AccordionTrigger>
@@ -339,29 +272,19 @@ export default function PRExamPage() {
                   </AccordionItem>
                   <AccordionItem
                     value="helper-details"
-                    className={!isHelperDetailsEnabled ? "opacity-50" : ""}
+                    className={!isPersonDetailsEnabled ? "opacity-50" : ""}
                   >
                     <AccordionTrigger
                       className="text-lg font-bold"
-                      disabled={!isHelperDetailsEnabled}
-                      data-completed={isHelperDetailsCompleted}
+                      disabled={!isPersonDetailsEnabled}
+                      isCompleted={isPersonDetailsCompleted}
                     >
                       Person details
                     </AccordionTrigger>
-                    <HelperDetails
+                    <PersonDetails
                       isSummaryActive={isSummaryActive}
                       handleContinue={handleContinue}
-                      handleFinChange={handleFinChange}
-                      setFinTouched={setFinTouched}
-                      setVisitDateTouched={setVisitDateTouched}
-                      finTouched={finTouched}
-                      visitDateTouched={visitDateTouched}
-                      isPendingMe={isPendingMe}
                       nextStep="examination-details"
-                      requireVisitDate={true}
-                      defaultToday={false}
-                      sampleFin={samplePerson[0].fin}
-                      isLoading={isLoading}
                     />
                   </AccordionItem>
                   <AccordionItem
@@ -375,25 +298,19 @@ export default function PRExamPage() {
                     <AccordionTrigger
                       className="text-lg font-bold"
                       disabled={!isExaminationEnabled}
-                      data-completed={isExaminationCompleted}
+                      isCompleted={isExaminationCompleted}
                     >
                       Examination details
                     </AccordionTrigger>
                     <ExaminationDetails
                       isSummaryActive={isSummaryActive}
                       handleContinue={handleContinue}
-                      testTypes={testTypes}
                     />
                   </AccordionItem>
                 </Accordion>
               </form>
             </FormProvider>
           </div>
-          <FinChangeModal
-            isOpen={isFinChangeModalOpen}
-            onClose={() => setIsFinChangeModalOpen(false)}
-            onConfirm={confirmFinChange}
-          />
         </div>
       </div>
     </div>

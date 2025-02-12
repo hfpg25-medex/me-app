@@ -6,11 +6,10 @@ export const clinicDoctorSchema = z.object({
 });
 
 export const helperDetailsSchema = z.object({
-  // fin: z.string().regex(/^[FMG]\d{7}[A-Z]$/, "Please enter a valid FIN"),
   fin: z
     .string()
     .refine((val) => validateNRIC(val), "Please enter a valid FIN"),
-  helperName: z.string().min(1, "Helper name is required"),
+  helperName: z.string().min(1, "Person name is required"),
   visitDate: z.date({
     required_error: "Please select a visit date",
     invalid_type_error: "That's not a valid date",
@@ -164,12 +163,6 @@ export const examinationDetailsMWSchema = z.object({
     }),
 });
 
-// export const medicalHistoryItemsSchema = z.array(z.object({
-//   condition: z.string(),
-//   hasCondition: z.boolean(),
-//   details: z.string().nullable()
-// }));
-
 export const formSchemaMDW = z.object({
   clinicDoctor: clinicDoctorSchema,
   helperDetails: helperDetailsSchema,
@@ -185,6 +178,14 @@ export const formSchemaMW = z.object({
 });
 
 export type FormDataMW = z.infer<typeof formSchemaMW>;
+
+export const formSchemaPR = z.object({
+  clinicDoctor: clinicDoctorSchema,
+  helperDetails: helperDetailsSchema,
+  examinationDetails: examinationDetailsMWSchema,
+});
+
+export type FormDataPR = z.infer<typeof formSchemaPR>;
 
 export const medicalHistoryItemSchema = z.object({
   condition: z.string(),
