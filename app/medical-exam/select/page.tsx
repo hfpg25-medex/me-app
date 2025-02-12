@@ -7,6 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -80,11 +81,11 @@ export default function SelectExamPage() {
         </h1>
         <div className="flex flex-col sm:flex-row sm:justify-between mb-8 gap-2">
           <div className="flex flex-col sm:flex-row sm:ml-auto items-stretch sm:items-center gap-2">
-            <input
+            <Input
               type="text"
               placeholder="Search by title"
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="border rounded p-2 w-full sm:w-64 h-10"
+              className="w-full sm:w-64"
             />
             <Select onValueChange={setFilter} defaultValue="all">
               <SelectTrigger className="w-full sm:w-24">
