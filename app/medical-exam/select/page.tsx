@@ -7,12 +7,19 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
 export default function SelectExamPage() {
-  const [filter, setFilter] = useState("");
+  const [filter, setFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
 
   const examTypes = [
@@ -60,7 +67,7 @@ export default function SelectExamPage() {
     },
   ].filter(
     (exam) =>
-      (filter === "" || exam.agency === filter) &&
+      (filter === "all" || exam.agency === filter) &&
       (searchTerm === "" ||
         exam.title.toLowerCase().includes(searchTerm.toLowerCase()))
   );
@@ -79,17 +86,18 @@ export default function SelectExamPage() {
               onChange={(e) => setSearchTerm(e.target.value)}
               className="border rounded p-2 w-full sm:w-64 h-10"
             />
-            <select
-              onChange={(e) => setFilter(e.target.value)}
-              className="border rounded p-2 w-full sm:w-24 h-10"
-              defaultValue=""
-            >
-              <option value="">All</option>
-              <option value="MOM">MOM</option>
-              <option value="SPF">SPF</option>
-              <option value="LTA">LTA</option>
-              <option value="ICA">ICA</option>
-            </select>
+            <Select onValueChange={setFilter} defaultValue="all">
+              <SelectTrigger className="w-full sm:w-24">
+                <SelectValue placeholder="Filter" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All</SelectItem>
+                <SelectItem value="MOM">MOM</SelectItem>
+                <SelectItem value="SPF">SPF</SelectItem>
+                <SelectItem value="LTA">LTA</SelectItem>
+                <SelectItem value="ICA">ICA</SelectItem>
+              </SelectContent>
+            </Select>
             {/* <Button onClick={() => setFilter("")} className="w-full sm:w-auto">
               Clear Filter
             </Button> */}
