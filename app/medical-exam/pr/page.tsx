@@ -12,6 +12,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { StepIndicator } from "@/components/ui/step-indicator";
+import { useToast } from "@/components/ui/use-toast";
 import { examTitles } from "@/constants/exam-titles";
 import { STEPS, StepType } from "@/constants/steps";
 import { getCurrentUserId } from "@/lib/auth";
@@ -48,6 +49,7 @@ export default function PRExamPage() {
   const [isClient, setIsClient] = useState(false);
   const [step, setStep] = useState<StepType>(STEPS.SUBMISSION);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
   const [expandedAccordion, setExpandedAccordion] = useState<
     string | undefined
   >("clinic-doctor");
@@ -98,8 +100,6 @@ export default function PRExamPage() {
         break;
       case "examination-details":
         isValid = await trigger("helperDetails");
-        console.log(watchedValues);
-        console.log("isValidX=", isValid);
         if (isValid) {
           setIsExaminationEnabled(true);
           setIsPersonDetailsCompleted(true);
@@ -144,13 +144,24 @@ export default function PRExamPage() {
       if (result.success) {
         setIsSubmitted(true);
       } else {
-        // Handle error
+        // Log the error for debugging but don't show to user
         console.error("Failed to submit form:", result.error);
-        alert("Failed to submit form. Please try again.");
+        toast({
+          variant: "destructive",
+          title: "Submission Failed",
+          description:
+            "Unable to submit the form at this time. Please try again later.",
+        });
       }
     } catch (error) {
+      // Log the detailed error for debugging
       console.error("Error submitting form:", error);
-      alert("An error occurred while submitting the form. Please try again.");
+      toast({
+        variant: "destructive",
+        title: "Submission Failed",
+        description:
+          "Unable to submit the form at this time. Please try again later.",
+      });
     } finally {
       setIsSubmitting(false);
     }

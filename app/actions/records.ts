@@ -111,11 +111,13 @@ export async function createSubmissionAndRecord(data: {
 
     return { success: true, data: result };
   } catch (error) {
+    // Log the detailed error for debugging
     console.error("Error creating submission and record:", error);
-    const errorMessage =
-      error instanceof Error
-        ? error.message
-        : "Failed to create submission and record";
-    return { success: false, error: errorMessage };
+
+    // Return a generic error message to the client
+    return {
+      success: false,
+      error: "Unable to submit the form at this time. Please try again later.",
+    };
   }
 }
