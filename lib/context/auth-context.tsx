@@ -37,9 +37,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const authenticatedUser = await authenticate({ uen, corpPassId });
       if (authenticatedUser) {
-        // Set cookies to expire in 1 hour
+        // Set cookies to expire in 3 hours
         const cookieOptions = {
-          expires: 10 / 24, // 1 hour
+          expires: 3 / 24, // 3 hours
           secure: process.env.NODE_ENV === "production", // Only HTTPS in prod
           sameSite: "lax" as const, // Allow redirect from login
         };
