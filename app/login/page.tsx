@@ -17,7 +17,8 @@ export default function LoginPage() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await login(uen, corppassId);
+      // Ensure values are trimmed before login
+      await login(uen.trim(), corppassId.trim());
       toast({
         title: "Login Successful",
         description: "Welcome to the Medical Examination Portal",
@@ -66,7 +67,7 @@ export default function LoginPage() {
                 type="text"
                 required
                 value={uen}
-                onChange={(e) => setUen(e.target.value)}
+                onChange={(e) => setUen(e.target.value.trim())}
                 placeholder="Enter your UEN"
                 className="mt-1"
               />
@@ -79,7 +80,7 @@ export default function LoginPage() {
                 type="text"
                 required
                 value={corppassId}
-                onChange={(e) => setCorppassId(e.target.value)}
+                onChange={(e) => setCorppassId(e.target.value.trim())}
                 placeholder="Enter your CorpPass ID"
                 className="mt-1"
               />
